@@ -8,18 +8,21 @@ const color = ref(null)
 </script>
 
 <template>
+<div>
   <header>
     <div class="wrapper">
-      <div class="pr-44 bg-slate-950">Hola</div>
-      <ColorPicker v-model="color" />
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/newAssociacio">NewAssociacio</RouterLink>
       </nav>
     </div>
   </header>
 
   <RouterView />
+</div>
+
+  
 </template>
 
 <style scoped>
