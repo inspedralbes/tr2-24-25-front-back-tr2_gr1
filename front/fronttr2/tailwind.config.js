@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('tailwindcss-primeui')],
   content: [
     // Example content paths...
     './public/**/*.html',
