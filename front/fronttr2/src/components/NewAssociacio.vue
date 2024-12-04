@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="screen-container">
         <div class="card flex flex-wrap justify-center items-end gap-4">
             <FloatLabel variant="in">
                 <label for="nom_label">Nom</label>
@@ -13,7 +13,7 @@
             </FloatLabel>
         </div>
         <div class="card flex flex-wrap justify-center items-end gap-4">
-            <Button label="Crear" icon="pi pi-check" iconPos="left" severity="success"/>
+            <Button label="Crear" icon="pi pi-check" iconPos="left" severity="success" :loading="loading" @click="newAssociacio()"/>
         </div>
     </div>
 </template>
@@ -23,16 +23,26 @@ import { ref } from 'vue';
 import InputText from 'primevue/inputtext';
 import FloatLabel from 'primevue/floatlabel';
 import Button from 'primevue/button';
-
+import { crearAssociacio } from './../services/comunicationManager';
 
 const nom = ref(null);
 const desc = ref(null);
+const loading = ref(false);
+
+async function newAssociacio() {
+    console.log('Nova Associació: ', nom, desc);
+    await crearAssociacio(nom, desc);
+    loading.value = true;
+};
 
 </script>
 
 
 <style scoped>
     .card {
+        padding: 10px;
+    }
+    .screen-container {
         padding: 10px;
     }
 </style>
