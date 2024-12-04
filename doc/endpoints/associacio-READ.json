@@ -1,0 +1,15 @@
+{
+    "endpoint": "/api/associacio",
+    "method": "GET",
+    "description": "Retrieve all records from the ASSOCIACIO table",
+    "response": {
+        "status": 200,
+        "body": [
+            {
+                "id": 1,
+                "nom": "Associació Cultural",
+                "descripcio": "Promoció de la cultura local"
+            }
+        ]
+    }
+}
