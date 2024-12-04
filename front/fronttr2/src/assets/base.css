@@ -1,6 +1,12 @@
 
 /* Primary and Surface Palettes */
 :root {
+    --main-color: #E6F8F8;
+    --accent-dark-color: #104D4D;
+    --accent-light-color: #90CDCD;
+    --secondary-dark-color: #2C7878;
+    --secondary-light-color: #57A2A2;
+    --bold-color:#023333;
     --p-primary-50: #ecfdf5;
     --p-primary-100: #d1fae5;
     --p-primary-200: #a7f3d0;

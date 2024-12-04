@@ -5,6 +5,7 @@ import PrimeVue from 'primevue/config';
 import App from './App.vue'
 import router from './router'
 import './assets/index.css'
+import './assets/base.css'
 
 const app = createApp(App)
 
