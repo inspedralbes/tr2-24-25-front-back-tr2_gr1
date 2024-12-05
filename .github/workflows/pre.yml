@@ -1,0 +1,61 @@
+name: TR2G1 Deploy Actions
+run-name: ${{ github.actor }} is deploying TR2G1 on pre-production 🌯
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  STOP-SCREEN:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stop Screen
+        run: |
+          echo "Connecting to the server and stopping screen"
+          echo "${{ secrets.PRE_SECRET_KEY }}" > ~/key
+          chmod 600 ~/key
+        
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }} << 'EOF'
+            if screen -ls | grep -q tr2g1; then
+              echo "The screen session 'tr2g1' exists.";
+              screen -X -S tr2g1 quit
+              echo "Screen terminated.";
+            else
+              echo "The screen session 'tr2g1' does not exist.";
+            fi
+          EOF
+  
+  DEPLOY-NODE:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtaining repository code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Deploy
+        run: |
+          echo "Connecting to the server and deploying TR2G1 Node"
+          echo "${{ secrets.PRE_SECRET_KEY }}" > ~/key
+          chmod 600 ~/key
+
+          cd ./back
+          cp .env.example .env
+          echo "MYSQL_HOST=${{ secrets.MYSQL_PRE_HOST }}" >> .env
+          echo "MYSQL_DB=${{ secrets.MYSQL_PRE_DB }}" >> .env
+          echo "MYSQL_USER=${{ secrets.MYSQL_PRE_USER }}" >> .env
+          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PRE_PASSWORD }}" >> .env
+
+          cd ${{ github.workspace }}
+
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./back/* ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.PRE_DOMAIN }}/private
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }} << 'EOF'
+            cd web/${{ secrets.PRE_DOMAIN }}/private
+            screen -S tr2g1 -d -m node index.js
+          EOF
