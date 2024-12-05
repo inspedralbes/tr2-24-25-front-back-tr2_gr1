@@ -51,11 +51,14 @@ jobs:
           chmod 600 ~/key
 
           cd ./back
-          cp .env.example .env # CAMBIAR EL PUERTO DEL ENV
+
+          cp .env.prod .env
+
           echo "MYSQL_HOST=${{ secrets.MYSQL_PRE_HOST }}" >> .env
           echo "MYSQL_DB=${{ secrets.MYSQL_PRE_DB }}" >> .env
           echo "MYSQL_USER=${{ secrets.MYSQL_PRE_USER }}" >> .env
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PRE_PASSWORD }}" >> .env
+          echo "PORT=${{ secrets.PRE_BACK_PORT }}" >> .env
 
           cd ${{ github.workspace }}
 
