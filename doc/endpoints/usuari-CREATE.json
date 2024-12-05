@@ -1,0 +1,33 @@
+{
+    "endpoint": "/api/usuari",
+    "method": "POST",
+    "description": "Create a new user",
+    "request": {
+        "contentType": "application/json",
+        "body": {
+            "nom": "string",
+            "cognoms": "string",
+            "contrasenya": "string",
+            "correu": "string",
+            "imatge": "string",
+            "permisos": "string"
+        }
+    },
+    "response": {
+        "201": {
+            "description": "User created successfully",
+            "body": {
+                "id": "integer",
+                "nom": "string",
+                "cognoms": "string",
+                "contrasenya": "string",
+                "correu": "string",
+                "imatge": "string",
+                "permisos": "string"
+            }
+        },
+        "400": {
+            "description": "Invalid input"
+        }
+    }
+}
