@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "fronttr2": "file:",
     "pinia": "^2.2.6",
     "primevue": "^4.2.4",
     "tailwindcss-primeui": "^0.3.4",
