@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import ColorPicker from 'primevue/colorpicker';
 import { ref } from 'vue'
-
+import 'primeicons/primeicons.css'
 const color = ref(null)
 </script>
 
