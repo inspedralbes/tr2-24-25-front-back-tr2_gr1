@@ -5,7 +5,7 @@ export const crearAssociacio = async (nom, desc) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: {nom: nom, descripcio: desc},
+            body: JSON.stringify({nom: nom, descripcio: desc}),
         });
         if (response.ok) {
             const data = await response.json();
@@ -15,7 +15,6 @@ export const crearAssociacio = async (nom, desc) => {
         } else {
             console.error('Unexpected error', response.status);
         }
-        loading.value = false;
     } catch (err) {
         console.error('Error during fetch: ', err);
     }

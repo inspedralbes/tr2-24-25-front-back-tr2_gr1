@@ -68,6 +68,10 @@ app.post('/api/associacio', (req, res) => {
   const db = connectToDatabase();
   const { nom, descripcio } = req.body;
 
+  console.log(nom)
+  
+  console.log(descripcio)
+
   // Validación de entrada
   if (!nom || !descripcio) {
     return res.status(400).json({ message: 'Invalid input' });
