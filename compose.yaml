@@ -56,11 +56,11 @@ services:
       - ./bd/mysql/inserts.sql:/docker-entrypoint-initdb.d/inserts.sql
     ports:
       - 3306:3306
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
 
   adminer:
     image: adminer
@@ -70,8 +70,8 @@ services:
     environment:
       ADMINER_DEFAULT_SERVER: tr2g1-mysql
     depends_on:
-      tr2g1-mysql:
-        condition: service_healthy
+      - tr2g1-mysql
+        # condition: service_healthy
 
 volumes:
   bd:

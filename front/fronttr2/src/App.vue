@@ -1,12 +1,26 @@
 <script setup>
 import { ref } from 'vue'
-import Header from './components/Header.vue'
-import { RouterView } from 'vue-router'
+import 'primeicons/primeicons.css'
+const color = ref(null)
 </script>
 
 <template>
-  <Header />
+<div>
+  <header>
+    <!-- <div class="wrapper">
+      <nav>
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/newAssociacio">NewAssociacio</RouterLink>
+      </nav>
+    </div> -->
+    <Header />
+  </header> 
+  
   <RouterView />
+</div>
+
+  
 </template>
 
 <style scoped>

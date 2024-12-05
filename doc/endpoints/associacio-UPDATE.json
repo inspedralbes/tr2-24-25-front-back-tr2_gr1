@@ -1,0 +1,29 @@
+{
+    "endpoint": "/api/associacio",
+    "method": "PUT",
+    "description": "Update an existing associacio",
+    "request": {
+        "contentType": "application/json",
+        "body": {
+            "id": "integer",
+            "nom": "string",
+            "descripcio": "string"
+        }
+    },
+    "response": {
+        "200": {
+            "description": "Associacio updated successfully",
+            "body": {
+                "id": "integer",
+                "nom": "string",
+                "descripcio": "string"
+            }
+        },
+        "400": {
+            "description": "Invalid input"
+        },
+        "404": {
+            "description": "Associacio not found"
+        }
+    }
+}

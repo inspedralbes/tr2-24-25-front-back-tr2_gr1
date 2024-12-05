@@ -1,9 +1,9 @@
 
 /* Primary and Surface Palettes */
 :root {
+    --accent-light-color: #90CDCD;
     --main-color: #E6F8F8;
     --accent-dark-color: #104D4D;
-    --accent-light-color: #90CDCD;
     --secondary-dark-color: #2C7878;
     --secondary-light-color: #57A2A2;
     --bold-color:#023333;

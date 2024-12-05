@@ -1,0 +1,28 @@
+{
+    "endpoint": "/api/usuari",
+    "method": "GET",
+    "description": "Read user information",
+    "request": {
+        "contentType": "application/json",
+        "body": {
+            "id": "integer"
+        }
+    },
+    "response": {
+        "200": {
+            "description": "User information retrieved successfully",
+            "body": {
+                "id": "integer",
+                "nom": "string",
+                "cognoms": "string",
+                "contrasenya": "string",
+                "correu": "string",
+                "imatge": "string",
+                "permisos": "string"
+            }
+        },
+        "404": {
+            "description": "User not found"
+        }
+    }
+}
