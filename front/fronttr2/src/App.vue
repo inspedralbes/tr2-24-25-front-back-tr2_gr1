@@ -1,25 +1,27 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import ColorPicker from 'primevue/colorpicker';
 import { ref } from 'vue'
-
+import 'primeicons/primeicons.css'
+import Header from '@/components/Header.vue'
 const color = ref(null)
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <div class="pr-44 bg-slate-950">Hola</div>
-      <ColorPicker v-model="color" />
+  <div>
+    <header>
+      <!-- <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/newAssociacio">NewAssociacio</RouterLink>
       </nav>
-    </div>
-  </header>
+    </div> -->
+      <Header />
+    </header>
 
-  <RouterView />
+    <RouterView />
+  </div>
+
+
 </template>
 
 <style scoped>
