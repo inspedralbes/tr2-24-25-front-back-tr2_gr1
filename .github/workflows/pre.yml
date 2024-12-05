@@ -26,6 +26,7 @@ jobs:
           EOF
   
   DEPLOY-NODE:
+    needs: [STOP-SCREEN]
     runs-on: ubuntu-latest
     steps:
       - name: Obtaining repository code
@@ -50,7 +51,7 @@ jobs:
           chmod 600 ~/key
 
           cd ./back
-          cp .env.example .env
+          cp .env.example .env # CAMBIAR EL PUERTO DEL ENV
           echo "MYSQL_HOST=${{ secrets.MYSQL_PRE_HOST }}" >> .env
           echo "MYSQL_DB=${{ secrets.MYSQL_PRE_DB }}" >> .env
           echo "MYSQL_USER=${{ secrets.MYSQL_PRE_USER }}" >> .env
@@ -63,3 +64,41 @@ jobs:
             cd web/${{ secrets.PRE_DOMAIN }}/private
             screen -S tr2g1 -d -m node index.js
           EOF
+
+  DEPLOY-VUE:
+    steps:
+      - name: Obtaining repository code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: |
+          cd ./front/fronttr2
+          npm install
+
+          cd ${{ github.workspace }}
+
+      - name: Deploy Vue
+        run: |
+          echo "Connecting to the server and deploying TR2G1 Vue"
+          
+          cd front/fronttr2
+
+          cp .env.example .env.production
+
+          echo "API_ROUTE=${{ secrets.PRE_API_ROUTE }}" >> .env.production
+
+          npm run build
+
+          cp .htaccess dist/.htaccess
+
+          cd ${{ github.workspace }}
+
+          echo "${{ secrets.PRE_SECRET_KEY }}" > ~/key
+          chmod 600 ~/key
+
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./front/fronttr2/dist/* ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.PRE_DOMAIN }}/public_html
