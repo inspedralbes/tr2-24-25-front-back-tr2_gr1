@@ -5,10 +5,13 @@ import NavigationBar from '@/components/NavigationBar.vue';
 
 <template>
   <main>
-    <TheWelcome />
-    
+    <Header />
   </main>
   <footer>
     <NavigationBar />
   </footer>
 </template>
+
+<script setup>
+import Header from '../components/Header.vue'
+</script>
