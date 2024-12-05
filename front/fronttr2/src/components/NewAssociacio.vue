@@ -30,9 +30,10 @@ const desc = ref(null);
 const loading = ref(false);
 
 async function newAssociacio() {
+    loading.value = true;
     console.log('Nova Associació: ', nom, desc);
     await crearAssociacio(nom, desc);
-    loading.value = true;
+    loading.value = false;
 };
 
 </script>
