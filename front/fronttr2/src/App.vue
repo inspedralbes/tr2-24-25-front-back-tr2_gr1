@@ -1,26 +1,27 @@
 <script setup>
 import { ref } from 'vue'
 import 'primeicons/primeicons.css'
+import Header from '@/components/Header.vue'
 const color = ref(null)
 </script>
 
 <template>
-<div>
-  <header>
-    <!-- <div class="wrapper">
+  <div>
+    <header>
+      <!-- <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/newAssociacio">NewAssociacio</RouterLink>
       </nav>
     </div> -->
-    <Header />
-  </header> 
-  
-  <RouterView />
-</div>
+      <Header />
+    </header>
 
-  
+    <RouterView />
+  </div>
+
+
 </template>
 
 <style scoped>
