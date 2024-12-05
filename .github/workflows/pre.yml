@@ -98,11 +98,10 @@ jobs:
 
           npm run build
 
-          cp .htaccess dist/.htaccess
-
           cd ${{ github.workspace }}
 
           echo "${{ secrets.PRE_SECRET_KEY }}" > ~/key
           chmod 600 ~/key
 
           scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./front/fronttr2/dist/* ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.PRE_DOMAIN }}/public_html
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./front/fronttr2/.htaccess ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.PRE_DOMAIN }}/public_html
