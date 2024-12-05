@@ -63,6 +63,7 @@ jobs:
           cd ${{ github.workspace }}
 
           scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./back/* ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.PRE_DOMAIN }}/private
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./back/.env ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.PRE_DOMAIN }}/private
           ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }} << 'EOF'
             cd web/${{ secrets.PRE_DOMAIN }}/private
             screen -S tr2g1 -d -m node index.js
