@@ -37,7 +37,11 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          cd ./back
+          npm install
+
+          cd ${{ github.workspace }}
 
       - name: Deploy
         run: |
