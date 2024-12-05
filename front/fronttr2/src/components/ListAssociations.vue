@@ -57,6 +57,8 @@ onMounted(() => {
 
 h2 {
     color: var(--bold-color);
+    text-align: center;
+    margin-bottom: 2vh;
 }
 
 .association-card {
@@ -65,7 +67,6 @@ h2 {
     margin-bottom: 16px;
 }
 
-/* Estilos para las Cards */
 .mb-4 {
     margin-bottom: 16px;
 }
