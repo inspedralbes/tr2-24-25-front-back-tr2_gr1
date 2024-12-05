@@ -49,8 +49,8 @@ app.get('/api/associacio', (req, res) => {
 
   connection.query(query, (err, results) => {
     if (err) {
-      console.error('Error al obtener los datos:', err);
-      return res.status(500).send('Error al obtener las asociaciones');
+      console.error('Associacio not found', err);
+      return res.status(500).send('Associacio not found');
     }
 
 
@@ -74,8 +74,8 @@ app.post('/api/associacio', (req, res) => {
   const insertQuery = 'INSERT INTO associacio (nom, descripcio) VALUES (?, ?)';
   connection.query(insertQuery, [nom, descripcio], (err, result) => {
     if (err) {
-      console.error('Error al insertar en la base de datos:', err);
-      return res.status(500).send('Error al insertar la asociación');
+      console.error('Error creating associacio', err);
+      return res.status(500).send('Error creating associacio');
     }
 
 
@@ -104,8 +104,8 @@ app.delete('/api/associacio', (req, res) => {
   const deleteQuery = 'DELETE FROM associacio WHERE id = ?';
   connection.query(deleteQuery, [id], (err, result) => {
     if (err) {
-      console.error('Error al eliminar la asociación:', err);
-      return res.status(500).send('Error al eliminar la asociación');
+      console.error('Error deleting associacio', err);
+      return res.status(500).send('Error deleting associacio');
     }
 
 
@@ -135,8 +135,8 @@ app.put('/api/associacio', (req, res) => {
   const updateQuery = 'UPDATE associacio SET nom = ?, descripcio = ? WHERE id = ?';
   connection.query(updateQuery, [nom, descripcio, id], (err, result) => {
     if (err) {
-      console.error('Error al actualizar la asociación:', err);
-      return res.status(500).send('Error al actualizar la asociación');
+      console.error('Error updating associacio', err);
+      return res.status(500).send('Error updating associacio');
     }
 
 
@@ -165,8 +165,8 @@ app.get('/api/usuari', (req, res) => {
 
   connection.query(query, (err, results) => {
     if (err) {
-      console.error('Error al obtener los usuarios:', err);
-      return res.status(500).send('Error al obtener los usuarios');
+      console.error('Users not found', err);
+      return res.status(500).send('Users not found');
     }
 
 
@@ -190,8 +190,8 @@ app.post('/api/usuari', (req, res) => {
   const insertQuery = 'INSERT INTO usuari (nom, cognoms, contrasenya, correu, imatge, permisos) VALUES (?, ?, ?, ?, ?, ?)';
   connection.query(insertQuery, [nom, cognoms, contrasenya, correu, imatge, permisos], (err, result) => {
     if (err) {
-      console.error('Error al crear el usuario:', err);
-      return res.status(500).send('Error al crear el usuario');
+      console.error('Invalid input', err);
+      return res.status(500).send('Invalid input');
     }
 
 
@@ -224,8 +224,8 @@ app.delete('/api/usuari', (req, res) => {
   const deleteQuery = 'DELETE FROM usuari WHERE id = ?';
   connection.query(deleteQuery, [id], (err, result) => {
     if (err) {
-      console.error('Error al eliminar el usuario:', err);
-      return res.status(500).send('Error al eliminar el usuario');
+      console.error('Error deleting user', err);
+      return res.status(500).send('Error deleting user');
     }
 
 
@@ -253,8 +253,8 @@ app.put('/api/usuari', (req, res) => {
   const updateQuery = 'UPDATE usuari SET nom = ?, cognoms = ?, contrasenya = ?, correu = ?, imatge = ?, permisos = ? WHERE id = ?';
   connection.query(updateQuery, [nom, cognoms, contrasenya, correu, imatge, permisos, id], (err, result) => {
     if (err) {
-      console.error('Error al actualizar el usuario:', err);
-      return res.status(500).send('Error al actualizar el usuario');
+      console.error('Error updating user', err);
+      return res.status(500).send('Error updating user');
     }
 
 
@@ -281,5 +281,5 @@ app.put('/api/usuari', (req, res) => {
 
 // Iniciar el servidor
 app.listen(PORT, () => {
-  console.log(`Servidor activo en el puerto ${PORT}`);
+  console.log(`Server active at port ${PORT}`);
 });
