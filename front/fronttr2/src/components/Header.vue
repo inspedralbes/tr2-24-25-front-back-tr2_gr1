@@ -1,5 +1,8 @@
 <template>
-    <Menubar :model="items" />
+    <div class="menubar-wrapper">
+        <div class="associacions-text">Associacions</div>
+        <Menubar :model="items" class="p-menubar bg-secondary-dark text-secondary-light border-none p-2" />
+    </div>
 </template>
 
 <script setup>
@@ -16,42 +19,61 @@ const items = ref([
     },
     {
         label: 'About',
-        icon: 'pi pi-fw pi-info',
+        icon: 'pi pi-pw pi-id-card',
         command: () => router.push('/about'),
     },
     {
         label: 'Associacions',
         icon: 'pi pi-fw pi-users',
-        command: () => router.push('/associations'),
+        command: () => router.push('/show'),
     },
 ]);
 </script>
 
 <style scoped>
-.p-menubar {
-    background-color: var(--secondary-dark-color);
-    color: var(--bold-color); /* Color del texto */
-    border: none;
-    width: 100%;
+.menubar-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--secondary-dark-color) !important;
+    padding: 0 1rem;
     border-radius: 0;
+    width: 100%;
+}
+
+.associacions-text {
+    font-weight: bold;
+    color: var(--main-color) !important;
+    font-size: 1.1rem;
+    margin-right: auto;
+}
+
+.menu-items {
+    display: flex;
+    align-items: center;
+    background-color: var(--secondary-dark-color) !important;
+}
+
+.p-menubar {
+    border: none !important;
+    background-color: var(--secondary-dark-color) !important;
 }
 
 .p-menubar .p-menuitem-link {
-    color: var(--bold-color); /* Color del texto en los items */
+    color: var(--secondary-light-color) !important;
     font-weight: bold;
 }
 
 .p-menubar .p-menuitem-icon {
-    color: var(--accent-light-color); /* Color del icono */
-    font-size: 1.25rem; /* Tamaño adecuado para los iconos */
+    color: var(--secondary-light-color) !important;
+    font-size: 1.25rem;
 }
 
-/* Cambiar el color al hacer hover */
 .p-menubar .p-menuitem-link:hover .p-menuitem-icon {
-    color: var(--main-color); /* Color del icono en hover */
+    color: var(--main-color) !important;
 }
 
 .p-menubar .p-menuitem-link:hover {
-    color: var(--secondary-light-color); /* Color del texto en hover */
+    color: var(--main-color) !important;
 }
 </style>

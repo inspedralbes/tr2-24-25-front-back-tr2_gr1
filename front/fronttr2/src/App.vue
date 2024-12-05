@@ -1,17 +1,12 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import ListAssociations from './components/ListAssociations.vue';
-import ColorPicker from 'primevue/colorpicker';
-import Header from './components/Header.vue';
 import { ref } from 'vue'
-
-const color = ref(null)
+import Header from './components/Header.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
   <Header />
-
+  <RouterView />
 </template>
 
 <style scoped>
