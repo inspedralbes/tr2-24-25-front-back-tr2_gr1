@@ -20,7 +20,7 @@ const router = createRouter({
     {
       path: '/show',
       name: 'show',
-      component: () => import('../views/showAssociations.vue'),
+      // component: () => import('../views/showAssociations.vue'),
     }
   ],
 })

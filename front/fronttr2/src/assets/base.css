@@ -1,9 +1,9 @@
 
 /* Primary and Surface Palettes */
 :root {
+    --accent-light-color: #90CDCD;
     --main-color: #E6F8F8;
     --accent-dark-color: #104D4D;
-    --accent-light-color: #90CDCD;
     --secondary-dark-color: #2C7878;
     --secondary-light-color: #57A2A2;
     --bold-color:#023333;
@@ -35,7 +35,6 @@
 
 /* Light */
 :root {
-    --accent-light-color:  var(--accent-light-color-1);
     --p-primary-color: var(--p-primary-500);
     --p-primary-contrast-color: var(--p-surface-0);
     --p-primary-hover-color: var(--p-primary-600);
@@ -63,7 +62,6 @@
 */
 @media (prefers-color-scheme: dark) {
     :root {
-        --accent-light-color:  var(--accent-light-color-1);
         --p-primary-color: var(--p-primary-400);
         --p-primary-contrast-color: var(--p-surface-900);
         --p-primary-hover-color: var(--p-primary-300);

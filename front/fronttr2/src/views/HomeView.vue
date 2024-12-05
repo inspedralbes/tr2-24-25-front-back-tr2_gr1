@@ -1,12 +1,8 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-import NavigationBar from '@/components/NavigationBar.vue';
-</script>
-
 <template>
   <main>
-    <Header />
+    <!-- <Header /> -->
   </main>
+  
   <footer>
     <NavigationBar />
   </footer>
@@ -14,4 +10,6 @@ import NavigationBar from '@/components/NavigationBar.vue';
 
 <script setup>
 import Header from '../components/Header.vue'
+import TheWelcome from '../components/TheWelcome.vue'
+import NavigationBar from '@/components/NavigationBar.vue';
 </script>

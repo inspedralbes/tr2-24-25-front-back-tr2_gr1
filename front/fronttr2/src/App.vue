@@ -11,7 +11,7 @@ const color = ref(null)
 
 <template>
   <Header />
-
+  <RouterView />
 </template>
 
 <style scoped>
