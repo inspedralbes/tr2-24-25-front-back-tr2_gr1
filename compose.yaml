@@ -11,8 +11,11 @@ services:
       - tr2g1-back
 
   tr2g1-back:
-    image: node:23-bookworm-slim
-    command: sh -c "cp .env.DEV .env && npm install && node ./index.js"
+    
+    build: 
+      dockerfile: ./back/develop.Dockerfile
+      context: .
+    command: sh -c "cp .env.DEV .env && npm install && nodemon index.js"
     volumes:
       - ./back:/usr/src/app
     working_dir: /usr/src/app
@@ -48,8 +51,8 @@ services:
     image: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: mydatabase
+      MYSQL_ROOT_PASSWORD: root 
+      MYSQL_DATABASE: tr2-g1
     volumes:
       - bd:/var/lib/mysql:rw
       - ./bd/mysql/create.sql:/docker-entrypoint-initdb.d/create.sql
