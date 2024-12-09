@@ -1,6 +1,8 @@
+const URL = import.meta.env.VITE_API_ROUTE;
+
 export const crearAssociacio = async (nom, desc) => {
     try {
-        const response = await fetch('http://localhost:3000/api/associacio', {
+        const response = await fetch(`${URL}/api/associacio`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
