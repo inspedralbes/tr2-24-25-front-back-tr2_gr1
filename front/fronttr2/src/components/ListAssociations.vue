@@ -1,9 +1,11 @@
 <template>
-    <div class="page-background mt-16">
+    <div class="page-background bg-[--main-color]">
         <h2>Llistat d'Associacions</h2>
         <div v-if="associacions.length > 0">
             <Card v-for="associacio in associacions" :key="associacio.id" class="association-card">
-                <template #title>{{ associacio.nom }}</template>
+                <template #title>
+                    <h2>{{ associacio.nom }}</h2>
+                </template>
                 <template #content>
                     <p>{{ associacio.descripcio }}</p>
                 </template>
@@ -11,7 +13,7 @@
         </div>
         <p v-else>No hay asociaciones disponibles.</p>
 
-        <Button label="Crear Asociació" icon="pi pi-plus" @click="goToCreatePage" class="create-association-btn" />
+        <Button label=" Crear Asociació" icon="pi pi-plus" @click="goToCreatePage" class="create-association-btn" />
     </div>
 </template>
 
@@ -62,10 +64,15 @@ onMounted(() => {
     padding: 20px;
 }
 
+p {
+    color: var(--bold-color);
+    text-align: center;
+}
+
 h2 {
     color: var(--bold-color);
     text-align: center;
-    margin-bottom: 2vh;
+    margin-bottom: 1vh;
 }
 
 .association-card {
