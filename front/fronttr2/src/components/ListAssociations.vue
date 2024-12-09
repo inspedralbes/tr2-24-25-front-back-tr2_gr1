@@ -1,5 +1,5 @@
 <template>
-    <div class="page-background">
+    <div class="page-background mt-16">
         <h2>Llistat d'Associacions</h2>
         <div v-if="associacions.length > 0">
             <Card v-for="associacio in associacions" :key="associacio.id" class="association-card">
