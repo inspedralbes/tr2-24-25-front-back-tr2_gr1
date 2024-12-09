@@ -126,7 +126,6 @@ button:hover {
     background-color: var(--secondary-dark-color);
 }
 
-/* Ajuste en la clase focus-ring para que coincida con el color secundario */
 input:focus {
     border-color: var(--secondary-light-color);
     box-shadow: 0 0 0 2px var(--secondary-light-color);
