@@ -1,4 +1,4 @@
-name: TR2G1 Deploy Actions
+name: TR2G1 PRE-PROD Deploy Actions
 run-name: ${{ github.actor }} is deploying TR2G1 on pre-production 🌯
 on:
   push:
