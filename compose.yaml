@@ -21,7 +21,7 @@ services:
     working_dir: /usr/src/app
     ports: 
       - 3000:3000
-    links:
+    depends_on:
       - tr2g1-mysql
       - tr2g1-mongodb
 
