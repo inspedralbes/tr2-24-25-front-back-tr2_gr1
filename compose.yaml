@@ -15,7 +15,7 @@ services:
     build: 
       dockerfile: ./back/develop.Dockerfile
       context: .
-    command: sh -c "cp .env.DEV .env && npm install && nodemon index.js"
+    command: sh -c "cp .env.DEV .env && npm install && nodemon -L index.js"
     volumes:
       - ./back:/usr/src/app
     working_dir: /usr/src/app
