@@ -11,7 +11,8 @@
         </div>
         <p v-else>No hay asociaciones disponibles.</p>
 
-        <Button label="Crear Asociació" icon="pi pi-plus" @click="goToCreatePage" class="create-association-btn" />
+        <!-- Botón para crear una nueva asociación -->
+        <Button label="Crear Associació" icon="pi pi-plus" @click="goToCreatePage" class="create-association-btn" />
     </div>
 </template>
 
@@ -37,7 +38,7 @@ const fetchAssociations = async () => {
 
 
 const goToCreatePage = () => {
-    router.push('/create');
+    router.push('/newAssociacio');
 };
 
 onMounted(() => {
