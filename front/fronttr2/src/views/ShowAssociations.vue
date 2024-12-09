@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="min-h-[90vh] flex justify-center items-center bg-[--main-color]">
         <ListAssociations />
     </div>
 </template>
