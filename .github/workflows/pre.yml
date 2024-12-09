@@ -85,8 +85,6 @@ jobs:
           
           cd front/fronttr2
 
-          cp .env.example .env.production
-
           echo "VITE_API_ROUTE=${{ secrets.PRE_API_ROUTE }}" > .env.production
 
           npm run build

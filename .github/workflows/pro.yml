@@ -85,8 +85,6 @@ jobs:
           
           cd front/fronttr2
 
-          cp .env.example .env.production
-
           echo "VITE_API_ROUTE=${{ secrets.API_ROUTE }}" > .env.production
 
           npm run build
@@ -96,5 +94,5 @@ jobs:
           echo "${{ secrets.PRE_SECRET_KEY }}" > ~/key
           chmod 600 ~/key
 
-          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./front/fronttr2/dist/* ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.PRE_DOMAIN }}/public_html
-          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./front/fronttr2/.htaccess ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.PRE_DOMAIN }}/public_html
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./front/fronttr2/dist/* ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.DOMAIN }}/public_html
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./front/fronttr2/.htaccess ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.DOMAIN }}/public_html
