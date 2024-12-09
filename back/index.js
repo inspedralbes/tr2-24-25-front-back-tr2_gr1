@@ -49,7 +49,7 @@ connection.connect((err) => {
 // GET Endpoint
 app.get('/api/associacio', (req, res) => {
   const db = connectToDatabase();
-  const query = 'SELECT id, nom, descripcio FROM associacio';
+  const query = 'SELECT id, nom, descripcio FROM ASSOCIACIO';
 
   db.query(query, (err, results) => {
     if (err) {
@@ -77,7 +77,7 @@ app.post('/api/associacio', (req, res) => {
     return res.status(400).json({ message: 'Invalid input' });
   }
 
-  const insertQuery = 'INSERT INTO associacio (nom, descripcio) VALUES (?, ?)';
+  const insertQuery = 'INSERT INTO ASSOCIACIO (nom, descripcio) VALUES (?, ?)';
   db.query(insertQuery, [nom, descripcio], (err, result) => {
     if (err) {
       console.error('Error creating associacio', err);
@@ -105,7 +105,7 @@ app.delete('/api/associacio', (req, res) => {
     return res.status(400).json({ message: 'Invalid input' });
   }
 
-  const deleteQuery = 'DELETE FROM associacio WHERE id = ?';
+  const deleteQuery = 'DELETE FROM ASSOCIACIO WHERE id = ?';
   db.query(deleteQuery, [id], (err, result) => {
     if (err) {
       console.error('Error deleting associacio', err);
@@ -133,7 +133,7 @@ app.put('/api/associacio', (req, res) => {
     return res.status(400).json({ message: 'Invalid input' });
   }
 
-  const updateQuery = 'UPDATE associacio SET nom = ?, descripcio = ? WHERE id = ?';
+  const updateQuery = 'UPDATE ASSOCIACIO SET nom = ?, descripcio = ? WHERE id = ?';
   db.query(updateQuery, [nom, descripcio, id], (err, result) => {
     if (err) {
       console.error('Error updating associacio', err);
@@ -160,7 +160,7 @@ app.put('/api/associacio', (req, res) => {
 // GET Endpoint
 app.get('/api/usuari', (req, res) => {
   const db = connectToDatabase();
-  const query = 'SELECT id, nom, cognoms, contrasenya, correu, imatge, permisos FROM usuari';
+  const query = 'SELECT id, nom, cognoms, contrasenya, correu, imatge, permisos FROM USUARI';
 
   db.query(query, (err, results) => {
     if (err) {
@@ -184,7 +184,7 @@ app.post('/api/usuari', (req, res) => {
     return res.status(400).json({ message: 'Invalid input' });
   }
 
-  const insertQuery = 'INSERT INTO usuari (nom, cognoms, contrasenya, correu, imatge, permisos) VALUES (?, ?, ?, ?, ?, ?)';
+  const insertQuery = 'INSERT INTO USUARI (nom, cognoms, contrasenya, correu, imatge, permisos) VALUES (?, ?, ?, ?, ?, ?)';
   db.query(insertQuery, [nom, cognoms, contrasenya, correu, imatge, permisos], (err, result) => {
     if (err) {
       console.error('Invalid input', err);
@@ -216,7 +216,7 @@ app.delete('/api/usuari', (req, res) => {
     return res.status(400).json({ message: 'Invalid input' });
   }
 
-  const deleteQuery = 'DELETE FROM usuari WHERE id = ?';
+  const deleteQuery = 'DELETE FROM USUARI WHERE id = ?';
   db.query(deleteQuery, [id], (err, result) => {
     if (err) {
       console.error('Error deleting user', err);
@@ -242,7 +242,7 @@ app.put('/api/usuari', (req, res) => {
     return res.status(400).json({ message: 'Invalid input' });
   }
 
-  const updateQuery = 'UPDATE usuari SET nom = ?, cognoms = ?, contrasenya = ?, correu = ?, imatge = ?, permisos = ? WHERE id = ?';
+  const updateQuery = 'UPDATE USUARI SET nom = ?, cognoms = ?, contrasenya = ?, correu = ?, imatge = ?, permisos = ? WHERE id = ?';
   db.query(updateQuery, [nom, cognoms, contrasenya, correu, imatge, permisos, id], (err, result) => {
     if (err) {
       console.error('Error updating user', err);
