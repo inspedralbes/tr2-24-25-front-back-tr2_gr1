@@ -89,7 +89,7 @@ jobs:
 
           cp .env.example .env.production
 
-          echo "API_ROUTE=${{ secrets.PRE_API_ROUTE }}" > .env.production
+          echo "VITE_API_ROUTE=${{ secrets.PRE_API_ROUTE }}" > .env.production
 
           npm run build
 
