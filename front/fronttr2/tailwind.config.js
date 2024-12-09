@@ -43,7 +43,7 @@ export default {
       'hover:border-CustomDarkAccent',
       'hover:border-ReallyDark',
     ],
-  darkMode: true, 
+  darkMode: false, 
   theme: {
     extend: {
       colors:{
