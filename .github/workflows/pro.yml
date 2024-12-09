@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying TR2G1 on production ⭐
 on:
   push:
     branches:
-      - feature-actions-prod
+      - main
 # a
 jobs:
   STOP-SCREEN:
