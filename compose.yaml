@@ -1,7 +1,7 @@
 services: 
   tr2g1-front:
     image: node:23-bookworm-slim
-    command: sh -c "cp .env.example .env.DEV && npm install && npm run dev"
+    command: sh -c "cp .env.DEV .env && npm install && npm run dev"
     volumes:
       - ./front/fronttr2:/usr/src/app
     working_dir: /usr/src/app

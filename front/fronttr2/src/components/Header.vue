@@ -1,5 +1,5 @@
 <template>
-    <div class="menubar-wrapper">
+    <div class="menubar-wrapper relative top-0 left-0 w-full h-full">
         <div class="associacions-text">Associacions</div>
         <Menubar :model="items" class="p-menubar bg-secondary-dark text-secondary-light border-none p-2" />
     </div>
@@ -39,6 +39,7 @@ const items = ref([
     padding: 0 1rem;
     border-radius: 0;
     width: 100%;
+    height: 100%;
 }
 
 .associacions-text {
@@ -46,12 +47,6 @@ const items = ref([
     color: var(--main-color) !important;
     font-size: 1.1rem;
     margin-right: auto;
-}
-
-.menu-items {
-    display: flex;
-    align-items: center;
-    background-color: var(--secondary-dark-color) !important;
 }
 
 .p-menubar {

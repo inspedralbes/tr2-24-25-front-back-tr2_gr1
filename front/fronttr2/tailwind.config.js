@@ -46,16 +46,22 @@ export default {
   darkMode: false, 
   theme: {
     extend: {
-      colors:{
-        CustomMain:'#E6F8F8',
+      colors: {
+        CustomMain: '#E6F8F8',
         CustomLightSecondary: '#57A2A2',
         CustomDarkSecondary: '#2C7878',
         CustomLightAccent: '#90CDCD',
         CustomDarkAccent: '#2C7878',
-        ReallyDark: '#023333'
+        ReallyDark: '#023333',
+        surface: {
+          0: '#ffffff',  // Color para 'surface-0'
+          50: '#f5f5f5', // Color para 'surface-50'
+          300: '#cccccc', 
+          700: '#2d2d2d', // Color para 'surface-700'
+          950: '#121212', // Color para 'surface-950'
+        }
       }
     },
   },
   plugins: [primeUI],
 }
-
