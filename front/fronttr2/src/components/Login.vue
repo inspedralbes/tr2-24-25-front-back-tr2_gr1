@@ -39,7 +39,7 @@
                         Es requereix un Correu i una Contrasenya
                     </span>
                     <div class="flex justify-end gap-2">
-                        <Button 
+                        <Button  class="button secondary-button"
                             type="button" 
                             label="Entesos" 
                             @click="visible = false" 
