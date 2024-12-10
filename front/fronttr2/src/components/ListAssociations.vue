@@ -1,9 +1,11 @@
 <template>
-    <div class="page-background">
+    <div class="page-background bg-[--main-color]">
         <h2>Llistat d'Associacions</h2>
         <div v-if="associacions.length > 0">
             <Card v-for="associacio in associacions" :key="associacio.id" class="association-card">
-                <template #title>{{ associacio.nom }}</template>
+                <template #title>
+                    <h2>{{ associacio.nom }}</h2>
+                </template>
                 <template #content>
                     <p>{{ associacio.descripcio }}</p>
                 </template>
@@ -12,37 +14,33 @@
         <p v-else>No hay asociaciones disponibles.</p>
 
         <!-- Botón para crear una nueva asociación -->
-        <Button label="Crear Asociació" icon="pi pi-plus" @click="goToCreatePage" class="create-association-btn" />
+        <Button label="Crear Associació" icon="pi pi-plus" @click="goToCreatePage" class="create-association-btn" />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router'; // Para la navegación
+import { useRouter } from 'vue-router';
 import Card from 'primevue/card';
-import Button from 'primevue/button'; // Importa el componente Button
+import Button from 'primevue/button';
+import { getAssociacions } from '@/services/comunicationManager';
 
-const router = useRouter(); // Usar el router de Vue para la navegación
+const router = useRouter();
 
 const associacions = ref([]);
 
 const fetchAssociations = async () => {
     try {
-        const response = await fetch('http://localhost:3000/api/associacio');
-        if (!response.ok) {
-            throw new Error('Error en la solicitud');
-        }
-        const data = await response.json();
-        console.log("Datos obtenidos:", data);
-        associacions.value = data; // Aquí se asigna directamente el arreglo
+        const data = await getAssociacions();
+        associacions.value = data;
     } catch (error) {
-        console.error('Error en la solicitud:', error);
+        console.error('Error fetching associations:', error);
     }
 };
 
-// Función para redirigir a la página de creación
+
 const goToCreatePage = () => {
-    router.push('/create');
+    router.push('/newAssociacio');
 };
 
 onMounted(() => {
@@ -67,10 +65,15 @@ onMounted(() => {
     padding: 20px;
 }
 
+p {
+    color: var(--bold-color);
+    text-align: center;
+}
+
 h2 {
     color: var(--bold-color);
     text-align: center;
-    margin-bottom: 2vh;
+    margin-bottom: 1vh;
 }
 
 .association-card {

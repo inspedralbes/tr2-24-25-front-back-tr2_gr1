@@ -40,6 +40,22 @@ const router = createRouter({
       component: () => import('../views/ShowAssociations.vue'),
     },
     {
+      path: '/noticies',
+      name: 'noticies',
+      component: () => import('../views/NoticiesView.vue'),
+    },
+    {
+      path: '/noticies/:id',
+      name: 'NotciaDetall',
+      component:  () => import('../views/NotciaDetall.vue'),
+      props: true 
+    },
+    {
+      path: '/xat',
+      name: 'xat',
+      component: () => import('../views/XatView.vue'),
+    },
+    {
       path: '/login',
       name: 'login',
       component: Login
