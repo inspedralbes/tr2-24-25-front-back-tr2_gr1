@@ -1,7 +1,7 @@
 <template>
     <div class="screen-container">
         <Card>
-            <template #title>Iniciar sesió</template>
+            <template #title>Iniciar sessió</template>
             <template #content>
                 <div class="card flex flex-wrap justify-center items-end gap-4">
                     <FloatLabel variant="in">
@@ -9,19 +9,42 @@
                         <InputText id="correu_label" v-model="correu" autocomplete="off" />
                     </FloatLabel>
                 </div>
+
                 <div class="card flex flex-wrap justify-center items-end gap-4">
                     <FloatLabel variant="in">
                         <label for="contrasenya_label">Contrasenya</label>
                         <InputText type="password" id="contrasenya_label" v-model="contrasenya" autocomplete="off" />
                     </FloatLabel>
                 </div>
+
                 <div class="card flex flex-wrap justify-center items-end gap-4">
-                    <Button label="Iniciar sesión" icon="pi pi-check" iconPos="left" severity="success" :loading="loading" @click="login" />
+                    <Button 
+                        label="Iniciar sessió" 
+                        icon="pi pi-check" 
+                        iconPos="left" 
+                        severity="success" 
+                        :loading="loading" 
+                        @click="login" 
+                    />
                 </div>
-                <Dialog :visible="visible" modal header="Alerta" :style="{ width: '25rem' }" class="bg-white">
-                    <span class="text-surface-500 dark:text-surface-400 block mb-8">Es requereix un Correu i una Contrasenya</span>
+
+                <Dialog 
+                    :visible="visible" 
+                    modal 
+                    header="Alerta" 
+                    :style="{ width: '25rem' }" 
+                    class="bg-white"
+                >
+                    <span class="text-surface-500 dark:text-surface-400 block mb-8">
+                        Es requereix un Correu i una Contrasenya
+                    </span>
                     <div class="flex justify-end gap-2">
-                        <Button type="button" label="Entesos" @click="visible = false" severity="success"></Button>
+                        <Button 
+                            type="button" 
+                            label="Entesos" 
+                            @click="visible = false" 
+                            severity="success" 
+                        />
                     </div>
                 </Dialog>
             </template>
@@ -31,6 +54,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import InputText from 'primevue/inputtext';
 import FloatLabel from 'primevue/floatlabel';
 import Button from 'primevue/button';
@@ -43,16 +67,21 @@ const contrasenya = ref(null);
 const loading = ref(false);
 var visible = ref(false);
 
+const router = useRouter();
+
 async function login() {
     if (!correu.value || !contrasenya.value) {
         visible.value = true;
         return;
     }
+
     loading.value = true;
     try {
         const result = await loginUsuari(correu.value, contrasenya.value);
+    
         if (result) {
             alert('Inici de sessió exitós!');
+            router.push('/');
         } else {
             alert('Correu o contrasenya incorrectes');
         }
