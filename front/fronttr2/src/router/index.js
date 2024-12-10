@@ -42,6 +42,17 @@ const router = createRouter({
       path: '/noticies',
       name: 'noticies',
       component: () => import('../views/NoticiesView.vue'),
+    },
+    {
+      path: '/noticies/:id',
+      name: 'NotciaDetall',
+      component:  () => import('../views/NotciaDetall.vue'),
+      props: true 
+    },
+    {
+      path: '/xat',
+      name: 'xat',
+      component: () => import('../views/XatView.vue'),
     }
   ],
 });

@@ -4,6 +4,7 @@
         "titol": "Sample Title 1",
         "subtitol": "Sample Subtitle 1",
         "imatge": "image1.jpg",
+        "contingut": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at odio eleifend libero elementum tempor nec at est. Nulla convallis tortor et vestibulum pharetra. Suspendisse interdum dolor fringilla magna aliquet, ac dignissim metus convallis. Nunc sit amet dui justo. Curabitur molestie, sem in fermentum hendrerit, ante nunc suscipit lectus, at finibus justo enim a arcu. In ex nisi, egestas sit amet eleifend at, aliquam non mauris. Aenean porta, magna a auctor posuere, quam felis ultrices odio, sit amet blandit dui elit nec nisl. Suspendisse imperdiet nec mi eu interdum. Pellentesque porttitor, magna ut ultricies varius, massa nisl vestibulum nisl, ac condimentum massa libero vitae diam. Donec consectetur, mauris a ornare sagittis, felis leo viverra ligula, at hendrerit risus odio id urna. Sed feugiat feugiat orci ac tincidunt. Donec aliquet in tellus sit amet dapibus.",
         "autor": 101,
         "idAsso": 201,
         "createdAt": "2023-10-01T12:00:00Z",
@@ -14,6 +15,7 @@
         "titol": "Sample Title 2",
         "subtitol": "Sample Subtitle 2",
         "imatge": "image2.jpg",
+        "contingut": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at odio eleifend libero elementum tempor nec at est. Nulla convallis tortor et vestibulum pharetra. Suspendisse interdum dolor fringilla magna aliquet, ac dignissim metus convallis. Nunc sit amet dui justo. Curabitur molestie, sem in fermentum hendrerit, ante nunc suscipit lectus, at finibus justo enim a arcu. In ex nisi, egestas sit amet eleifend at, aliquam non mauris. Aenean porta, magna a auctor posuere, quam felis ultrices odio, sit amet blandit dui elit nec nisl. Suspendisse imperdiet nec mi eu interdum. Pellentesque porttitor, magna ut ultricies varius, massa nisl vestibulum nisl, ac condimentum massa libero vitae diam. Donec consectetur, mauris a ornare sagittis, felis leo viverra ligula, at hendrerit risus odio id urna. Sed feugiat feugiat orci ac tincidunt. Donec aliquet in tellus sit amet dapibus.",
         "autor": 102,
         "idAsso": 202,
         "createdAt": "2023-10-02T12:00:00Z",
@@ -24,9 +26,34 @@
         "titol": "Sample Title 3",
         "subtitol": "Sample Subtitle 3",
         "imatge": "image3.jpg",
+        "contingut": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at odio eleifend libero elementum tempor nec at est. Nulla convallis tortor et vestibulum pharetra. Suspendisse interdum dolor fringilla magna aliquet, ac dignissim metus convallis. Nunc sit amet dui justo. Curabitur molestie, sem in fermentum hendrerit, ante nunc suscipit lectus, at finibus justo enim a arcu. In ex nisi, egestas sit amet eleifend at, aliquam non mauris. Aenean porta, magna a auctor posuere, quam felis ultrices odio, sit amet blandit dui elit nec nisl. Suspendisse imperdiet nec mi eu interdum. Pellentesque porttitor, magna ut ultricies varius, massa nisl vestibulum nisl, ac condimentum massa libero vitae diam. Donec consectetur, mauris a ornare sagittis, felis leo viverra ligula, at hendrerit risus odio id urna. Sed feugiat feugiat orci ac tincidunt. Donec aliquet in tellus sit amet dapibus.",
         "autor": 103,
         "idAsso": 203,
         "createdAt": "2023-10-03T12:00:00Z",
         "updatedAt": "2023-10-03T12:00:00Z"
     }
+
+,
+{
+    "id": 4,
+    "titol": "Sample Title 4",
+    "subtitol": "Sample Subtitle 4",
+    "imatge": "image4.jpg",
+    "contingut": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at odio eleifend libero elementum tempor nec at est. Nulla convallis tortor et vestibulum pharetra. Suspendisse interdum dolor fringilla magna aliquet, ac dignissim metus convallis. Nunc sit amet dui justo. Curabitur molestie, sem in fermentum hendrerit, ante nunc suscipit lectus, at finibus justo enim a arcu. In ex nisi, egestas sit amet eleifend at, aliquam non mauris. Aenean porta, magna a auctor posuere, quam felis ultrices odio, sit amet blandit dui elit nec nisl. Suspendisse imperdiet nec mi eu interdum. Pellentesque porttitor, magna ut ultricies varius, massa nisl vestibulum nisl, ac condimentum massa libero vitae diam. Donec consectetur, mauris a ornare sagittis, felis leo viverra ligula, at hendrerit risus odio id urna. Sed feugiat feugiat orci ac tincidunt. Donec aliquet in tellus sit amet dapibus.",
+    "autor": 104,
+    "idAsso": 204,
+    "createdAt": "2023-10-04T12:00:00Z",
+    "updatedAt": "2023-10-04T12:00:00Z"
+},
+{
+    "id": 5,
+    "titol": "Sample Title 5",
+    "subtitol": "Sample Subtitle 5",
+    "imatge": "image5.jpg",
+    "contingut": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at odio eleifend libero elementum tempor nec at est. Nulla convallis tortor et vestibulum pharetra. Suspendisse interdum dolor fringilla magna aliquet, ac dignissim metus convallis. Nunc sit amet dui justo. Curabitur molestie, sem in fermentum hendrerit, ante nunc suscipit lectus, at finibus justo enim a arcu. In ex nisi, egestas sit amet eleifend at, aliquam non mauris. Aenean porta, magna a auctor posuere, quam felis ultrices odio, sit amet blandit dui elit nec nisl. Suspendisse imperdiet nec mi eu interdum. Pellentesque porttitor, magna ut ultricies varius, massa nisl vestibulum nisl, ac condimentum massa libero vitae diam. Donec consectetur, mauris a ornare sagittis, felis leo viverra ligula, at hendrerit risus odio id urna. Sed feugiat feugiat orci ac tincidunt. Donec aliquet in tellus sit amet dapibus.",
+    "autor": 105,
+    "idAsso": 205,
+    "createdAt": "2023-10-05T12:00:00Z",
+    "updatedAt": "2023-10-05T12:00:00Z"
+}
 ]
