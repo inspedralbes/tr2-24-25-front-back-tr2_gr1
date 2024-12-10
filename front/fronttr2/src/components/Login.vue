@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="card flex flex-wrap justify-center items-end gap-4">
-                    <Button 
+                    <Button class="button secondary-button"
                         label="Iniciar sessió" 
                         icon="pi pi-check" 
                         iconPos="left" 
@@ -103,12 +103,23 @@ async function login() {
     gap: 5px;
     height: 100vh;
     padding: 10px;
-    background-color: #f8f9fa;
+    background-color: var(--main-color);
 }
 
 .card {
     padding: 10px;
     max-width: 400px;
     width: 100%;
+    color: var(--accent-light-color);
+}
+
+.secondary-button {
+    background-color: var(--secondary-light-color) !important;
+    border-color: var(--secondary-light-color) !important;
+    color: white !important;
+}
+
+.secondary-button:hover {
+    filter: brightness(90%);
 }
 </style>
