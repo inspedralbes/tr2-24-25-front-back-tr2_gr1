@@ -7,7 +7,7 @@ export const crearAssociacio = async (nom, desc) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({nom: nom, descripcio: desc}),
+            body: JSON.stringify({ nom: nom, descripcio: desc }),
         });
         if (response.ok) {
             const data = await response.json();
@@ -43,7 +43,7 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
     try {
         console.log('Datos enviados:', { nom, cognoms, contrasenya, correu, imatge, permisos });
 
-        const response = await fetch('http://localhost:3000/api/usuari', {
+        const response = await fetch(`${URL}/api/usuari`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,3 +75,61 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
         throw err;
     }
 };
+
+export const getNoticies = async () => {
+    try {
+        const response = await fetch(`${URL}/api/noticies`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticies:', data);
+            return data;
+        } else {
+            console.error('Error inesperat:', response.status);
+            return [];
+        }
+    } catch (err) {
+        console.error('Error en el fetch:', err);
+        throw err;
+    }
+}
+
+export const getNoticia = async (id) => {
+    try {
+        const response = await fetch(`${URL}/api/noticies/${id}`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticia:', data);
+            return data;
+        } else {
+            console.error('Error inesperat:', response.status);
+            return {};
+        }
+    } catch (err) {
+        console.error('Error en el fetch:', err);
+        throw err;
+    }
+}
+
+export async function toggleNoticies() {
+    try {
+        const response = await fetch('http://localhost:3001/toggle-noticies', {
+            method: 'POST',
+        });
+        return response.json();
+    } catch (error) {
+        console.error('Error during fetch:', error);
+    }
+}
+
+export async function fetchNoticies() {
+    try {
+        const response = await fetch('http://localhost:3001/noticies');
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error('Failed to fetch noticies:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error during fetch:', error);
+    }
+}

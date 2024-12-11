@@ -43,6 +43,11 @@ const router = createRouter({
       name: 'register',
       component: () => import('../views/RegisterView.vue'),
     },
+    {
+      path: '/noticies',
+      name: 'noticies',
+      component: () => import('../views/NoticiesView.vue'),
+    }
   ],
 });
 

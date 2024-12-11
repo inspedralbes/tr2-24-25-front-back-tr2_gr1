@@ -268,6 +268,95 @@ app.put('/api/usuari', (req, res) => {
   db.end();
 });
 
+//NOTICIES
+app.get('/api/noticies', (req, res) => {
+  const db = connectToDatabase();
+  const query = 'SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM NOTICIA';
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error retrieving noticies:', err);
+      return res.status(500).json({
+        status: 'error',
+        message: 'Error retrieving noticies',
+      });
+    }
+
+    const formattedResults = results.map((row) => ({
+      id: row.id,
+      titol: row.titol,
+      subtitol: row.subtitol,
+      imatge: row.imatge,
+      autor: row.autor,
+      idAsso: row.idAsso,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    }));
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Noticies retrieved successfully',
+      data: formattedResults,
+    });
+  });
+
+  db.end();
+});
+
+app.get('/api/noticies/:id', (req, res) => {
+  const db = connectToDatabase();
+  const { id } = req.params;
+  const query = 'SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM NOTICIA WHERE id = ?';
+
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Error retrieving noticia:', err);
+      return res.status(500).json({
+        status: 'error',
+        message: 'Error retrieving noticia',
+      });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Noticia not found',
+      });
+    }
+
+    const noticia = results[0];
+    const formattedNoticia = {
+      id: noticia.id,
+      titol: noticia.titol,
+      subtitol: noticia.subtitol,
+      imatge: noticia.imatge,
+      autor: noticia.autor,
+      idAsso: noticia.idAsso,
+      createdAt: noticia.createdAt,
+      updatedAt: noticia.updatedAt,
+    };
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Noticia retrieved successfully',
+      data: formattedNoticia,
+    });
+  }
+  );
+});
+
+app.post('/toggle-noticies', (req, res) => {
+  if (noticiesServiceRunning) {
+    app._router.stack = app._router.stack.filter((middleware) => middleware.handle !== noticiesService);
+    noticiesServiceRunning = false;
+    res.status(200).send('Noticies service stopped');
+  } else {
+    app.use('/api', noticiesService);
+    noticiesServiceRunning = true;
+    res.status(200).send('Noticies service started');
+  }
+});
+
 // Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
