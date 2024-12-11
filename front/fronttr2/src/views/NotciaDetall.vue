@@ -29,7 +29,6 @@ import NavigationBar from '@/components/NavigationBar.vue';
     .main {
       background-color: var(--main-color);
       padding: 1rem;
-      height: 100vh;
       width: 100%;
       box-sizing: border-box;
       margin: 0;
