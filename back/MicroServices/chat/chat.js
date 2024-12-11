@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
     //function that joins the user to a room
     socket.on('joinChat', (data) => {
         console.log('joinChat', data);
-        if(!chat.includes(data)){
+        if(chat.find(room => room.room === data) === undefined){
             chat.push({room: data, messages: []});
         } else{
             socket.emit('allMessages', chat.find(room => room.room === data).messages);

@@ -58,8 +58,8 @@ const messages = ref([])
     width: 100%;
     box-sizing: border-box;
     margin: 0;
-    height: calc(100vh - 4rem); /* Adjust height to occupy the whole page minus the input container */
-    overflow-y: auto; /* Add scroll if content overflows */
+    height: calc(100vh - 4rem); 
+    overflow-y: auto; 
 }
 .chatInput{
     width: 98%;

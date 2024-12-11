@@ -28,10 +28,13 @@ import NavigationBar from '@/components/NavigationBar.vue';
   <style scoped>
     .main {
       background-color: var(--main-color);
-      padding: 1rem;
-      width: 100%;
-      box-sizing: border-box;
-      margin: 0;
+    padding: 1rem;
+    padding-bottom: 8rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    height: calc(100vh - 4rem); 
+    overflow-y: auto; 
     }
 
     h1 {
