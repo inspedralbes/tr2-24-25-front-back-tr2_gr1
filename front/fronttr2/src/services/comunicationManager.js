@@ -1,3 +1,5 @@
+import { useLoggedUsers } from "@/stores/users";
+
 const URL = import.meta.env.VITE_API_ROUTE;
 
 export const crearAssociacio = async (nom, desc) => {
@@ -78,29 +80,41 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
 
 
 export const loginUsuari = async (correu, contrasenya) => {
+    const loggedUsersStore = useLoggedUsers();
     try {
-        const response = await fetch('http://localhost:3000/api/usuari', {
-            method: 'GET',
+        const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({
+                correu,
+                contrasenya
+            })
         });
 
         if (!response.ok) {
-            throw new Error('No es va poder obtenir la llista d\'usuaris');
+            throw new Error(`L'inici de sessió ha fallat`);
         }
 
-        const users = await response.json();
+        const user = await response.json();
 
-        const user = users.find((u) => u.correu === correu);
+        loggedUsersStore.newUser({
+            token: user.token,
+            nom: user.nom,
+            cognoms: user.cognoms,
+            correu: user.correu,
+            associacionsId: user.associacionsId,
+        });
 
-        if (user && user.contrasenya === contrasenya) {
+        if (response.ok) {
             console.log('Usuari autenticat amb èxit');
             return true;
+        } else {
+            console.error('Usuari o contrasenya incorrectes');
+            return false;
         }
-
-        console.error('Usuari o contrasenya incorrectes');
-        return false;
+        
     } catch (error) {
         console.error('Error al intentar autenticar:', error);
         return false;

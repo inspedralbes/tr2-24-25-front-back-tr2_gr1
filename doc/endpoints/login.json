@@ -1,0 +1,30 @@
+{
+    "endpoint": "/api/login",
+    "method": "POST",
+    "description": "Authenticate a user and return a token",
+    "request": {
+        "contentType": "application/json",
+        "body": {
+            "correu": "string",
+            "contrasenya": "string"
+        }
+    },
+    "response": {
+        "200": {
+            "description": "Login successful",
+            "body": {
+                "token": "string",
+                "nom": "string",
+                "cognoms": "string",
+                "correu": "string",
+                "associacionsId": "array"
+            }
+        },
+        "400": {
+            "description": "Invalid input"
+        },
+        "401": {
+            "description": "Invalid credentials"
+        }
+    }
+}

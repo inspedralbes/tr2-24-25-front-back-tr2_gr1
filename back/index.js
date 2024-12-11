@@ -7,6 +7,8 @@ dotenv.config();
 import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 // Crear la aplicación Express
 const app = express();
@@ -17,6 +19,7 @@ app.use(express.json());
 
 // Variables de entorno
 const PORT = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 
 console.log(process.env.MYSQL_USER);
@@ -355,8 +358,58 @@ app.put('/api/proposta', (req, res) => {
   db.end();
 });
 
+// --- Login ENDPOINT ---
+app.post('/api/login', (req, res) => {
+  const { correu, contrasenya } = req.body;
 
-// Iniciar el servidor
+  if (!correu || !contrasenya) {
+    return res.status(400).json({ error: 'Email and password are required' });
+  }
+
+  const query = 'SELECT * FROM USUARI WHERE correu = ?';
+  db.query(query, [correu], async (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    if (results.length === 0) {
+      console.log('results.lenght = 0');
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const user = results[0];
+
+    const isMatch = await bcrypt.compare(contrasenya, user.contrasenya);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, correu: user.correu, permisos: user.permisos },
+      SECRET_KEY,
+      { expiresIn: '1h' }
+    );
+
+    const query2 = 'SELECT idAssociacio FROM USUARI_ASSOCIACIO WHERE idUsu = ?';
+    db.query(query2, [user.id], (err, assocResults) => {
+      if (err) {
+        return res.status(500).json({ error: 'Database error' });
+      }
+
+      const associacionsId = assocResults.map((row) => row.idAssociacio);
+
+      res.status(200).json({
+        token: token,
+        nom: user.nom,
+        cognoms: user.cognoms,
+        correu: user.correu,
+        associacionsId: associacionsId,
+      });
+    });
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
 });
