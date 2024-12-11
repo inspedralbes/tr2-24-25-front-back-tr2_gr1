@@ -312,6 +312,59 @@ app.get('/api/proposta', (req, res) => {
   db.end();
 });
 
+
+//GET Endpoint por ID
+app.get('/api/proposta/:id', (req, res) => {
+  const propostaId = req.params.id;  // Obtener el ID desde la URL
+  const db = connectToDatabase();
+  
+  const query = `
+    SELECT 
+      p.id,
+      p.titol,
+      p.subtitol,
+      p.contingut,
+      p.data,
+      p.idAsso,
+      u.id AS idUsuari,
+      CONCAT(u.nom, ' ', u.cognoms) AS nomUsuari
+    FROM PROPOSTA p
+    LEFT JOIN USUARI u ON p.autor = u.id
+    WHERE p.id = ?;
+  `;
+
+  db.query(query, [propostaId], (err, results) => {
+    if (err) {
+      console.error('Error retrieving proposal:', err);
+      return res.status(500).send('Error retrieving proposal');
+    }
+
+    if (results.length === 0) {
+      // Si no se encuentra la propuesta
+      return res.status(404).send('Proposal not found');
+    }
+
+    const proposta = results[0];  // Obtener la primera propuesta (ya que el ID es único)
+    
+    const formattedProposta = {
+      id: proposta.id,
+      titol: proposta.titol,
+      subtitol: proposta.subtitol,
+      contingut: proposta.contingut,
+      autor: {
+        idUsuari: proposta.idUsuari,
+        nomUsuari: proposta.nomUsuari
+      },
+      idAsso: proposta.idAsso,
+      data: proposta.data
+    };
+
+    res.status(200).json(formattedProposta);
+  });
+
+  db.end();
+});
+
 // UPDATE Endpoint
 app.put('/api/proposta', (req, res) => {
   const { id, titol, subtitol, contingut, autor, idAsso, data } = req.body;
@@ -350,6 +403,89 @@ app.put('/api/proposta', (req, res) => {
     };
 
     res.status(200).json(updatedProposal);
+  });
+
+  db.end();
+});
+
+
+// --- ENDPOINTS PARA COMENTARIS ---
+// GET Endpoint per IDPROP
+app.get('/api/comentaris/:idProp', (req, res) => {
+  const db = connectToDatabase();
+  const { idProp } = req.params;
+
+  console.log(`Fetching comments for proposal ID: ${idProp}`);
+
+  const query = `
+    SELECT 
+      c.id,
+      c.contingut,
+      c.actiu,
+      u.nom AS autorNom,
+      u.cognoms AS autorCognoms
+    FROM COMENTARI c
+    JOIN USUARI u ON c.autor = u.id
+    WHERE c.idProp = ? AND c.actiu = true
+    ORDER BY c.id DESC;
+  `;
+
+  db.query(query, [idProp], (err, results) => {
+    if (err) {
+      console.error('Error retrieving comments:', err.message);
+      return res.status(500).send(`Error retrieving comments: ${err.message}`);
+    }
+
+    console.log('Comments retrieved:', results);
+
+    const formattedResults = results.map(comment => ({
+      id: comment.id,
+      autor: {
+        nomUsuari: `${comment.autorNom} ${comment.autorCognoms}`,
+      },
+      contingut: comment.contingut,
+    }));
+
+    res.status(200).json(formattedResults);
+  });
+
+  db.end();
+});
+
+
+// POST Endpoint per IDPROP
+app.post('/api/comentaris/:idProp', (req, res) => {
+  const db = connectToDatabase();
+  const { idProp } = req.params;
+  const { contenido } = req.body;
+
+  if (!contenido || contenido.trim() === '') {
+    return res.status(400).send('El comentario no puede estar vacío.');
+  }
+
+  const query = `
+    INSERT INTO COMENTARI (autor, idProp, contingut, actiu) 
+    VALUES (?, ?, ?, true)
+  `;
+
+  const autorId = 1;
+
+  db.query(query, [autorId, idProp, contenido], (err, results) => {
+    if (err) {
+      console.error('Error inserting comment:', err);
+      return res.status(500).send('Error adding comment');
+    }
+
+    const currentDate = new Date().toLocaleString();
+
+    const newComment = {
+      id: results.insertId,
+      autor: { nomUsuari: 'Tu Nom' },
+      contingut: contenido,
+      data: currentDate,
+    };
+
+    res.status(200).json(newComment);
   });
 
   db.end();

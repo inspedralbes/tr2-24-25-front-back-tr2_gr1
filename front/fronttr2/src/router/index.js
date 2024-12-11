@@ -59,6 +59,17 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/propostes',
+      name: 'propostes',
+      component: () => import('../views/PropostesView.vue'),
+    },
+    {
+      path: '/propostes/:id',
+      name: 'PropostaDetall',
+      component:  () => import('../views/PropostaDetall.vue'),
+      props: true 
     }
   ],
 });
