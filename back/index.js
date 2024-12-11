@@ -268,6 +268,94 @@ app.put('/api/usuari', (req, res) => {
   db.end();
 });
 
+// --- ENDPOINTS PER PROPOSTA ---
+
+// GET Endpoint
+app.get('/api/proposta', (req, res) => {
+  const db = connectToDatabase();
+  const query = `
+    SELECT 
+      p.id,
+      p.titol,
+      p.subtitol,
+      p.contingut,
+      p.data,
+      p.idAsso,
+      u.id AS idUsuari,
+      CONCAT(u.nom, ' ', u.cognoms) AS nomUsuari
+    FROM PROPOSTA p
+    LEFT JOIN USUARI u ON p.autor = u.id;
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error retrieving proposals:', err);
+      return res.status(500).send('Error retrieving proposals');
+    }
+
+    const formattedResults = results.map(proposta => ({
+      id: proposta.id,
+      titol: proposta.titol,
+      subtitol: proposta.subtitol,
+      contingut: proposta.contingut,
+      autor: {
+        idUsuari: proposta.idUsuari,
+        nomUsuari: proposta.nomUsuari
+      },
+      idAsso: proposta.idAsso,
+      data: proposta.data
+    }));
+
+    res.status(200).json(formattedResults);
+  });
+
+  db.end();
+});
+
+// UPDATE Endpoint
+app.put('/api/proposta', (req, res) => {
+  const { id, titol, subtitol, contingut, autor, idAsso, data } = req.body;
+
+  if (!id || !titol || !subtitol || !contingut || !autor || !idAsso || !data) {
+    return res.status(400).json({ description: "Invalid input" });
+  }
+
+  const db = connectToDatabase();
+  const query = `
+    UPDATE PROPOSTA 
+    SET titol = ?, subtitol = ?, contingut = ?, autor = ?, idAsso = ?, data = ?
+    WHERE id = ?
+  `;
+
+  const params = [titol, subtitol, contingut, autor, idAsso, data, id];
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error updating proposal:', err);
+      return res.status(500).send('Error updating proposal');
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ description: "Proposal not found" });
+    }
+
+    const updatedProposal = {
+      id,
+      titol,
+      subtitol,
+      contingut,
+      autor,
+      idAsso,
+      data
+    };
+
+    res.status(200).json(updatedProposal);
+  });
+
+  db.end();
+});
+
+
 // Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
