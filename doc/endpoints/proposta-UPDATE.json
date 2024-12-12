@@ -1,0 +1,37 @@
+{
+    "endpoint": "/api/proposta",
+    "method": "PUT",
+    "description": "Update an existing proposal",
+    "request": {
+        "contentType": "application/json",
+        "body": {
+            "id": "integer",
+            "titol": "string",
+            "subtitol": "string",
+            "contingut": "string",
+            "autor": "integer",
+            "idAsso": "integer",
+            "data": "string (YYYY-MM-DD)"
+        }
+    },
+    "response": {
+        "200": {
+            "description": "Proposal updated successfully",
+            "body": {
+                "id": "integer",
+                "titol": "string",
+                "subtitol": "string",
+                "contingut": "string",
+                "autor": "integer",
+                "idAsso": "integer",
+                "data": "string (YYYY-MM-DD)"
+            }
+        },
+        "400": {
+            "description": "Invalid input"
+        },
+        "404": {
+            "description": "Proposal not found"
+        }
+    }
+}

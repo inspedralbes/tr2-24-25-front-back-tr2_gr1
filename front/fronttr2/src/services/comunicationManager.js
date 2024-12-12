@@ -133,3 +133,34 @@ export async function fetchNoticies() {
         console.error('Error during fetch:', error);
     }
 }
+
+
+export const loginUsuari = async (correu, contrasenya) => {
+    try {
+        const response = await fetch('http://localhost:3000/api/usuari', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('No es va poder obtenir la llista d\'usuaris');
+        }
+
+        const users = await response.json();
+
+        const user = users.find((u) => u.correu === correu);
+
+        if (user && user.contrasenya === contrasenya) {
+            console.log('Usuari autenticat amb èxit');
+            return true;
+        }
+
+        console.error('Usuari o contrasenya incorrectes');
+        return false;
+    } catch (error) {
+        console.error('Error al intentar autenticar:', error);
+        return false;
+    }
+};

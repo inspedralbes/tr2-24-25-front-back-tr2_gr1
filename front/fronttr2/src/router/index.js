@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import NewAssociacio from '../views/NewAssociacioView.vue'
+import Login from '@/components/Login.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,14 +40,25 @@ const router = createRouter({
       component: () => import('../views/ShowAssociations.vue'),
     },
     {
-      path: '/register',
-      name: 'register',
-      component: () => import('../views/RegisterView.vue'),
-    },
-    {
       path: '/noticies',
       name: 'noticies',
       component: () => import('../views/NoticiesView.vue'),
+    },
+    {
+      path: '/noticies/:id',
+      name: 'NotciaDetall',
+      component:  () => import('../views/NotciaDetall.vue'),
+      props: true 
+    },
+    {
+      path: '/xat',
+      name: 'xat',
+      component: () => import('../views/XatView.vue'),
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     }
   ],
 });
