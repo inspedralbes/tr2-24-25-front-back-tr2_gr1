@@ -1,4 +1,5 @@
 const URL = import.meta.env.VITE_API_ROUTE;
+const URLNOTICIAS = 'http://localhost:3002';
 
 export const crearAssociacio = async (nom, desc) => {
     try {
@@ -76,65 +77,6 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
     }
 };
 
-export const getNoticies = async () => {
-    try {
-        const response = await fetch(`${URL}/api/noticies`);
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Noticies:', data);
-            return data;
-        } else {
-            console.error('Error inesperat:', response.status);
-            return [];
-        }
-    } catch (err) {
-        console.error('Error en el fetch:', err);
-        throw err;
-    }
-}
-
-export const getNoticia = async (id) => {
-    try {
-        const response = await fetch(`${URL}/api/noticies/${id}`);
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Noticia:', data);
-            return data;
-        } else {
-            console.error('Error inesperat:', response.status);
-            return {};
-        }
-    } catch (err) {
-        console.error('Error en el fetch:', err);
-        throw err;
-    }
-}
-
-export async function toggleNoticies() {
-    try {
-        const response = await fetch('http://localhost:3001/toggle-noticies', {
-            method: 'POST',
-        });
-        return response.json();
-    } catch (error) {
-        console.error('Error during fetch:', error);
-    }
-}
-
-export async function fetchNoticies() {
-    try {
-        const response = await fetch('http://localhost:3001/noticies');
-        if (response.ok) {
-            return response.json();
-        } else {
-            console.error('Failed to fetch noticies:', response.statusText);
-        }
-    } catch (error) {
-        console.error('Error during fetch:', error);
-    }
-}
-
-
 export const loginUsuari = async (correu, contrasenya) => {
     try {
         const response = await fetch('http://localhost:3000/api/usuari', {
@@ -162,5 +104,98 @@ export const loginUsuari = async (correu, contrasenya) => {
     } catch (error) {
         console.error('Error al intentar autenticar:', error);
         return false;
+    }
+};
+
+export const getNoticies = async () => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticies:', data);
+            return data;
+        } else {
+            console.error('Unexpected error', response.status);
+            return [];
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+        throw err;
+    }
+};
+
+export const getNoticia = async (id) => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticia:', data);
+            return data;
+        } else {
+            console.error('Unexpected error', response.status);
+            return null;
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+        throw err;
+    }
+};
+
+export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor, idAsso }) => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticia created successfully:', data);
+        } else if (response.status === 400) {
+            console.error('Invalid input');
+        } else {
+            console.error('Unexpected error', response.status);
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+    }
+};
+
+export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, autor, idAsso }) => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticia edited successfully:', data);
+        } else if (response.status === 400) {
+            console.error('Invalid input');
+        } else {
+            console.error('Unexpected error', response.status);
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+    }
+};
+
+export const deleteNoticia = async (id) => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
+            method: 'DELETE',
+        });
+        if (response.ok) {
+            console.log('Noticia deleted successfully');
+        } else {
+            console.error('Unexpected error', response.status);
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
     }
 };

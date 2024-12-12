@@ -6,7 +6,7 @@
                     :key="noticia.id" @click="router.push({ path: `/noticies/${noticia.id}` })">
                     <template #header>
                         <img alt="user header" class="banner"
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlYTylxm7BIjHX7C0QOwEA7iEVEheDE65ukQ&s" />
+                            :src="noticia.imatge || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlYTylxm7BIjHX7C0QOwEA7iEVEheDE65ukQ&s'" />
                     </template>
                     <template #title>
                         <div class="title">{{ noticia.titol }}</div>
@@ -20,7 +20,6 @@
                         </div>
                     </template>
                 </Card>
-
             </div>
         </div>
 
@@ -31,26 +30,23 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 import router from '@/router';
 import Card from 'primevue/card';
-
 import NavigationBar from '@/components/NavigationBar.vue';
-import { ref, onMounted } from 'vue'
-import noticiesSample from '../assets/noticiesSample.json'
+import { getNoticies } from '@/services/comunicationManager';
 
-const noticies = ref([])
-onMounted(() => {
-    console.log('Component is mounted')
-    //getNoticies()
-    noticies.value = noticiesSample;
+const noticies = ref([]);
 
-})
-
-function redirectoToSinglePost(id) {
-    console.log('Redirecting to post with id: ', id)
-
-}
+onMounted(async () => {
+    try {
+        noticies.value = await getNoticies();
+    } catch (error) {
+        console.error('Error al obtenir les notícies:', error);
+    }
+});
 </script>
+
 <style scoped>
 .main {
     background-color: var(--main-color);
@@ -66,14 +62,11 @@ function redirectoToSinglePost(id) {
 
     @media screen and (min-width: 640px) {
         grid-template-columns: repeat(2, 1fr);
-
     }
 
     @media screen and (min-width: 1024px) {
         grid-template-columns: repeat(3, 1fr);
     }
-
-
 }
 
 .cardNew {
