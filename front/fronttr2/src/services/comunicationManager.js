@@ -1,4 +1,5 @@
 import { useLoggedUsers } from "@/stores/users";
+import bcrypt from "bcryptjs";
 
 const URL = import.meta.env.VITE_API_ROUTE;
 
@@ -43,7 +44,12 @@ export const getAssociacions = async () => {
 
 export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, permisos }) => {
     try {
-        console.log('Datos enviados:', { nom, cognoms, contrasenya, correu, imatge, permisos });
+        console.log('Dades enviades (abans del hash): ', { nom, cognoms, contrasenya, correu, imatge, permisos });
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(contrasenya, salt);
+
+        console.log('Contrasenya encriptada: ', hashedPassword);
 
         const response = await fetch('http://localhost:3000/api/usuari', {
             method: 'POST',
@@ -53,7 +59,7 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
             body: JSON.stringify({
                 nom,
                 cognoms,
-                contrasenya,
+                contrasenya: hashedPassword,
                 correu,
                 imatge,
                 permisos,
@@ -94,6 +100,7 @@ export const loginUsuari = async (correu, contrasenya) => {
         });
 
         if (!response.ok) {
+            console.log(response)
             throw new Error(`L'inici de sessió ha fallat`);
         }
 

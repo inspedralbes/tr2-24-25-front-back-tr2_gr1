@@ -20,7 +20,7 @@ CREATE TABLE USUARI (
 CREATE TABLE USUARI_ASSOCIACIO (
     idUsu INT,
     idAsso INT,
-    PRIMARY KEY (idUsus, idAsso),
+    PRIMARY KEY (idUsu, idAsso),
     FOREIGN KEY (idUsu) REFERENCES USUARI(id),
     FOREIGN KEY (idAsso) REFERENCES ASSOCIACIO(id)
 );

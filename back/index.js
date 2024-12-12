@@ -7,8 +7,7 @@ dotenv.config();
 import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { login, verifyToken } from './services/tokens.js';
 
 // Crear la aplicación Express
 const app = express();
@@ -292,7 +291,7 @@ app.get('/api/proposta', (req, res) => {
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error('Error retrieving proposals:', err);
+      console.error('Error retrieving proposals: ', err);
       return res.status(500).send('Error retrieving proposals');
     }
 
@@ -359,55 +358,17 @@ app.put('/api/proposta', (req, res) => {
 });
 
 // --- Login ENDPOINT ---
-app.post('/api/login', (req, res) => {
-  const { correu, contrasenya } = req.body;
+app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
 
-  if (!correu || !contrasenya) {
-    return res.status(400).json({ error: 'Email and password are required' });
-  }
+// Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
+app.get('/prova', (req, res) => {
+  const verificacio = verifyToken(req);
 
-  const query = 'SELECT * FROM USUARI WHERE correu = ?';
-  db.query(query, [correu], async (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ error: 'Database error' });
-    }
-
-    if (results.length === 0) {
-      console.log('results.lenght = 0');
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    const user = results[0];
-
-    const isMatch = await bcrypt.compare(contrasenya, user.contrasenya);
-    if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    const token = jwt.sign(
-      { id: user.id, correu: user.correu, permisos: user.permisos },
-      SECRET_KEY,
-      { expiresIn: '1h' }
-    );
-
-    const query2 = 'SELECT idAssociacio FROM USUARI_ASSOCIACIO WHERE idUsu = ?';
-    db.query(query2, [user.id], (err, assocResults) => {
-      if (err) {
-        return res.status(500).json({ error: 'Database error' });
-      }
-
-      const associacionsId = assocResults.map((row) => row.idAssociacio);
-
-      res.status(200).json({
-        token: token,
-        nom: user.nom,
-        cognoms: user.cognoms,
-        correu: user.correu,
-        associacionsId: associacionsId,
-      });
-    });
-  });
+  if (verificacio.status === 401) {
+    res.status(401).json(verificacio);
+  } else {
+    res.status(200).json(verificacio);
+  };
 });
 
 app.listen(PORT, () => {
