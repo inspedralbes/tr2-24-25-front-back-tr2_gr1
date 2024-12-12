@@ -26,12 +26,11 @@
       </template>
       
       <div v-for="(data, index) in dayData" :key="index">
-        <h3>{{ data.label }}</h3>
-        <a :href="data.link">{{ data.link }}</a>
+        <h3 :style="{ color: data.bar }"><a :href="data.link" >{{ data.label }}</a></h3>
+        
       </div>
       
     </Dialog>
-    <p>{{ attrs }}</p>
   </div>
   <NavigationBar />
 </template>
