@@ -194,3 +194,29 @@ export const getComentarios = async (idProp) => {
       throw error;
     }
   };
+
+  export async function submitVotacio(idProposta, idUsuari, resposta) {
+    try {
+      const response = await fetch('http://localhost:3000/api/votacions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idProp: idProposta,
+          idUsu: idUsuari,
+          resposta: resposta,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al registrar la votación');
+      }
+  
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error al enviar la votación:', error);
+      throw error;
+    }
+  }

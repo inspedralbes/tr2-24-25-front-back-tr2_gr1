@@ -453,6 +453,7 @@ app.get('/api/comentaris/:idProp', (req, res) => {
 });
 
 
+// --- ENDPOINTS PARA VOTACIONS ---
 // POST Endpoint per IDPROP
 app.post('/api/comentaris/:idProp', (req, res) => {
   const db = connectToDatabase();
@@ -489,6 +490,54 @@ app.post('/api/comentaris/:idProp', (req, res) => {
   });
 
   db.end();
+});
+
+
+// POST Endpoint 
+app.post('/api/votacions', (req, res) => {
+  const db = connectToDatabase();
+  const { idProp, idUsu, resposta } = req.body;
+
+  if (idProp === undefined || idUsu === undefined || resposta === undefined) {
+    db.end();
+    return res.status(400).json({ message: 'Faltan datos requeridos: idProp, idUsu, resposta.' });
+  }
+
+  const checkVoteQuery = 'SELECT * FROM VOTACIONS WHERE idProp = ? AND idUsu = ?';
+  
+  db.query(checkVoteQuery, [idProp, idUsu], (err, results) => {
+    if (err) {
+      console.error('Error al verificar la votación existente:', err);
+      db.end();
+      return res.status(500).json({ message: 'Error al verificar la votación existente', error: err.message });
+    }
+
+    if (results.length > 0) {
+      db.end();
+      return res.status(400).json({ message: 'Ya has votado para esta propuesta.' });
+    }
+
+    const insertVoteQuery = `
+      INSERT INTO VOTACIONS (idProp, idUsu, resposta)
+      VALUES (?, ?, ?)
+    `;
+    
+    db.query(insertVoteQuery, [idProp, idUsu, resposta], (err, result) => {
+      if (err) {
+        console.error('Error al registrar la votación:', err);
+        db.end();
+        return res.status(500).json({ message: 'Error al registrar la votación', error: err.message });
+      }
+
+      if (result.affectedRows > 0) {
+        db.end();
+        return res.status(200).json({ message: 'Votación registrada correctamente.' });
+      } else {
+        db.end();
+        return res.status(500).json({ message: 'No se pudo registrar la votación. Intenta de nuevo.' });
+      }
+    });
+  });
 });
 
 
