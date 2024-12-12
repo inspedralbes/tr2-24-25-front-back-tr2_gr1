@@ -59,6 +59,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/calendari',
+      name: 'calendari',
+      component: () => import('../views/Calendar.vue')
     }
   ],
 });

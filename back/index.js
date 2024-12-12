@@ -34,6 +34,7 @@ function connectToDatabase() {
   return connection;
 }
 
+
 // Verificar la conexión a la base de datos
 const connection = connectToDatabase();
 
@@ -355,7 +356,37 @@ app.put('/api/proposta', (req, res) => {
   db.end();
 });
 
+// --- ENDPOINTS PER ACTIVITIES ---
+app.get('/api/activities', (req,res)=>{
+  let data=[
+    {
+      id: 1,
+      date: new Date(2025, 0, 1),
+      label: "New Year",
+      content: "Happy New Year!",
+      link: "https://www.google.com",
+      color: "red",
+    },
+    {
+      id: 2,
+      date: new Date(2025, 0, 1),
+      label: "Valentine's Day",
+      content: "Happy Valentine's Day!",
+      link: "https://www.google.com",
+      color: "purple",
+    },
+    {
+      id: 3,
+      date: new Date(2025, 0, 2),
+      label: "International Women's Day",
+      content: "Happy International Women's Day!",
+      link: "https://www.google.com",
+      color: "green",
+    },
+  ];
+res.status(200).json(data);
 
+})
 // Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);

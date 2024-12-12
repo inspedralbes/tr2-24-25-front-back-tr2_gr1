@@ -106,3 +106,31 @@ export const loginUsuari = async (correu, contrasenya) => {
         return false;
     }
 };
+
+export const getActivities=async () => {
+    try {
+        const response = await fetch('http://localhost:3000/api/activities', {
+            
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('No es poden obtenir activitats del calendari');
+        }
+
+        const activities = await response.json();
+
+        console.log("holiwi"+activities)
+
+        return activities
+       
+
+        
+    } catch (error) {
+        console.error('Error al intentar conseguir activitats: ', error);
+        return false;
+    }
+};
