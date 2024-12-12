@@ -10,20 +10,20 @@ services:
     links:
       - tr2g1-back
 
-  tr2g1-back:
+  # tr2g1-back:
     
-    build: 
-      dockerfile: ./back/develop.Dockerfile
-      context: .
-    command: sh -c "cp .env.DEV .env && npm install && nodemon -L index.js"
-    volumes:
-      - ./back:/usr/src/app
-    working_dir: /usr/src/app
-    ports: 
-      - 3000:3000
-    depends_on:
-      - tr2g1-mysql
-      - tr2g1-mongodb
+  #   build: 
+  #     dockerfile: ./back/develop.Dockerfile
+  #     context: .
+  #   command: sh -c "cp .env.DEV .env && npm install && nodemon -L index.js"
+  #   volumes:
+  #     - ./back:/usr/src/app
+  #   working_dir: /usr/src/app
+  #   ports: 
+  #     - 3000:3000
+  #   depends_on:
+  #     - tr2g1-mysql
+  #     - tr2g1-mongodb
 
   tr2g1-mongodb:
     image: mongo
@@ -33,6 +33,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-bd:/data/db
 
   mongo-express:
     image: mongo-express
@@ -54,7 +56,7 @@ services:
       MYSQL_ROOT_PASSWORD: root 
       MYSQL_DATABASE: tr2-g1
     volumes:
-      - bd:/var/lib/mysql:rw
+      - mysql-bd:/var/lib/mysql:rw
       - ./bd/mysql/create.sql:/docker-entrypoint-initdb.d/create.sql
       - ./bd/mysql/inserts.sql:/docker-entrypoint-initdb.d/inserts.sql
     ports:
@@ -77,4 +79,5 @@ services:
         # condition: service_healthy
 
 volumes:
-  bd:
+  mysql-bd:
+  mongo-bd:
