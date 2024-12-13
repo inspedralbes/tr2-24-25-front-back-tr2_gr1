@@ -20,11 +20,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useLoggedUsers } from '@/stores/users';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import { getAssociacions } from '@/services/comunicationManager';
 
 const router = useRouter();
+
+const userStore = useLoggedUsers();
 
 const associacions = ref([]);
 
@@ -37,14 +40,43 @@ const fetchAssociations = async () => {
     }
 };
 
-
 const goToCreatePage = () => {
     router.push('/newAssociacio');
 };
 
-const goToNoticias = (id) => {
-    console.log('Navigating to noticias for associacio ID:', id);
-    router.push('/noticies');
+const goToNoticias = async (idAsso) => {
+    const loggedUser = userStore.getLoggedUser();
+    console.log('Usuario logueado:', loggedUser); // Verificar qué se está obteniendo
+
+    if (!loggedUser || !loggedUser.id) {
+        console.error('No hay usuario logueado.');
+        return;
+    }
+
+    try {
+        const response = await fetch('/asignaUsuariAssociacio', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idUsu: loggedUser.id, idAsso }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al asignar usuario a la asociación.');
+        }
+
+        const data = await response.json();
+        console.log('Usuario asignado a la asociación con éxito:', data);
+
+        // Actualizar Pinia con la nueva asociación del usuario
+        userStore.updateUserAssociations(idAsso);
+
+        // Navegar a la página de noticias
+        router.push('/noticies');
+    } catch (error) {
+        console.error('Error asignando usuario a asociación:', error);
+    }
 };
 
 onMounted(() => {

@@ -1,12 +1,21 @@
-import { ref } from 'vue';
+// userStore.js
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
-export const useLoggedUsers = defineStore('loggedUsers', () => {
-    const users = ref([]);
+export const useUserStore = defineStore('userStore', () => {
+    const users = ref([]); // Guardar usuarios logueados
 
-    const newUser = (user) => {
-        users.value.push(user);
+    const setLoggedUser = (user) => {
+        users.value = [user]; // Establecer el usuario logueado
     };
 
-    return { users, newUser };
+    const getLoggedUser = () => {
+        return users.value.length > 0 ? users.value[0] : null; // Devolver el usuario logueado
+    };
+
+    return {
+        users,
+        setLoggedUser,
+        getLoggedUser,
+    };
 });

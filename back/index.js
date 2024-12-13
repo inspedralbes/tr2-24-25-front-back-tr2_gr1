@@ -541,6 +541,27 @@ res.status(200).json(data);
 })// --- Login ENDPOINT ---
 app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
 
+app.post('/asignaUsuariAssociacio', async (req, res) => {
+  const { idUsu, idAsso } = req.body;
+
+  if (!idUsu || !idAsso) {
+      return res.status(400).json({ error: 'Faltan datos necesarios.' });
+  }
+
+  try {
+      const query = `
+          INSERT INTO USUARI_ASSOCIACIO (idUsu, idAsso)
+          VALUES (?, ?)
+          ON DUPLICATE KEY UPDATE idUsu = idUsu;
+      `;
+      await connection.query(query, [idUsu, idAsso]);
+      res.status(200).json({ message: 'Usuario asignado a la asociación correctamente.' });
+  } catch (error) {
+      console.error('Error al asignar usuario a asociación:', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+});
+
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
 app.get('/prova', (req, res) => {
   const verificacio = verifyToken(SECRET_KEY, req);
