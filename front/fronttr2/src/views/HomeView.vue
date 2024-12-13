@@ -1,7 +1,7 @@
 <template>
-  <main>
+  <!-- <main> -->
     <!-- <Header /> -->
-  </main>
+  <!-- </main> -->
   
   <footer>
     <NavigationBar />

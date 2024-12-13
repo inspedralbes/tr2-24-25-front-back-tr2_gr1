@@ -10,11 +10,15 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "@popperjs/core": "^2.11.8",
     "fronttr2": "file:",
     "pinia": "^2.2.6",
     "primeicons": "^7.0.0",
     "primevue": "^4.2.4",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "tailwindcss-primeui": "^0.3.4",
+    "v-calendar": "^3.1.2",
     "vue": "^3.5.13",
     "vue-router": "^4.4.5"
   },

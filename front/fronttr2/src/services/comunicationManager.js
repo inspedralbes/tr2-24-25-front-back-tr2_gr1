@@ -2,6 +2,7 @@ import { useLoggedUsers } from "@/stores/users";
 import bcrypt from "bcryptjs";
 
 const URL = import.meta.env.VITE_API_ROUTE;
+const URLNOTICIAS = 'http://localhost:3002';
 
 export const crearAssociacio = async (nom, desc) => {
     try {
@@ -10,7 +11,7 @@ export const crearAssociacio = async (nom, desc) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({nom: nom, descripcio: desc}),
+            body: JSON.stringify({ nom: nom, descripcio: desc }),
         });
         if (response.ok) {
             const data = await response.json();
@@ -51,7 +52,7 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
 
         console.log('Contrasenya encriptada: ', hashedPassword);
 
-        const response = await fetch('http://localhost:3000/api/usuari', {
+        const response = await fetch(`${URL}/api/usuari`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +84,6 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
         throw err;
     }
 };
-
 
 export const loginUsuari = async (correu, contrasenya) => {
     const loggedUsersStore = useLoggedUsers();
@@ -129,6 +129,127 @@ export const loginUsuari = async (correu, contrasenya) => {
         
     } catch (error) {
         console.error('Error al intentar autenticar:', error);
+        return false;
+    }
+};
+
+export const getNoticies = async () => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticies:', data);
+            return data;
+        } else {
+            console.error('Unexpected error', response.status);
+            return [];
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+        throw err;
+    }
+};
+
+export const getNoticia = async (id) => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticia:', data);
+            return data;
+        } else {
+            console.error('Unexpected error', response.status);
+            return null;
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+        throw err;
+    }
+};
+
+export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor, idAsso }) => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticia created successfully:', data);
+        } else if (response.status === 400) {
+            console.error('Invalid input');
+        } else {
+            console.error('Unexpected error', response.status);
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+    }
+};
+
+export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, autor, idAsso }) => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Noticia edited successfully:', data);
+        } else if (response.status === 400) {
+            console.error('Invalid input');
+        } else {
+            console.error('Unexpected error', response.status);
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+    }
+};
+
+export const deleteNoticia = async (id) => {
+    try {
+        const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
+            method: 'DELETE',
+        });
+        if (response.ok) {
+            console.log('Noticia deleted successfully');
+        } else {
+            console.error('Unexpected error', response.status);
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+    }
+};
+
+export const getActivities=async () => {
+    try {
+        const response = await fetch('http://localhost:3000/api/activities', {
+            
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('No es poden obtenir activitats del calendari');
+        }
+
+        const activities = await response.json();
+
+        console.log("holiwi"+activities)
+
+        return activities
+       
+
+        
+    } catch (error) {
+        console.error('Error al intentar conseguir activitats: ', error);
         return false;
     }
 };
