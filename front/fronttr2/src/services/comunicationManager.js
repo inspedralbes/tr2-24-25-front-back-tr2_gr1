@@ -106,13 +106,18 @@ export const loginUsuari = async (correu, contrasenya) => {
 
         const user = await response.json();
 
+        const currentAssiciacio = 0;
+
         loggedUsersStore.newUser({
             token: user.token,
             nom: user.nom,
             cognoms: user.cognoms,
             correu: user.correu,
             associacionsId: user.associacionsId,
+            currentAssiciacio
         });
+
+        console.log(loggedUsersStore.users);
 
         if (response.ok) {
             console.log('Usuari autenticat amb èxit');

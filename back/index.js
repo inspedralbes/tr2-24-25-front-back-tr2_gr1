@@ -362,7 +362,7 @@ app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
 
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
 app.get('/prova', (req, res) => {
-  const verificacio = verifyToken(req);
+  const verificacio = verifyToken(SECRET_KEY, req);
 
   if (verificacio.status === 401) {
     res.status(401).json(verificacio);

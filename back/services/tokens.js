@@ -9,9 +9,11 @@ export function login(db, SECRET_KEY) {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    const query = 'SELECT * FROM USUARI WHERE correu = ?';
+    const query = `SELECT * FROM USUARI WHERE correu = ?`;
     db.query(query, [correu], async (err, results) => {
+      console.log("Query:", query, "Params:", correu);
       if (err) {
+        console.log('aaa');
         console.log(err);
         return res.status(500).json({ error: 'Database error' });
       }
@@ -34,9 +36,11 @@ export function login(db, SECRET_KEY) {
         { expiresIn: '1h' }
       );
 
-      const query2 = 'SELECT idAssociacio FROM USUARI_ASSOCIACIO WHERE idUsu = ?';
+      const query2 = 'SELECT idAsso FROM USUARI_ASSOCIACIO WHERE idUsu = ?';
       db.query(query2, [user.id], (err, assocResults) => {
+        console.log("Query:", query2, "Params:", user.id);
         if (err) {
+          console.log(err);
           return res.status(500).json({ error: 'Database error' });
         }
 
@@ -54,22 +58,21 @@ export function login(db, SECRET_KEY) {
   };
 }
 
-export function verifyToken(SECRET_KEY) {
-  return (req) => {
-    const token = req.headers.authorization?.split(' ')[1];
+export function verifyToken(SECRET_KEY, req) {
+  console.log('Hola: ', req.headers.authorization);
+  const token = req.headers.authorization?.split(' ')[1];
+  console.log(token);
+  if (!token) {
+    return { message: "Token is required", login: false, user: null, status: 401 };
+  }
 
-    if (!token) {
-      return { message: "Token is required", login: false, user: null, status: 401 };
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    return { message: "Valid token", login: false, user: decoded, status: 200 };
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return { message: "Token has expired. Please log in again.", login: true, user: null, status: 401 };
     }
-
-    try {
-      const decoded = jwt.verify(token, SECRET_KEY);
-      return { message: "Valid token", login: false, user: decoded, status: 200 };
-    } catch (err) {
-      if (err.name === "TokenExpiredError") {
-        return { message: "Token has expired. Please log in again.", login: true, user: null, status: 401 };
-      }
-      return { message: "Invalid token", login: false, user: null, status: 401 };
-    }
-  };
+    return { message: "Invalid token", login: false, user: null, status: 401 };
+  }
 }
