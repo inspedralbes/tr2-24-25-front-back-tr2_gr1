@@ -16,6 +16,7 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 
 dotenv.config();
+import { login, verifyToken } from './services/tokens.js';
 
 // Crear la aplicación Express
 const app = express();
@@ -32,6 +33,7 @@ const io = new Server(server);
 
 // Variables de entorno
 const PORT = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 
 console.log(process.env.MYSQL_USER);
@@ -48,6 +50,7 @@ function connectToDatabase() {
   const connection = mysql.createConnection(connectionConfig);
   return connection;
 }
+
 
 // Verificar la conexión a la base de datos
 const connection = connectToDatabase();
@@ -84,6 +87,7 @@ app.post('/api/associacio', (req, res) => {
   const { nom, descripcio } = req.body;
 
   console.log(nom)
+
 
   console.log(descripcio)
 
@@ -304,7 +308,7 @@ app.get('/api/proposta', (req, res) => {
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error('Error retrieving proposals:', err);
+      console.error('Error retrieving proposals: ', err);
       return res.status(500).send('Error retrieving proposals');
     }
 
@@ -493,17 +497,18 @@ app.post('/changeServiceState', (req, res) => {
 });
 
 function startProcess(service) {
-  const process = spawn('node', [path.join(__dirname, 'services') + `/${service.name}/index.js`]);
+  const process = spawn('node', [path.join(__dirname, 'services') + `/${service.name}/index.js`], {
+    cwd: path.join(__dirname, 'services') + `/${service.name}`,
+  });
 
   service.process = process;
-
+  
   console.log("entering");
 
   process.stdout.on('data', data => {
     const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
     console.log(date);
     service.logs.push({ log: data.toString(), date: date });
-    console.log("Estàndard: ", { log: data.toString(), date: date });
     saveLogs(service, { log: data.toString(), date: date });
   });
 
@@ -511,7 +516,6 @@ function startProcess(service) {
     const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
     console.log(date);
     service.errorLogs.push({ log: data.toString(), date: date });
-    console.log("Error: ", { log: data.toString(), date: date });
     saveErrorLogs(service, { log: data.toString(), date: date });
 
   });
@@ -534,9 +538,11 @@ function stopProcess(service) {
 }
 
 function saveLogs(service, objectToSave) {
-  console.log(objectToSave);
   const { log, date } = objectToSave;
 
+  fs.existsSync(path.join(__dirname, 'logs')) || fs.mkdirSync(path.join(__dirname, 'logs'));
+
+  fs.existsSync(path.join(__dirname, 'logs') + `/${service.name}.log`) || fs.writeFileSync(path.join(__dirname, 'logs') + `/${service.name}.log`, '');
 
   fs.appendFile(path.join(__dirname, 'logs') + `/${service.name}.log`, JSON.stringify({ log, date }) + "||\n", err => {
     if (err) {
@@ -545,8 +551,15 @@ function saveLogs(service, objectToSave) {
   });
 }
 
-function saveErrorLogs(service, log) {
-  fs.appendFile(path.join(__dirname, 'logs') + `/${service.name}.error.log`, log, err => {
+function saveErrorLogs(service, objectToSave) {
+  console.log(objectToSave);
+  const { log, date } = objectToSave;
+
+  fs.existsSync(path.join(__dirname, 'logs')) || fs.mkdirSync(path.join(__dirname, 'logs'));
+
+  fs.existsSync(path.join(__dirname, 'logs') + `/${service.name}.error.log`) || fs.writeFileSync(path.join(__dirname, 'logs') + `/${service.name}.error.log`, '');
+
+  fs.appendFile(path.join(__dirname, 'logs') + `/${service.name}.error.log`, JSON.stringify({ log, date }) + "||\n", err => {
     if (err) {
       console.error(err);
     }
@@ -558,140 +571,50 @@ function enviarServeis() {
     return { id: service.id, name: service.name, state: service.state, logs: service.logs, errorLogs: service.errorLogs };
   })));
 }
+// --- ENDPOINTS PER ACTIVITIES ---
+app.get('/api/activities', (req,res)=>{
+  let data=[
+    {
+      id: 1,
+      date: new Date(2025, 0, 1),
+      label: "New Year",
+      content: "Happy New Year!",
+      link: "https://www.google.com",
+      color: "red",
+    },
+    {
+      id: 2,
+      date: new Date(2025, 0, 1),
+      label: "Valentine's Day",
+      content: "Happy Valentine's Day!",
+      link: "https://www.google.com",
+      color: "purple",
+    },
+    {
+      id: 3,
+      date: new Date(2025, 0, 2),
+      label: "International Women's Day",
+      content: "Happy International Women's Day!",
+      link: "https://www.google.com",
+      color: "green",
+    },
+  ];
+res.status(200).json(data);
 
-// --- ENDPOINTS PARA COMENTARIS ---
-// GET Endpoint per IDPROP
-app.get('/api/comentaris/:idProp', (req, res) => {
-  const db = connectToDatabase();
-  const { idProp } = req.params;
+})// --- Login ENDPOINT ---
+app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
 
-  console.log(`Fetching comments for proposal ID: ${idProp}`);
+// Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
+app.get('/prova', (req, res) => {
+  const verificacio = verifyToken(SECRET_KEY, req);
 
-  const query = `
-    SELECT 
-      c.id,
-      c.contingut,
-      c.actiu,
-      u.nom AS autorNom,
-      u.cognoms AS autorCognoms
-    FROM COMENTARI c
-    JOIN USUARI u ON c.autor = u.id
-    WHERE c.idProp = ? AND c.actiu = true
-    ORDER BY c.id DESC;
-  `;
-
-  db.query(query, [idProp], (err, results) => {
-    if (err) {
-      console.error('Error retrieving comments:', err.message);
-      return res.status(500).send(`Error retrieving comments: ${err.message}`);
-    }
-
-    console.log('Comments retrieved:', results);
-
-    const formattedResults = results.map(comment => ({
-      id: comment.id,
-      autor: {
-        nomUsuari: `${comment.autorNom} ${comment.autorCognoms}`,
-      },
-      contingut: comment.contingut,
-    }));
-
-    res.status(200).json(formattedResults);
-  });
-
-  db.end();
+  if (verificacio.status === 401) {
+    res.status(401).json(verificacio);
+  } else {
+    res.status(200).json(verificacio);
+  };
 });
 
-
-// --- ENDPOINTS PARA VOTACIONS ---
-// POST Endpoint per IDPROP
-app.post('/api/comentaris/:idProp', (req, res) => {
-  const db = connectToDatabase();
-  const { idProp } = req.params;
-  const { contenido } = req.body;
-
-  if (!contenido || contenido.trim() === '') {
-    return res.status(400).send('El comentario no puede estar vacío.');
-  }
-
-  const query = `
-    INSERT INTO COMENTARI (autor, idProp, contingut, actiu) 
-    VALUES (?, ?, ?, true)
-  `;
-
-  const autorId = 1;
-
-  db.query(query, [autorId, idProp, contenido], (err, results) => {
-    if (err) {
-      console.error('Error inserting comment:', err);
-      return res.status(500).send('Error adding comment');
-    }
-
-    const currentDate = new Date().toLocaleString();
-
-    const newComment = {
-      id: results.insertId,
-      autor: { nomUsuari: 'Tu Nom' },
-      contingut: contenido,
-      data: currentDate,
-    };
-
-    res.status(200).json(newComment);
-  });
-
-  db.end();
-});
-
-
-// POST Endpoint 
-app.post('/api/votacions', (req, res) => {
-  const db = connectToDatabase();
-  const { idProp, idUsu, resposta } = req.body;
-
-  if (idProp === undefined || idUsu === undefined || resposta === undefined) {
-    db.end();
-    return res.status(400).json({ message: 'Faltan datos requeridos: idProp, idUsu, resposta.' });
-  }
-
-  const checkVoteQuery = 'SELECT * FROM VOTACIONS WHERE idProp = ? AND idUsu = ?';
-  
-  db.query(checkVoteQuery, [idProp, idUsu], (err, results) => {
-    if (err) {
-      console.error('Error al verificar la votación existente:', err);
-      db.end();
-      return res.status(500).json({ message: 'Error al verificar la votación existente', error: err.message });
-    }
-
-    if (results.length > 0) {
-      db.end();
-      return res.status(400).json({ message: 'Ya has votado para esta propuesta.' });
-    }
-
-    const insertVoteQuery = `
-      INSERT INTO VOTACIONS (idProp, idUsu, resposta)
-      VALUES (?, ?, ?)
-    `;
-    
-    db.query(insertVoteQuery, [idProp, idUsu, resposta], (err, result) => {
-      if (err) {
-        console.error('Error al registrar la votación:', err);
-        db.end();
-        return res.status(500).json({ message: 'Error al registrar la votación', error: err.message });
-      }
-
-      if (result.affectedRows > 0) {
-        db.end();
-        return res.status(200).json({ message: 'Votación registrada correctamente.' });
-      } else {
-        db.end();
-        return res.status(500).json({ message: 'No se pudo registrar la votación. Intenta de nuevo.' });
-      }
-    });
-  });
-});
-
-
-// Iniciar el servidor
 server.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
 });
