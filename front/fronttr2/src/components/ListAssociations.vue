@@ -2,7 +2,7 @@
     <div class="page-background bg-[--main-color]">
         <h2>Llistat d'Associacions</h2>
         <div v-if="associacions.length > 0">
-            <Card v-for="associacio in associacions" :key="associacio.id" class="association-card">
+            <Card v-for="associacio in associacions" :key="associacio.id" class="association-card" @click="goToNoticias(associacio.id)">
                 <template #title>
                     <h2>{{ associacio.nom }}</h2>
                 </template>
@@ -13,7 +13,6 @@
         </div>
         <p v-else>No hay asociaciones disponibles.</p>
 
-        <!-- Botón para crear una nueva asociación -->
         <Button label="Crear Associació" icon="pi pi-plus" @click="goToCreatePage" class="create-association-btn" />
     </div>
 </template>
@@ -41,6 +40,11 @@ const fetchAssociations = async () => {
 
 const goToCreatePage = () => {
     router.push('/newAssociacio');
+};
+
+const goToNoticias = (id) => {
+    console.log('Navigating to noticias for associacio ID:', id);
+    router.push('/noticies');
 };
 
 onMounted(() => {
@@ -79,7 +83,12 @@ h2 {
 .association-card {
     background-color: var(--secondary-light-color);
     color: var(--bold-color);
+    cursor: pointer;
     margin-bottom: 16px;
+}
+
+.association-card:hover {
+    transform: scale(1.02);
 }
 
 .create-association-btn {

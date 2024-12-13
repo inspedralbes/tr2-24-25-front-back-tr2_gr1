@@ -6,7 +6,7 @@ const color = ref(null)
 </script>
 
 <template>
-  <div>
+  <div class="bg-[--main-color] h-max">
     <header>
       <!-- <div class="wrapper">
       <nav>
