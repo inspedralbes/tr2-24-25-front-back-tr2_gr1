@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "date": "2025-01-01T00:00:00.000Z",
+        "label": "New Year",
+        "content": "Happy New Year!",
+        "link": "https://www.google.com",
+        "color": "red"
+      },
+      {
+        "id": 2,
+        "date": "2025-02-14T00:00:00.000Z",
+        "label": "Valentine's Day",
+        "content": "Happy Valentine's Day!",
+        "link": "https://www.google.com",
+        "color": "purple"
+          },
+          {
+        "id": 3,
+        "date": "2025-03-08T00:00:00.000Z",
+        "label": "International Women's Day",
+        "content": "Happy International Women's Day!",
+        "link": "https://www.google.com",
+        "color": "green"
+      }
+]

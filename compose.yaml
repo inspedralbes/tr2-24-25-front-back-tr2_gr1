@@ -18,6 +18,7 @@ services:
     command: sh -c "cp .env.DEV .env && npm install && nodemon -L index.js"
     volumes:
       - ./back:/usr/src/app
+      - ./back:/usr/src/app/node_modules/.node_modules-AmjBrQJy
     working_dir: /usr/src/app
     ports: 
       - 3000:3000

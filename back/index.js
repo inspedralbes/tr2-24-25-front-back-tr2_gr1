@@ -16,6 +16,7 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 
 dotenv.config();
+import { login, verifyToken } from './services/tokens.js';
 
 // Crear la aplicación Express
 const app = express();
@@ -32,6 +33,7 @@ const io = new Server(server);
 
 // Variables de entorno
 const PORT = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 
 console.log(process.env.MYSQL_USER);
@@ -48,6 +50,7 @@ function connectToDatabase() {
   const connection = mysql.createConnection(connectionConfig);
   return connection;
 }
+
 
 // Verificar la conexión a la base de datos
 const connection = connectToDatabase();
@@ -304,7 +307,7 @@ app.get('/api/proposta', (req, res) => {
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error('Error retrieving proposals:', err);
+      console.error('Error retrieving proposals: ', err);
       return res.status(500).send('Error retrieving proposals');
     }
 
@@ -505,8 +508,50 @@ function enviarServeis() {
     return { id: service.id, name: service.name, state: service.state, logs: service.logs, errorLogs: service.errorLogs };
   })));
 }
+// --- ENDPOINTS PER ACTIVITIES ---
+app.get('/api/activities', (req,res)=>{
+  let data=[
+    {
+      id: 1,
+      date: new Date(2025, 0, 1),
+      label: "New Year",
+      content: "Happy New Year!",
+      link: "https://www.google.com",
+      color: "red",
+    },
+    {
+      id: 2,
+      date: new Date(2025, 0, 1),
+      label: "Valentine's Day",
+      content: "Happy Valentine's Day!",
+      link: "https://www.google.com",
+      color: "purple",
+    },
+    {
+      id: 3,
+      date: new Date(2025, 0, 2),
+      label: "International Women's Day",
+      content: "Happy International Women's Day!",
+      link: "https://www.google.com",
+      color: "green",
+    },
+  ];
+res.status(200).json(data);
 
-// Iniciar el servidor
+})// --- Login ENDPOINT ---
+app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
+
+// Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
+app.get('/prova', (req, res) => {
+  const verificacio = verifyToken(SECRET_KEY, req);
+
+  if (verificacio.status === 401) {
+    res.status(401).json(verificacio);
+  } else {
+    res.status(200).json(verificacio);
+  };
+});
+
 server.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
 });
