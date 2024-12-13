@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
     "@popperjs/core": "^2.11.8",
+    "bcryptjs": "^2.4.3",
     "fronttr2": "file:",
     "pinia": "^2.2.6",
     "primeicons": "^7.0.0",
