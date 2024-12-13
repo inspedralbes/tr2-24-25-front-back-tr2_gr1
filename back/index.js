@@ -1,19 +1,34 @@
 // Cargar configuraciones de entorno
 import dotenv from 'dotenv';
 
-dotenv.config();
+
 
 // Importar dependencias necesarias
 import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
+import fs, { read } from 'fs';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { v4 as uuidv4 } from 'uuid';
+import { spawn } from 'node:child_process';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+
+dotenv.config();
 
 // Crear la aplicación Express
 const app = express();
 
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+
+// --- SOCKET.IO ---
+const server = createServer(app);
+const io = new Server(server);
 
 // Variables de entorno
 const PORT = process.env.PORT || 3000;
@@ -69,7 +84,7 @@ app.post('/api/associacio', (req, res) => {
   const { nom, descripcio } = req.body;
 
   console.log(nom)
-  
+
   console.log(descripcio)
 
   // Validación de entrada
@@ -408,6 +423,141 @@ app.put('/api/proposta', (req, res) => {
   db.end();
 });
 
+//  ----- MICROSERVEIS -----
+
+
+const services = [];
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+fs.readdirSync(path.join(__dirname, 'services')).forEach(file => {
+  services.push({ id: uuidv4(), name: file, state: 'tancat', logs: [], errorLogs: [], process: null });
+
+  try {
+    let data = fs.readFileSync(path.join(__dirname, 'logs') + `/${file}.log`, 'utf8');
+
+    let splitData = data.toString().split('||\n');
+
+    splitData.forEach(element => {
+      if (element.length === 0) return;
+      const parsedElement = JSON.parse(element);
+
+      services.find(service => service.name === file).logs.push(parsedElement);
+    });
+  } catch (error) {
+    console.log(`File not found: ${error}`);
+  }
+
+  console.log(services.find(service => service.name === file).logs);
+
+  try {
+    let data = fs.readFileSync(path.join(__dirname, 'logs') + `/${file}.error.log`, 'utf8');
+
+    let splitData = data.toString().split('||\n');
+
+    splitData.forEach(element => {
+      if (element.length === 0) return;
+      const parsedElement = JSON.parse(element);
+
+      services.find(service => service.name === file).errorLogs.push(parsedElement);
+    });
+  } catch (error) {
+    console.log(`File not found: ${error}`);
+  }
+  // services.push({ id: uuidv4(), name: file, state: 'tancat', logs: [], errorLogs: [], process: null });
+});
+
+app.get('/services', (req, res) => {
+  res.send(services);
+});
+
+app.post('/changeServiceState', (req, res) => {
+
+  console.log(req.body);
+
+  const { id } = req.body
+
+  const service = services.find(service => service.id === id);
+
+  console.log(service);
+
+  if (service.state === 'tancat') {
+    startProcess(service);
+    service.state = 'encès';
+  } else {
+    stopProcess(service);
+    service.state = 'tancat';
+  }
+
+  res.send(services);
+
+});
+
+function startProcess(service) {
+  const process = spawn('node', [path.join(__dirname, 'services') + `/${service.name}/index.js`]);
+
+  service.process = process;
+
+  console.log("entering");
+
+  process.stdout.on('data', data => {
+    const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
+    console.log(date);
+    service.logs.push({ log: data.toString(), date: date });
+    console.log("Estàndard: ", { log: data.toString(), date: date });
+    saveLogs(service, { log: data.toString(), date: date });
+  });
+
+  process.stderr.on('data', data => {
+    const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
+    console.log(date);
+    service.errorLogs.push({ log: data.toString(), date: date });
+    console.log("Error: ", { log: data.toString(), date: date });
+    saveErrorLogs(service, { log: data.toString(), date: date });
+
+  });
+
+  process.on('close', code => {
+    service.state = 'tancat';
+    service.process = null;
+    enviarServeis();
+  });
+
+  enviarServeis();
+}
+
+function stopProcess(service) {
+  console.log(process.platform);
+  service.process.kill();
+  service.process = null;
+  service.state = 'tancat';
+  enviarServeis();
+}
+
+function saveLogs(service, objectToSave) {
+  console.log(objectToSave);
+  const { log, date } = objectToSave;
+
+
+  fs.appendFile(path.join(__dirname, 'logs') + `/${service.name}.log`, JSON.stringify({ log, date }) + "||\n", err => {
+    if (err) {
+      console.error(err);
+    }
+  });
+}
+
+function saveErrorLogs(service, log) {
+  fs.appendFile(path.join(__dirname, 'logs') + `/${service.name}.error.log`, log, err => {
+    if (err) {
+      console.error(err);
+    }
+  });
+}
+
+function enviarServeis() {
+  io.emit('actualitzar serveis', JSON.stringify(services.map(service => {
+    return { id: service.id, name: service.name, state: service.state, logs: service.logs, errorLogs: service.errorLogs };
+  })));
+}
 
 // --- ENDPOINTS PARA COMENTARIS ---
 // GET Endpoint per IDPROP
@@ -542,6 +692,6 @@ app.post('/api/votacions', (req, res) => {
 
 
 // Iniciar el servidor
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
 });
