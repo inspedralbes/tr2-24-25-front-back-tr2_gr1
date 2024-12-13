@@ -88,6 +88,7 @@ app.post('/api/associacio', (req, res) => {
 
   console.log(nom)
 
+
   console.log(descripcio)
 
   // Validación de entrada
@@ -443,17 +444,18 @@ app.post('/changeServiceState', (req, res) => {
 });
 
 function startProcess(service) {
-  const process = spawn('node', [path.join(__dirname, 'services') + `/${service.name}/index.js`]);
+  const process = spawn('node', [path.join(__dirname, 'services') + `/${service.name}/index.js`], {
+    cwd: path.join(__dirname, 'services') + `/${service.name}`,
+  });
 
   service.process = process;
-
+  
   console.log("entering");
 
   process.stdout.on('data', data => {
     const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
     console.log(date);
     service.logs.push({ log: data.toString(), date: date });
-    console.log("Estàndard: ", { log: data.toString(), date: date });
     saveLogs(service, { log: data.toString(), date: date });
   });
 
@@ -461,7 +463,6 @@ function startProcess(service) {
     const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
     console.log(date);
     service.errorLogs.push({ log: data.toString(), date: date });
-    console.log("Error: ", { log: data.toString(), date: date });
     saveErrorLogs(service, { log: data.toString(), date: date });
 
   });
@@ -484,9 +485,11 @@ function stopProcess(service) {
 }
 
 function saveLogs(service, objectToSave) {
-  console.log(objectToSave);
   const { log, date } = objectToSave;
 
+  fs.existsSync(path.join(__dirname, 'logs')) || fs.mkdirSync(path.join(__dirname, 'logs'));
+
+  fs.existsSync(path.join(__dirname, 'logs') + `/${service.name}.log`) || fs.writeFileSync(path.join(__dirname, 'logs') + `/${service.name}.log`, '');
 
   fs.appendFile(path.join(__dirname, 'logs') + `/${service.name}.log`, JSON.stringify({ log, date }) + "||\n", err => {
     if (err) {
@@ -495,8 +498,15 @@ function saveLogs(service, objectToSave) {
   });
 }
 
-function saveErrorLogs(service, log) {
-  fs.appendFile(path.join(__dirname, 'logs') + `/${service.name}.error.log`, log, err => {
+function saveErrorLogs(service, objectToSave) {
+  console.log(objectToSave);
+  const { log, date } = objectToSave;
+
+  fs.existsSync(path.join(__dirname, 'logs')) || fs.mkdirSync(path.join(__dirname, 'logs'));
+
+  fs.existsSync(path.join(__dirname, 'logs') + `/${service.name}.error.log`) || fs.writeFileSync(path.join(__dirname, 'logs') + `/${service.name}.error.log`, '');
+
+  fs.appendFile(path.join(__dirname, 'logs') + `/${service.name}.error.log`, JSON.stringify({ log, date }) + "||\n", err => {
     if (err) {
       console.error(err);
     }

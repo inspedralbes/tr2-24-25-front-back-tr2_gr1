@@ -73,7 +73,8 @@ function findSocketRoom(socket) {
     }
     return null;
 }
+const PORT = process.env.PORT || 3001;
 
-server.listen(process.env.PORT, () => {
-    console.log('server running at http://localhost:' + process.env.PORT);
+server.listen(PORT, () => {
+  console.log(`Servidor en funcionament a http://localhost:${PORT}`);
 });
