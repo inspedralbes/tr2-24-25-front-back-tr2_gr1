@@ -3,7 +3,7 @@
 // routes/motocicletes.js
 import express from 'express';
 import path from 'path';
-import Motocicleta from '../models/Motocicleta';
+import Chat from '../models/Chat.js';
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
 
     console.log(req.body);
 
-    const newChat = new Motocicleta({
+    const newChat = new Chat({
       participants: req.body.participants,
       idAsso: req.body.idAsso,
     });
@@ -33,74 +33,71 @@ router.post('/', async (req, res) => {
     const chatGuardat = await newChat.save();
     res.status(201).json(chatGuardat);
   } catch (error) {
-    res.status(500).json({ missatge: 'Error al crear la motocicleta', error });
+    res.status(500).json({ missatge: 'Error al crear el chat', error });
   }
 });
 
-// Obtenir totes les motocicletes
+// Obtenir totes els chats
 router.get('/', async (req, res) => {
   try {
-    const motos = await Motocicleta.find();
+    const motos = await Chat.find();
     res.json(motos);
   } catch (error) {
-    res.status(500).json({ missatge: 'Error al obtenir les motocicletes', error });
+    res.status(500).json({ missatge: 'Error al obtenir els chats', error });
   }
 });
 
-// Obtenir una motocicleta per ID
+// Obtenir un chat per ID
 router.get('/:id', async (req, res) => {
   try {
-    const moto = await Motocicleta.findById(req.params.id);
-    if (!moto) return res.status(404).json({ missatge: 'Motocicleta no trobada' });
-    res.json(moto);
+    const chat = await Chat.findById(req.params.id);
+    if (!chat) return res.status(404).json({ missatge: 'Chat no trobat' });
+    res.json(chat);
   } catch (error) {
-    res.status(500).json({ missatge: 'Error al obtenir la motocicleta', error });
+    res.status(500).json({ missatge: 'Error al obtenir el chat', error });
   }
 });
 
 // Actualitzar una motocicleta per ID
 router.put('/:id', async (req, res) => {
   try {
-    let imatgePath = req.body.imatge || '';
+    // let imatgePath = req.body.imatge || '';
 
-    // Gestionar la pujada de la imatge si se'n proporciona una de nova
-    if (req.files && req.files.imatge) {
-      const imatge = req.files.imatge;
-      const uploadPath = path.join(__dirname, '..', 'upload', imatge.name);
+    // // Gestionar la pujada de la imatge si se'n proporciona una de nova
+    // if (req.files && req.files.imatge) {
+    //   const imatge = req.files.imatge;
+    //   const uploadPath = path.join(__dirname, '..', 'upload', imatge.name);
 
-      await imatge.mv(uploadPath);
-      imatgePath = `/upload/${imatge.name}`;
-    }
+    //   await imatge.mv(uploadPath);
+    //   imatgePath = `/upload/${imatge.name}`;
+    // }
 
-    const motoActualitzada = await Motocicleta.findByIdAndUpdate(
+    const chatActualitzat = await Chat.findByIdAndUpdate(
       req.params.id,
       {
-        marca: req.body.marca,
-        model: req.body.model,
-        potencia: req.body.potencia,
-        descripcio: req.body.descripcio,
-        imatge: imatgePath,
+        participants: req.body.participants,
+        idAsso: req.body.idAsso,
       },
       { new: true }
     );
 
-    if (!motoActualitzada) return res.status(404).json({ missatge: 'Motocicleta no trobada' });
+    if (!chatActualitzat) return res.status(404).json({ missatge: 'Chat no trobat' });
 
-    res.json(motoActualitzada);
+    res.json(chatActualitzat);
   } catch (error) {
-    res.status(500).json({ missatge: 'Error al actualitzar la motocicleta', error });
+    res.status(500).json({ missatge: 'Error al actualitzar el chat', error });
   }
 });
 
 // Eliminar una motocicleta per ID
 router.delete('/:id', async (req, res) => {
   try {
-    const motoEliminada = await Motocicleta.findByIdAndDelete(req.params.id);
-    if (!motoEliminada) return res.status(404).json({ missatge: 'Motocicleta no trobada' });
-    res.json({ missatge: 'Motocicleta eliminada' });
+    const chatEliminat = await Chat.findByIdAndDelete(req.params.id);
+    if (!chatEliminat) return res.status(404).json({ missatge: 'Chat no trobat' });
+    res.json({ missatge: 'Chat eliminada' });
   } catch (error) {
-    res.status(500).json({ missatge: 'Error al eliminar la motocicleta', error });
+    res.status(500).json({ missatge: 'Error al eliminar el chat', error });
   }
 });
 
-module.exports = router;
+export default router;
