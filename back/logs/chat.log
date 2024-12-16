@@ -1,0 +1,66 @@
+{"log":"Servidor en funcionament a http://localhost:3001\n","date":"2024-12-16 08:22:16"}||
+{"log":"Servidor en funcionament a http://localhost:3001\n","date":"2024-12-16 08:40:53"}||
+{"log":"a user connected\n","date":"2024-12-16 08:41:10"}||
+{"log":"joinChat 1\n","date":"2024-12-16 08:41:10"}||
+{"log":"joinChat 1\n","date":"2024-12-16 08:43:12"}||
+{"log":"joinChat 1\n","date":"2024-12-16 08:44:01"}||
+{"log":"a user connected\n","date":"2024-12-16 08:45:55"}||
+{"log":"joinChat 1\n","date":"2024-12-16 08:45:58"}||
+{"log":"chat message { idUser: 1, message: 'hola', idAsso: 1, username: 'sample' }\n","date":"2024-12-16 08:47:19"}||
+{"log":"{\n  idUser: 1,\n  message: 'hola',\n  idAsso: 1,\n  username: 'sample',\n  time: 2024-12-16T08:47:19.930Z\n}\n","date":"2024-12-16 08:47:19"}||
+{"log":"rooms Map(3) {\n  '95seJctBYlwiuQJ1AAAB' => Set(1) { '95seJctBYlwiuQJ1AAAB' },\n  1 => Set(2) { '95seJctBYlwiuQJ1AAAB', '73CgGmOdxRYIhc-SAAAD' },\n  '73CgGmOdxRYIhc-SAAAD' => Set(1) { '73CgGmOdxRYIhc-SAAAD' }\n}\n","date":"2024-12-16 08:47:19"}||
+{"log":"room 1\n","date":"2024-12-16 08:47:19"}||
+{"log":"room 1\n{ room: 1, participants: undefined, messages: [] }\n","date":"2024-12-16 08:47:19"}||
+{"log":"{\n  valid: false,\n  error: Error: Message validation failed: idChat: Path `idChat` is required., date: Path `date` is required.\n      at ValidationError.inspect (D:\\Arnau\\TR2\\tr2-24-25-front-back-tr2_gr1\\back\\services\\chat\\node_modules\\mongoose\\lib\\error\\validation.js:52:26)\n      at formatValue (node:internal/util/inspect:806:19)\n      at formatProperty (node:internal/util/inspect:1946:11)\n      at formatRaw (node:internal/util/inspect:1055:9)\n      at formatValue (node:internal/util/inspect:841:10)\n      at inspect (node:internal/util/inspect:365:10)\n      at formatWithOptionsInternal (node:internal/util/inspect:2304:40)\n      at formatWithOptions (node:internal/util/inspect:2166:10)\n      at console.value (node:internal/console/constructor:348:14)\n      at console.log (node:internal/console/constructor:385:61) {\n    errors: { idChat: [ValidatorError], date: [ValidatorError] },\n    _message: 'Message validation failed'\n  }\n}\n","date":"2024-12-16 08:47:19"}||
+{"log":"chat message { idUser: 1, message: 'asdf', idAsso: 1, username: 'sample' }\n","date":"2024-12-16 08:52:30"}||
+{"log":"{\n  idUser: 1,\n  message: 'asdf',\n  idAsso: 1,\n  username: 'sample',\n  time: 2024-12-16T08:52:30.664Z\n}\n","date":"2024-12-16 08:52:30"}||
+{"log":"rooms Map(3) {\n  '95seJctBYlwiuQJ1AAAB' => Set(1) { '95seJctBYlwiuQJ1AAAB' },\n  1 => Set(2) { '95seJctBYlwiuQJ1AAAB', '73CgGmOdxRYIhc-SAAAD' },\n  '73CgGmOdxRYIhc-SAAAD' => Set(1) { '73CgGmOdxRYIhc-SAAAD' }\n}\nroom 1\n","date":"2024-12-16 08:52:30"}||
+{"log":"room 1\n","date":"2024-12-16 08:52:30"}||
+{"log":"{\n  room: 1,\n  participants: undefined,\n  messages: [\n    {\n      idUser: 1,\n      message: 'hola',\n      idAsso: 1,\n      username: 'sample',\n      time: 2024-12-16T08:47:19.930Z\n    }\n  ]\n}\n","date":"2024-12-16 08:52:30"}||
+{"log":"{\n  valid: false,\n  error: Error: Message validation failed: idChat: Path `idChat` is required., date: Path `date` is required.\n      at ValidationError.inspect (D:\\Arnau\\TR2\\tr2-24-25-front-back-tr2_gr1\\back\\services\\chat\\node_modules\\mongoose\\lib\\error\\validation.js:52:26)\n      at formatValue (node:internal/util/inspect:806:19)\n      at formatProperty (node:internal/util/inspect:1946:11)\n      at formatRaw (node:internal/util/inspect:1055:9)\n      at formatValue (node:internal/util/inspect:841:10)\n      at inspect (node:internal/util/inspect:365:10)\n      at formatWithOptionsInternal (node:internal/util/inspect:2304:40)\n      at formatWithOptions (node:internal/util/inspect:2166:10)\n      at console.value (node:internal/console/constructor:348:14)\n      at console.log (node:internal/console/constructor:385:61) {\n    errors: { idChat: [ValidatorError], date: [ValidatorError] },\n    _message: 'Message validation failed'\n  }\n}\n","date":"2024-12-16 08:52:30"}||
+{"log":"Servidor en funcionament a http://localhost:3001\n","date":"2024-12-16 08:53:29"}||
+{"log":"a user connected\n","date":"2024-12-16 08:53:29"}||
+{"log":"a user connected\n","date":"2024-12-16 08:53:29"}||
+{"log":"chat message { idUser: 1, message: 'sdfas', idAsso: 1, username: 'sample' }\n","date":"2024-12-16 08:53:48"}||
+{"log":"{\n  idUser: 1,\n  message: 'sdfas',\n  idAsso: 1,\n  username: 'sample',\n  time: 2024-12-16T08:53:48.547Z\n}\n","date":"2024-12-16 08:53:48"}||
+{"log":"rooms Map(2) {\n  'Rij0oABZGC_zWKg7AAAC' => Set(1) { 'Rij0oABZGC_zWKg7AAAC' },\n  '-CJ8AWp9FON2nzmtAAAD' => Set(1) { '-CJ8AWp9FON2nzmtAAAD' }\n}\n","date":"2024-12-16 08:53:48"}||
+{"log":"room null\n","date":"2024-12-16 08:53:48"}||
+{"log":"room null\nundefined\n","date":"2024-12-16 08:53:48"}||
+{"log":"Servidor en funcionament a http://localhost:3001\n","date":"2024-12-16 09:02:43"}||
+{"log":"a user connected\n","date":"2024-12-16 09:02:43"}||
+{"log":"a user connected\n","date":"2024-12-16 09:02:43"}||
+{"log":"a user connected\n","date":"2024-12-16 09:02:52"}||
+{"log":"joinChat 1\n","date":"2024-12-16 09:02:52"}||
+{"log":"chat message { idUser: 1, message: 'helo', idAsso: 1, username: 'sample' }\n","date":"2024-12-16 09:03:28"}||
+{"log":"{\n  idUser: 1,\n  message: 'helo',\n  idAsso: 1,\n  username: 'sample',\n  time: 2024-12-16T09:03:28.416Z\n}\n","date":"2024-12-16 09:03:28"}||
+{"log":"rooms Map(2) {\n  'aU3gqOERs-d8cWBdAAAF' => Set(1) { 'aU3gqOERs-d8cWBdAAAF' },\n  1 => Set(1) { 'aU3gqOERs-d8cWBdAAAF' }\n}\n","date":"2024-12-16 09:03:28"}||
+{"log":"room 1\n","date":"2024-12-16 09:03:28"}||
+{"log":"room 1\n","date":"2024-12-16 09:03:28"}||
+{"log":"{ room: 1, participants: [], messages: [] }\n","date":"2024-12-16 09:03:28"}||
+{"log":"{\n  valid: false,\n  error: Error: Message validation failed: idChat: Path `idChat` is required., date: Path `date` is required.\n      at ValidationError.inspect (D:\\Arnau\\TR2\\tr2-24-25-front-back-tr2_gr1\\back\\services\\chat\\node_modules\\mongoose\\lib\\error\\validation.js:52:26)\n      at formatValue (node:internal/util/inspect:806:19)\n      at formatProperty (node:internal/util/inspect:1946:11)\n      at formatRaw (node:internal/util/inspect:1055:9)\n      at formatValue (node:internal/util/inspect:841:10)\n      at inspect (node:internal/util/inspect:365:10)\n      at formatWithOptionsInternal (node:internal/util/inspect:2304:40)\n      at formatWithOptions (node:internal/util/inspect:2166:10)\n      at console.value (node:internal/console/constructor:348:14)\n      at console.log (node:internal/console/constructor:385:61) {\n    errors: { idChat: [ValidatorError], date: [ValidatorError] },\n    _message: 'Message validation failed'\n  }\n}\n","date":"2024-12-16 09:03:28"}||
+{"log":"chat message { idUser: 1, message: 'asdfasdfasdf', idAsso: 1, username: 'sample' }\n","date":"2024-12-16 09:03:32"}||
+{"log":"{\n  idUser: 1,\n  message: 'asdfasdfasdf',\n  idAsso: 1,\n  username: 'sample',\n  time: 2024-12-16T09:03:32.784Z\n}\n","date":"2024-12-16 09:03:32"}||
+{"log":"rooms Map(2) {\n  'aU3gqOERs-d8cWBdAAAF' => Set(1) { 'aU3gqOERs-d8cWBdAAAF' },\n  1 => Set(1) { 'aU3gqOERs-d8cWBdAAAF' }\n}\nroom 1\n","date":"2024-12-16 09:03:32"}||
+{"log":"room 1\n","date":"2024-12-16 09:03:32"}||
+{"log":"{\n  room: 1,\n  participants: [],\n  messages: [\n    {\n      idUser: 1,\n      message: 'helo',\n      idAsso: 1,\n      username: 'sample',\n      time: 2024-12-16T09:03:28.416Z\n    }\n  ]\n}\n","date":"2024-12-16 09:03:32"}||
+{"log":"{\n  valid: false,\n  error: Error: Message validation failed: idChat: Path `idChat` is required., date: Path `date` is required.\n      at ValidationError.inspect (D:\\Arnau\\TR2\\tr2-24-25-front-back-tr2_gr1\\back\\services\\chat\\node_modules\\mongoose\\lib\\error\\validation.js:52:26)\n      at formatValue (node:internal/util/inspect:806:19)\n      at formatProperty (node:internal/util/inspect:1946:11)\n      at formatRaw (node:internal/util/inspect:1055:9)\n      at formatValue (node:internal/util/inspect:841:10)\n      at inspect (node:internal/util/inspect:365:10)\n      at formatWithOptionsInternal (node:internal/util/inspect:2304:40)\n      at formatWithOptions (node:internal/util/inspect:2166:10)\n      at console.value (node:internal/console/constructor:348:14)\n      at console.log (node:internal/console/constructor:385:61) {\n    errors: { idChat: [ValidatorError], date: [ValidatorError] },\n    _message: 'Message validation failed'\n  }\n}\n","date":"2024-12-16 09:03:32"}||
+{"log":"Servidor en funcionament a http://localhost:3001\n","date":"2024-12-16 09:05:23"}||
+{"log":"a user connected\n","date":"2024-12-16 09:05:23"}||
+{"log":"a user connected\n","date":"2024-12-16 09:05:25"}||
+{"log":"joinChat 1\n","date":"2024-12-16 09:05:25"}||
+{"log":"chat message { idUser: 1, message: 'holi', idAsso: 1, username: 'sample' }\n","date":"2024-12-16 09:05:30"}||
+{"log":"{\n  idUser: 1,\n  message: 'holi',\n  idAsso: 1,\n  username: 'sample',\n  date: 2024-12-16T09:05:30.424Z\n}\n","date":"2024-12-16 09:05:30"}||
+{"log":"rooms Map(2) {\n  'Yo-pe1VrZV16T6XUAAAD' => Set(1) { 'Yo-pe1VrZV16T6XUAAAD' },\n  1 => Set(1) { 'Yo-pe1VrZV16T6XUAAAD' }\n}\n","date":"2024-12-16 09:05:30"}||
+{"log":"room 1\n","date":"2024-12-16 09:05:30"}||
+{"log":"room 1\n{ room: 1, participants: [], messages: [] }\n","date":"2024-12-16 09:05:30"}||
+{"log":"{\n  valid: false,\n  error: MongooseError: Operation `messages.insertOne()` buffering timed out after 10000ms\n      at Timeout.<anonymous> (D:\\Arnau\\TR2\\tr2-24-25-front-back-tr2_gr1\\back\\services\\chat\\node_modules\\mongoose\\lib\\drivers\\node-mongodb-native\\collection.js:185:23)\n      at listOnTimeout (node:internal/timers:581:17)\n      at process.processTimers (node:internal/timers:519:7)\n}\n","date":"2024-12-16 09:05:40"}||
+{"log":"chat message {\n  idUser: 1,\n  message: 'adssdgaasfdfdsaa',\n  idAsso: 1,\n  username: 'sample'\n}\n","date":"2024-12-16 09:08:52"}||
+{"log":"{\n  idUser: 1,\n  message: 'adssdgaasfdfdsaa',\n  idAsso: 1,\n  username: 'sample',\n  date: 2024-12-16T09:08:52.959Z\n}\nrooms Map(2) {\n  'Yo-pe1VrZV16T6XUAAAD' => Set(1) { 'Yo-pe1VrZV16T6XUAAAD' },\n  1 => Set(1) { 'Yo-pe1VrZV16T6XUAAAD' }\n}\nroom 1\n","date":"2024-12-16 09:08:52"}||
+{"log":"room 1\n","date":"2024-12-16 09:08:52"}||
+{"log":"{\n  room: 1,\n  participants: [],\n  messages: [\n    {\n      idUser: 1,\n      message: 'holi',\n      idAsso: 1,\n      username: 'sample',\n      date: 2024-12-16T09:05:30.424Z\n    }\n  ]\n}\n","date":"2024-12-16 09:08:52"}||
+{"log":"{\n  valid: false,\n  error: MongooseError: Operation `messages.insertOne()` buffering timed out after 10000ms\n      at Timeout.<anonymous> (D:\\Arnau\\TR2\\tr2-24-25-front-back-tr2_gr1\\back\\services\\chat\\node_modules\\mongoose\\lib\\drivers\\node-mongodb-native\\collection.js:185:23)\n      at listOnTimeout (node:internal/timers:581:17)\n      at process.processTimers (node:internal/timers:519:7)\n}\n","date":"2024-12-16 09:09:02"}||
+{"log":"chat message {\n  idUser: 1,\n  message: 'asdfgfFASDFASDFASDF',\n  idAsso: 1,\n  username: 'sample'\n}\n","date":"2024-12-16 09:09:12"}||
+{"log":"{\n  idUser: 1,\n  message: 'asdfgfFASDFASDFASDF',\n  idAsso: 1,\n  username: 'sample',\n  date: 2024-12-16T09:09:12.175Z\n}\n","date":"2024-12-16 09:09:12"}||
+{"log":"rooms Map(2) {\n  'Yo-pe1VrZV16T6XUAAAD' => Set(1) { 'Yo-pe1VrZV16T6XUAAAD' },\n  1 => Set(1) { 'Yo-pe1VrZV16T6XUAAAD' }\n}\nroom 1\n","date":"2024-12-16 09:09:12"}||
+{"log":"room 1\n{\n  room: 1,\n  participants: [],\n  messages: [\n    {\n      idUser: 1,\n      message: 'holi',\n      idAsso: 1,\n      username: 'sample',\n      date: 2024-12-16T09:05:30.424Z\n    },\n    {\n      idUser: 1,\n      message: 'adssdgaasfdfdsaa',\n      idAsso: 1,\n      username: 'sample',\n      date: 2024-12-16T09:08:52.959Z\n    }\n  ]\n}\n","date":"2024-12-16 09:09:12"}||
+{"log":"{\n  valid: false,\n  error: MongooseError: Operation `messages.insertOne()` buffering timed out after 10000ms\n      at Timeout.<anonymous> (D:\\Arnau\\TR2\\tr2-24-25-front-back-tr2_gr1\\back\\services\\chat\\node_modules\\mongoose\\lib\\drivers\\node-mongodb-native\\collection.js:185:23)\n      at listOnTimeout (node:internal/timers:581:17)\n      at process.processTimers (node:internal/timers:519:7)\n}\n","date":"2024-12-16 09:09:22"}||

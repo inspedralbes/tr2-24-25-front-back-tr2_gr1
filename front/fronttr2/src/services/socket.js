@@ -1,12 +1,12 @@
 import { io } from "socket.io-client";
 
 
-const URL = "localhost:3001";
+const URL = "http://localhost:3001/";
 
 export const socket = io(URL);
 
 socket.on("allMessages", (data)=>{
-    //add all messages to Pinia
+    console.log(data);
 })
 
 socket.on("chat message", (data)=>{
