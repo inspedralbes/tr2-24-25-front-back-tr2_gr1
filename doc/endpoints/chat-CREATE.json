@@ -1,0 +1,37 @@
+{
+    "endpoint": "/chat/create",
+    "method": "POST",
+    "description": "Create a new chat",
+    "request": {
+        "body": {
+            "idAsso": "string",
+            "participants": [
+                {
+                    "userId": "string",
+                    "username": "string"
+                }
+            ]
+        }
+    },
+    "response": {
+        "201": {
+            "description": "Chat created successfully",
+            "body": {
+                "chatId": "string",
+                "idAsso": "string",
+                "participants": [
+                    {
+                        "userId": "string"
+                    }
+                ],
+                "createdAt": "string"
+            }
+        },
+        "400": {
+            "description": "Invalid request"
+        },
+        "500": {
+            "description": "Internal server error"
+        }
+    }
+}
