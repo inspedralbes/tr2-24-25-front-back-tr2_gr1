@@ -3,7 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
-import chatRoutes from './routes/chat.js';
+import chatRoutes from '../chat/routes/chat.js';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
