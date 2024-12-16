@@ -99,7 +99,7 @@ async function login() {
                 localStorage.setItem("correu", correu.value);
                 localStorage.setItem("contrasenya", contrasenya.value)
             }
-            router.push('/');
+            router.push('/noticies');
         } else {
             alert('Correu o contrasenya incorrectes');
         }
