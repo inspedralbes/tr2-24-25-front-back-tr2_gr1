@@ -29,7 +29,6 @@ export function login(db, SECRET_KEY) {
       if (!isMatch) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
-
       const token = jwt.sign(
         { id: user.id, correu: user.correu },
         SECRET_KEY,

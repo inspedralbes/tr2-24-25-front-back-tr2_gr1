@@ -16,7 +16,7 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 
 dotenv.config();
-import { login, verifyToken } from './services/tokens.js';
+import { login, verifyToken } from './tokens.js';
 
 // Crear la aplicación Express
 const app = express();
