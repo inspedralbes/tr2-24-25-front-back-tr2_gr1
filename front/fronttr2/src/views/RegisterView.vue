@@ -86,7 +86,10 @@ export default {
                         imatge: 'default-image.png',
                         permisos: 'user',
                     });
-                    router.push('/');
+                    if(response==true){
+                        router.push('/');
+
+                    }
                 } catch (error) {
                     console.error('Error al crear el usuari:', error);
                 }
