@@ -1,5 +1,5 @@
-import { useLoggedUsers } from "@/stores/users";
 import bcrypt from "bcryptjs";
+import { useUserStore } from '@/stores/users';
 
 const URL = import.meta.env.VITE_API_ROUTE;
 const URLNOTICIAS = 'http://localhost:3002';
@@ -86,7 +86,7 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
 };
 
 export const loginUsuari = async (correu, contrasenya) => {
-    const loggedUsersStore = useLoggedUsers();
+    const userStore = useUserStore();  // Aquí accedes correctamente al store
     try {
         const response = await fetch('http://localhost:3000/api/login', {
             method: 'POST',
@@ -100,15 +100,15 @@ export const loginUsuari = async (correu, contrasenya) => {
         });
 
         if (!response.ok) {
-            console.log(response)
+            console.log(response);
             throw new Error(`L'inici de sessió ha fallat`);
         }
 
         const user = await response.json();
-
         const currentAssiciacio = 0;
 
-        loggedUsersStore.newUser({
+        // Actualiza el store con los datos del usuario
+        userStore.newUser({
             token: user.token,
             nom: user.nom,
             cognoms: user.cognoms,
@@ -117,7 +117,7 @@ export const loginUsuari = async (correu, contrasenya) => {
             currentAssiciacio
         });
 
-        console.log(loggedUsersStore.users);
+        console.log(userStore.user);  // Verifica los datos del store
 
         if (response.ok) {
             console.log('Usuari autenticat amb èxit');
@@ -126,7 +126,7 @@ export const loginUsuari = async (correu, contrasenya) => {
             console.error('Usuari o contrasenya incorrectes');
             return false;
         }
-        
+
     } catch (error) {
         console.error('Error al intentar autenticar:', error);
         return false;
@@ -223,6 +223,28 @@ export const deleteNoticia = async (id) => {
         }
     } catch (err) {
         console.error('Error during fetch: ', err);
+    }
+};
+
+export const asignaUsuariAssociacio = async (loggedUser, idAsso) => {
+    try {
+        const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idUsu: loggedUser.id, idAsso }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al asignar usuario a la asociación.');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error en la asignación de usuario:', error);
+        throw error;  // Propaga el error para que se maneje en el lugar donde se llama
     }
 };
 

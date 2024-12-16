@@ -60,6 +60,8 @@ import FloatLabel from 'primevue/floatlabel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Card from 'primevue/card';
+import { useUserStore } from '@/stores/users';
+
 import { loginUsuari } from './../services/comunicationManager';
 
 const correu = ref(null);
@@ -78,7 +80,6 @@ async function login() {
     loading.value = true;
     try {
         const result = await loginUsuari(correu.value, contrasenya.value);
-    
         if (result) {
             alert('Inici de sessió exitós!');
             router.push('/');
@@ -92,6 +93,7 @@ async function login() {
         loading.value = false;
     }
 }
+
 </script>
 
 <style scoped>

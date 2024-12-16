@@ -20,6 +20,7 @@ import { login, verifyToken } from './services/tokens.js';
 
 // Crear la aplicación Express
 const app = express();
+const router = express.Router();
 
 
 // Middleware
@@ -545,20 +546,17 @@ app.post('/asignaUsuariAssociacio', async (req, res) => {
   const { idUsu, idAsso } = req.body;
 
   if (!idUsu || !idAsso) {
-      return res.status(400).json({ error: 'Faltan datos necesarios.' });
+      return res.status(400).send('Falten paràmetres');
   }
 
   try {
-      const query = `
-          INSERT INTO USUARI_ASSOCIACIO (idUsu, idAsso)
-          VALUES (?, ?)
-          ON DUPLICATE KEY UPDATE idUsu = idUsu;
-      `;
-      await connection.query(query, [idUsu, idAsso]);
-      res.status(200).json({ message: 'Usuario asignado a la asociación correctamente.' });
+      const query = 'INSERT INTO usuari_associacio (idUsu, idAsso) VALUES (?, ?)';
+      await pool.query(query, [idUsu, idAsso]);
+
+      res.status(200).send('Usuari associat a l\'associació');
   } catch (error) {
-      console.error('Error al asignar usuario a asociación:', error);
-      res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error al associar usuari:', error);
+      res.status(500).send('Error del servidor');
   }
 });
 
