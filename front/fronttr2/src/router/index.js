@@ -69,6 +69,11 @@ const router = createRouter({
       path: '/calendari',
       name: 'calendari',
       component: () => import('../views/Calendar.vue')
+    },
+    {
+      path: '/perfil',
+      name: 'perfil',
+      component: () => import('../views/PerfilView.vue')
     }
   ],
 });
