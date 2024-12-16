@@ -39,7 +39,8 @@ export async function createMessage(data) {
 export async function getMessagesByAssoId(idAsso) {
   try {
     const messages = await Message.find({ idAsso });
-    return { valid: true, messages };
+    console.log(JSON.stringify(messages));
+    return { valid: true, messages: messages };
   } catch (error) {
     return { valid: false, error };
   }

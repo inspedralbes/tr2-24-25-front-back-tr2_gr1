@@ -8,6 +8,7 @@ import { createServer, get } from 'node:http';
 import { join } from 'node:path';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import mongoose from 'mongoose';
 import { createChat, getChatByAssoId } from './routes/chat.js';
 import { createMessage, getMessagesByAssoId } from './routes/message.js';
 
@@ -27,6 +28,11 @@ const io = new Server(server, {
     }
 });
 
+mongoose.connect('mongodb://root:example@localhost:27017/')
+    .then(() => console.log('Connectat a MongoDB'))
+    .catch((err) => console.error('Error al connectar a MongoDB', err));
+
+
 let chat = [];
 //socket connection
 io.on('connection', (socket) => {
@@ -36,19 +42,32 @@ io.on('connection', (socket) => {
     // <<< DATA == IDASSO >>> <<< MESSAGES == {idAsso: 1, idUser: 1, message: 'Hola', date: new Date()} >>>
     socket.on('joinChat', (data) => {
         console.log('joinChat', data);
-        if(chat.find(room => room.room === data) === undefined){
+        if (chat.find(room => room.room === data) === undefined) {
 
-            let chatData = getChatByAssoId(data);
+            Promise.all([
+
+                getChatByAssoId(data),
+                getMessagesByAssoId(data)
+
+            ]).then(([chatData, messagesData]) => {
+
+                chat.push({ room: data, participants: chatData.chat?.participants || [], messages: messagesData.valid == true ? messagesData.messages : [] });
+                socket.emit('allMessages', chat.find(room => room.room === data).messages);
+    
+                socket.join(data);
+            }).catch((error) => {
+                console.error('Error fetching chat or messages:', error);
+            });
+
             
-            let messagesData = getMessagesByAssoId(data);
-            
-            chat.push({room: data, participants: chatData.chat?.participants || [], messages: messagesData?.messages==undefined ? [] : messagesData.messages});
-        
+
+        } else {
+            socket.emit('allMessages', chat.find(room => room.room === data).messages);
+
+            socket.join(data);
         }
 
-        socket.emit('allMessages', chat.find(room => room.room === data).messages);
 
-        socket.join(data);
     });
 
     //function that removes the user from a room
@@ -56,7 +75,7 @@ io.on('connection', (socket) => {
         console.log('leaveChat', data);
         socket.leave(data);
     });
-    
+
     //function that sends a message to a room
     socket.on('newMessage', (data) => {
         console.log('chat message', data);
@@ -66,16 +85,16 @@ io.on('connection', (socket) => {
             console.log(result);
         });
 
-        let room=findSocketRoom(socket);
+        let room = findSocketRoom(socket);
         console.log('room', room);
         io.to(room).emit('chat message', data);
         console.log('room', room);
-        let chatAux=chat.find(chatroom => chatroom.room === room)
+        let chatAux = chat.find(chatroom => chatroom.room === room)
         console.log(chatAux);
         chatAux.messages.push(data);
 
-        
-        
+
+
     });
 });
 
@@ -100,5 +119,5 @@ function findSocketRoom(socket) {
 const PORT = 3001;
 
 server.listen(PORT, () => {
-  console.log(`Servidor en funcionament a http://localhost:${PORT}`);
+    console.log(`Servidor en funcionament a http://localhost:${PORT}`);
 });

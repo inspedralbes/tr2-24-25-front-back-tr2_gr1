@@ -46,6 +46,7 @@ const messages = ref([])
             idAsso: 1, //This must be changed to the association id
             username: "sample" //This must be changed to the user name
         }
+        console.log("Sending message: ", auxObject);
         socket.emit('newMessage', auxObject);
         message.value = '';
     }

@@ -10,5 +10,5 @@ socket.on("allMessages", (data)=>{
 })
 
 socket.on("chat message", (data)=>{
-    //add message to Pinia
+    console.log(data);
 })
