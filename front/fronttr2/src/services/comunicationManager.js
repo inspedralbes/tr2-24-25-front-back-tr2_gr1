@@ -137,7 +137,7 @@ export const loginUsuari = async (correu, contrasenya) => {
 
 export const getPropostes = async () => {
     try {
-        const response = await fetch(`${URL}/api/proposta`);
+        const response = await fetch(`${URLPROPOSTES}/api/proposta`);
         if (response.ok) {
             const data = await response.json();
             console.log('Propostes:', data);
@@ -161,7 +161,7 @@ export const getPropostes = async () => {
 
 export const getPropostaById = async (id) => {
     try {
-        const response = await fetch(`${URL}/api/proposta/${id}`);
+        const response = await fetch(`${URLPROPOSTES}/api/proposta/${id}`);
         if (response.ok) {
             const data = await response.json();
             return {
@@ -184,7 +184,7 @@ export const getPropostaById = async (id) => {
 
 export const getComentarios = async (idProp) => {
     try {
-      const response = await fetch(`${URL}/api/comentaris/${idProp}`);
+      const response = await fetch(`${URLPROPOSTES}/api/comentaris/${idProp}`);
       if (response.ok) {
         const data = await response.json();
         console.log('Comentarios:', data);
@@ -201,7 +201,7 @@ export const getComentarios = async (idProp) => {
   
   export const addComentario = async (idProp, comentario) => {
     try {
-      const response = await fetch(`${URL}/api/comentaris/${idProp}`, {
+      const response = await fetch(`${URLPROPOSTES}/api/comentaris/${idProp}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -224,7 +224,7 @@ export const getComentarios = async (idProp) => {
 
   export async function submitVotacio(idProposta, idUsuari, resposta) {
     try {
-      const response = await fetch(`${URL}/api/votacions`, {
+      const response = await fetch(`${URLPROPOSTES}/api/votacions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
