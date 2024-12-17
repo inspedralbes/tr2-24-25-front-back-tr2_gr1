@@ -29,6 +29,14 @@
                         :loading="loading" 
                         @click="login" 
                     />
+                    <Button class="button secondary-button"
+                        label="Registrar-se" 
+                        icon="pi pi-arrow-right" 
+                        iconPos="left" 
+                        severity="success" 
+                        :loading="loading" 
+                        @click="router.push('/register')" 
+                    />
                 </div>
 
                 <Dialog 

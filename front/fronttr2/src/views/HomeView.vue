@@ -54,8 +54,7 @@ import router from '@/router';
 }
 
 .custom-button:hover {
-  background-color: var(--secondary-color) !important;
-  border-color: var(--secondary-color) !important;
+  filter: brightness(90%)
 }
 
 .custom-button:focus-visible {
