@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 
 const URL = import.meta.env.VITE_API_ROUTE;
 const URLNOTICIAS = 'http://localhost:3002';
+const URLPROPOSTES = 'http://localhost:3003';
 
 export const crearAssociacio = async (nom, desc) => {
     try {
@@ -200,7 +201,7 @@ export const getComentarios = async (idProp) => {
   
   export const addComentario = async (idProp, comentario) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/comentaris/${idProp}`, {
+      const response = await fetch(`${URL}/api/comentaris/${idProp}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -223,7 +224,7 @@ export const getComentarios = async (idProp) => {
 
   export async function submitVotacio(idProposta, idUsuari, resposta) {
     try {
-      const response = await fetch('http://localhost:3000/api/votacions', {
+      const response = await fetch(`${URL}/api/votacions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
