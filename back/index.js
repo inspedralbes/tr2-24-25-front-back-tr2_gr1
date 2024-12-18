@@ -14,10 +14,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { spawn } from 'node:child_process';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
-
+import bcrypt from 'bcryptjs';
 dotenv.config();
 import { login, verifyToken } from './tokens.js';
 
+
+async function hashPassword(contrasenya){
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(contrasenya, salt);
+  return hashedPassword
+}
 // Crear la aplicación Express
 const app = express();
 
@@ -63,9 +69,16 @@ connection.connect((err) => {
   console.log('Conectado a MySQL!');
 });
 
+function verifyTokenMiddleware(req, res, next) {
+  const verificacio = verifyToken(SECRET_KEY, req);
+  if (verificacio.status === 401) {
+    return res.status(401).json(verificacio);
+  }
+  next();
+}
 // --- ENDPOINTS PARA ASSOCIACIO ---
 // GET Endpoint
-app.get('/api/associacio', (req, res) => {
+app.get('/api/associacio',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const query = 'SELECT id, nom, descripcio FROM ASSOCIACIO';
 
@@ -82,7 +95,7 @@ app.get('/api/associacio', (req, res) => {
 });
 
 // POST Endpoint
-app.post('/api/associacio', (req, res) => {
+app.post('/api/associacio',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { nom, descripcio } = req.body;
 
@@ -115,7 +128,7 @@ app.post('/api/associacio', (req, res) => {
 });
 
 // DELETE Endpoint
-app.delete('/api/associacio', (req, res) => {
+app.delete('/api/associacio',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { id } = req.body;
 
@@ -143,7 +156,7 @@ app.delete('/api/associacio', (req, res) => {
 });
 
 // PUT Endpoint
-app.put('/api/associacio', (req, res) => {
+app.put('/api/associacio',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { id, nom, descripcio } = req.body;
 
@@ -177,7 +190,7 @@ app.put('/api/associacio', (req, res) => {
 
 // --- ENDPOINTS PARA USUARI ---
 // GET Endpoint
-app.get('/api/usuari', (req, res) => {
+app.get('/api/usuari', verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const query = 'SELECT id, nom, cognoms, contrasenya, correu, imatge, permisos FROM USUARI';
 
@@ -194,7 +207,7 @@ app.get('/api/usuari', (req, res) => {
 });
 
 // POST Endpoint
-app.post('/api/usuari', (req, res) => {
+app.post('/api/usuari', async (req, res) => {
   const db = connectToDatabase();
   const { nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
 
@@ -202,31 +215,47 @@ app.post('/api/usuari', (req, res) => {
   if (!nom || !cognoms || !contrasenya || !correu || !imatge || !permisos) {
     return res.status(400).json({ message: 'Invalid input' });
   }
-
-  const insertQuery = 'INSERT INTO USUARI (nom, cognoms, contrasenya, correu, imatge, permisos) VALUES (?, ?, ?, ?, ?, ?)';
-  db.query(insertQuery, [nom, cognoms, contrasenya, correu, imatge, permisos], (err, result) => {
+  const checkQuery = 'SELECT * FROM USUARI WHERE correu = ?';
+  db.query(checkQuery, [correu], async (err, results) => {
     if (err) {
-      console.error('Invalid input', err);
-      return res.status(500).send('Invalid input');
+      console.error('Error checking user', err);
+      db.end();
+      return res.status(500).send('Error checking user');
     }
 
-    // Respuesta exitosa con el ID generado
-    const createdUser = {
-      id: result.insertId,
-      nom,
-      cognoms,
-      contrasenya,
-      correu,
-      imatge,
-      permisos,
-    };
-    res.status(201).json(createdUser);
+    if (results.length > 0) {
+      db.end();
+      return res.status(400).json({ message: 'User with this email already exists' });
+    }
+
+    let hashedPassword = await hashPassword(contrasenya);
+    console.log(hashedPassword);
+    const insertQuery = 'INSERT INTO USUARI (nom, cognoms, contrasenya, correu, imatge, permisos) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(insertQuery, [nom, cognoms, hashedPassword, correu, imatge, permisos], (err, result) => {
+      if (err) {
+        console.error('Invalid input', err);
+        db.end();
+        return res.status(500).send('Invalid input');
+      }
+
+      // Respuesta exitosa con el ID generado
+      const createdUser = {
+        id: result.insertId,
+        nom,
+        cognoms,
+        hashedPassword,
+        correu,
+        imatge,
+        permisos,
+      };
+      db.end();
+      res.status(201).json(createdUser);
+    });
   });
-  db.end();
 });
 
 // DELETE Endpoint
-app.delete('/api/usuari', (req, res) => {
+app.delete('/api/usuari', verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { id } = req.body;
 
@@ -252,7 +281,7 @@ app.delete('/api/usuari', (req, res) => {
 });
 
 // PUT Endpoint
-app.put('/api/usuari', (req, res) => {
+app.put('/api/usuari', verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { id, nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
 
@@ -290,7 +319,7 @@ app.put('/api/usuari', (req, res) => {
 // --- ENDPOINTS PER PROPOSTA ---
 
 // GET Endpoint
-app.get('/api/proposta', (req, res) => {
+app.get('/api/proposta',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const query = `
     SELECT 
@@ -332,7 +361,7 @@ app.get('/api/proposta', (req, res) => {
 });
 
 // UPDATE Endpoint
-app.put('/api/proposta', (req, res) => {
+app.put('/api/proposta',verifyTokenMiddleware, (req, res) => {
   const { id, titol, subtitol, contingut, autor, idAsso, data } = req.body;
 
   if (!id || !titol || !subtitol || !contingut || !autor || !idAsso || !data) {
@@ -443,6 +472,50 @@ app.post('/changeServiceState', (req, res) => {
 
 });
 
+// --- ENDPOINTS PER ACTIVITIES ---
+app.get('/api/activities',verifyTokenMiddleware, (req,res)=>{
+  let data=[
+    {
+      id: 1,
+      date: new Date(2025, 0, 1),
+      label: "New Year",
+      content: "Happy New Year!",
+      link: "https://www.google.com",
+      color: "red",
+    },
+    {
+      id: 2,
+      date: new Date(2025, 0, 1),
+      label: "Valentine's Day",
+      content: "Happy Valentine's Day!",
+      link: "https://www.google.com",
+      color: "purple",
+    },
+    {
+      id: 3,
+      date: new Date(2025, 0, 2),
+      label: "International Women's Day",
+      content: "Happy International Women's Day!",
+      link: "https://www.google.com",
+      color: "green",
+    },
+  ];
+res.status(200).json(data);
+
+})// --- Login ENDPOINT ---
+app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
+
+// Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
+app.get('/prova', (req, res) => {
+  const verificacio = verifyToken(SECRET_KEY, req);
+  console.log(verificacio)
+  if (verificacio.status === 401) {
+    res.status(401).json(verificacio);
+  } else {
+    res.status(200).json(verificacio);
+  };
+});
+
 function startProcess(service) {
   const process = spawn('node', [path.join(__dirname, 'services') + `/${service.name}/index.js`], {
     cwd: path.join(__dirname, 'services') + `/${service.name}`,
@@ -518,49 +591,7 @@ function enviarServeis() {
     return { id: service.id, name: service.name, state: service.state, logs: service.logs, errorLogs: service.errorLogs };
   })));
 }
-// --- ENDPOINTS PER ACTIVITIES ---
-app.get('/api/activities', (req,res)=>{
-  let data=[
-    {
-      id: 1,
-      date: new Date(2025, 0, 1),
-      label: "New Year",
-      content: "Happy New Year!",
-      link: "https://www.google.com",
-      color: "red",
-    },
-    {
-      id: 2,
-      date: new Date(2025, 0, 1),
-      label: "Valentine's Day",
-      content: "Happy Valentine's Day!",
-      link: "https://www.google.com",
-      color: "purple",
-    },
-    {
-      id: 3,
-      date: new Date(2025, 0, 2),
-      label: "International Women's Day",
-      content: "Happy International Women's Day!",
-      link: "https://www.google.com",
-      color: "green",
-    },
-  ];
-res.status(200).json(data);
 
-})// --- Login ENDPOINT ---
-app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
-
-// Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
-app.get('/prova', (req, res) => {
-  const verificacio = verifyToken(SECRET_KEY, req);
-
-  if (verificacio.status === 401) {
-    res.status(401).json(verificacio);
-  } else {
-    res.status(200).json(verificacio);
-  };
-});
 
 server.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
