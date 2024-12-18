@@ -71,7 +71,9 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
         if (response.ok) {
             const data = await response.json();
             console.log('Usuari creat amb èxit:', data);
-            return data;
+            let returnData=loginUsuari(data.correu, contrasenya)
+            console.log(returnData)
+            return returnData;
         } else if (response.status === 400) {
             const errorDetails = await response.json();
             console.error('Error 400: Input no vàlid:', errorDetails);

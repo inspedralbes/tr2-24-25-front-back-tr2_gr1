@@ -16,7 +16,10 @@
                         <InputText type="password" id="contrasenya_label" v-model="contrasenya" autocomplete="off" />
                     </FloatLabel>
                 </div>
-
+                <div class="flex items-center gap-2">
+        <Checkbox v-model="session" inputId="session" name="session" value="session" />
+        <label for="session"> Mantenir sessió iniciada </label>
+    </div>
                 <div class="card flex flex-wrap justify-center items-end gap-4">
                     <Button class="button secondary-button"
                         label="Iniciar sessió" 
@@ -25,6 +28,14 @@
                         severity="success" 
                         :loading="loading" 
                         @click="login" 
+                    />
+                    <Button class="button secondary-button"
+                        label="Registrar-se" 
+                        icon="pi pi-arrow-right" 
+                        iconPos="left" 
+                        severity="success" 
+                        :loading="loading" 
+                        @click="router.push('/register')" 
                     />
                 </div>
 
@@ -53,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import InputText from 'primevue/inputtext';
 import FloatLabel from 'primevue/floatlabel';
@@ -61,13 +72,24 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Card from 'primevue/card';
 import { loginUsuari } from './../services/comunicationManager';
+import Checkbox from 'primevue/checkbox';
+
 
 const correu = ref(null);
 const contrasenya = ref(null);
 const loading = ref(false);
 var visible = ref(false);
-
+var session = ref(false);
 const router = useRouter();
+
+    onMounted(() => {
+        if(localStorage.getItem("correu") && localStorage.getItem("contrasenya")){
+            correu.value=localStorage.getItem("correu");
+            contrasenya.value=localStorage.getItem("contrasenya")
+            login()
+        }
+
+    })
 
 async function login() {
     if (!correu.value || !contrasenya.value) {
@@ -81,7 +103,11 @@ async function login() {
     
         if (result) {
             alert('Inici de sessió exitós!');
-            router.push('/');
+            if(session.value){
+                localStorage.setItem("correu", correu.value);
+                localStorage.setItem("contrasenya", contrasenya.value)
+            }
+            router.push('/noticies');
         } else {
             alert('Correu o contrasenya incorrectes');
         }

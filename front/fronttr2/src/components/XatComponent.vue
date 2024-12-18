@@ -28,24 +28,25 @@ const messages = ref([])
 
     })
 
-    //This code is just for testing
-    socket.on('allMessages', (data) => {
-        messages.value = data;
-    })
-    //This code is just for testing
-    socket.on('chat message', (data) => {
-        console.log(data)
-        messages.value.push(data);
-    })
+    // //This code is just for testing
+    // socket.on('allMessages', (data) => {
+    //     messages.value = data;
+    // })
+    // //This code is just for testing
+    // socket.on('chat message', (data) => {
+    //     console.log(data)
+    //     messages.value.push(data);
+    // })
 
     //function to send a message
     function sendMessage(){
         let auxObject={
-            userid: 1, //This must be changed to the user id
-            content: message.value,
-            associationid: 1, //This must be changed to the association id
+            idUser: 1, //This must be changed to the user id
+            message: message.value,
+            idAsso: 1, //This must be changed to the association id
             username: "sample" //This must be changed to the user name
         }
+        console.log("Sending message: ", auxObject);
         socket.emit('newMessage', auxObject);
         message.value = '';
     }
