@@ -25,6 +25,12 @@
           </FloatLabel>
         </div>
 
+        <!-- Selección de color -->
+        <div class="card flex flex-wrap justify-center items-end gap-4">
+          <label for="color_picker">Color de la Proposta</label>
+          <ColorPicker id="color_picker" v-model="color" format="hex"/>
+        </div>
+
         <!-- Botón de crear propuesta -->
         <div class="card flex flex-wrap justify-center items-end gap-4">
           <Button 
@@ -73,10 +79,12 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Card from 'primevue/card';
 import { crearProposta } from '@/services/comunicationManager';
+import ColorPicker from 'primevue/colorpicker'; // Importa el componente ColorPicker
 
 const titol = ref(null);
 const subtitol = ref(null);
 const contingut = ref(null);
+const color = ref('#FFFFFF'); // Color por defecto (blanco)
 const loading = ref(false);
 let visible = ref(false);
 let visible2 = ref(false);
@@ -106,11 +114,12 @@ async function newProposta() {
       titol: titol.value,
       subtitol: subtitol.value,
       contingut: contingut.value,
+      color: color.value,  // Pasamos el color seleccionado
       idAsso: 1,  // Asignamos automáticamente 1 como ID de la Asociación
       data: currentDate  // Se pasa la fecha generada
     });
 
-    await crearProposta(titol.value, subtitol.value, contingut.value, 1, currentDate); // Llamada al backend, pasando 1 como ID de la Asociación
+    await crearProposta(titol.value, subtitol.value, contingut.value, 1, currentDate, color.value); // Llamada al backend, pasando el color
     visible2.value = true;
   } catch (error) {
     console.error('Error al crear propuesta:', error);
