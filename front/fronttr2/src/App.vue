@@ -2,7 +2,11 @@
 import { ref } from 'vue'
 import 'primeicons/primeicons.css'
 import Header from '@/components/Header.vue'
+import { useUserStore } from '@/stores/users';
 const color = ref(null)
+
+const userStore = useUserStore();
+userStore.initializeUserData();
 </script>
 
 <template>

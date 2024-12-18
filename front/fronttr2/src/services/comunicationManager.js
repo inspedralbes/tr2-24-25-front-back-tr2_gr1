@@ -85,53 +85,29 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
     }
 };
 
-export const loginUsuari = async (correu, contrasenya) => {
-    const userStore = useUserStore();  // Aquí accedes correctamente al store
+export async function loginUsuari(correu, contrasenya) {
     try {
-        const response = await fetch('http://localhost:3000/api/login', {
+        const response = await fetch(`${URL}/api/login`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                correu,
-                contrasenya
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correu, contrasenya }),
         });
 
         if (!response.ok) {
-            console.log(response);
-            throw new Error(`L'inici de sessió ha fallat`);
+            throw new Error('Error en el login');
         }
 
-        const user = await response.json();
-        const currentAssiciacio = 0;
+        const result = await response.json();
 
-        // Actualiza el store con los datos del usuario
-        userStore.newUser({
-            token: user.token,
-            nom: user.nom,
-            cognoms: user.cognoms,
-            correu: user.correu,
-            associacionsId: user.associacionsId,
-            currentAssiciacio
-        });
-
-        console.log(userStore.user);  // Verifica los datos del store
-
-        if (response.ok) {
-            console.log('Usuari autenticat amb èxit');
-            return true;
-        } else {
-            console.error('Usuari o contrasenya incorrectes');
-            return false;
-        }
+        // Aquí ya recibes todos los datos (token, ID, etc.)
+        return result;  // Retorna los datos al componente que realizó la solicitud
 
     } catch (error) {
-        console.error('Error al intentar autenticar:', error);
-        return false;
+        console.error('Error en loginUsuari:', error);
+        throw error;  // Propaga el error para manejarlo en el componente
     }
-};
+}
+
 
 export const getNoticies = async () => {
     try {
@@ -226,14 +202,14 @@ export const deleteNoticia = async (id) => {
     }
 };
 
-export const asignaUsuariAssociacio = async (loggedUser, idAsso) => {
+export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
     try {
         const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ idUsu: loggedUser.id, idAsso }),
+            body: JSON.stringify({ idUsu, idAsso }),
         });
 
         if (!response.ok) {
@@ -244,14 +220,14 @@ export const asignaUsuariAssociacio = async (loggedUser, idAsso) => {
         return data;
     } catch (error) {
         console.error('Error en la asignación de usuario:', error);
-        throw error;  // Propaga el error para que se maneje en el lugar donde se llama
+        throw error;
     }
 };
 
-export const getActivities=async () => {
+export const getActivities = async () => {
     try {
         const response = await fetch('http://localhost:3000/api/activities', {
-            
+
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -264,12 +240,12 @@ export const getActivities=async () => {
 
         const activities = await response.json();
 
-        console.log("holiwi"+activities)
+        console.log("holiwi" + activities)
 
         return activities
-       
 
-        
+
+
     } catch (error) {
         console.error('Error al intentar conseguir activitats: ', error);
         return false;

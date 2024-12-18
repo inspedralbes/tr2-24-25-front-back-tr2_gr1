@@ -1,26 +1,48 @@
-// src/stores/users.js
 import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-        loggedUser: null,
-        associations: [],
-        userId: null,
+        id: null,
+        token: null,
+        nom: '',
+        cognoms: '',
+        correu: '',
+        associacionsId: [],
     }),
     actions: {
-        setLoggedUser(user) {
-            console.log('Usuario recibido para setLoggedUser:', user);
-            this.loggedUser = user;
-            this.userId = user.id;  // Asegúrate de que `id` esté disponible
-            this.associations = user.associacionsId || [];  // Asegúrate de que `associacionsId` esté correctamente asignado
-        },        
-        getLoggedUser() {
-            return this.loggedUser;  // No es necesario console.log aquí si no es necesario
+        setUserData(userData) {
+
+          
+
+            this.id = userData.id;
+            this.token = userData.token;
+            this.nom = userData.nom;
+            this.cognoms = userData.cognoms;
+            this.correu = userData.correu;
+            this.associacionsId = userData.associacionsId || [];
+
+
+            console.log("this is the user: ", userData);
+            // Guardar en localStorage
+            localStorage.setItem('user', JSON.stringify(userData));
         },
-        newUser(user) {
-            this.loggedUser = user;
-            this.userId = user.id;
-            this.associations = user.associacionsId || [];
-        }
-    }
+        clearUserData() {
+            this.id = null;
+            this.token = null;
+            this.nom = '';
+            this.cognoms = '';
+            this.correu = '';
+            this.associacionsId = [];
+
+            // Limpiar localStorage
+            localStorage.removeItem('user');
+        },
+        initializeUserData() {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                const userData = JSON.parse(storedUser);
+                this.setUserData(userData);
+            }
+        },
+    },
 });

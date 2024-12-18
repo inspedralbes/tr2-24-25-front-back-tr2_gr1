@@ -510,8 +510,8 @@ function enviarServeis() {
   })));
 }
 // --- ENDPOINTS PER ACTIVITIES ---
-app.get('/api/activities', (req,res)=>{
-  let data=[
+app.get('/api/activities', (req, res) => {
+  let data = [
     {
       id: 1,
       date: new Date(2025, 0, 1),
@@ -537,27 +537,46 @@ app.get('/api/activities', (req,res)=>{
       color: "green",
     },
   ];
-res.status(200).json(data);
+  res.status(200).json(data);
 
 })// --- Login ENDPOINT ---
 app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
 
-app.post('/asignaUsuariAssociacio', async (req, res) => {
+app.post('/asignaUsuariAssociacio', (req, res) => {
   const { idUsu, idAsso } = req.body;
+  const db = connectToDatabase();
 
+  // Validación de entrada
   if (!idUsu || !idAsso) {
-      return res.status(400).send('Falten paràmetres');
+    return res.status(400).json({ message: 'Falten paràmetres' });
   }
 
-  try {
-      const query = 'INSERT INTO usuari_associacio (idUsu, idAsso) VALUES (?, ?)';
-      await pool.query(query, [idUsu, idAsso]);
+  // Conexión a la base de datos
+  db.connect((err) => {
+    if (err) {
+      console.error('Error connecting to the database', err);
+      return res.status(500).json({ message: 'Error connecting to the database' });
+    }
 
-      res.status(200).send('Usuari associat a l\'associació');
-  } catch (error) {
-      console.error('Error al associar usuari:', error);
-      res.status(500).send('Error del servidor');
-  }
+    // Consulta para insertar la asignación
+    const query = 'INSERT INTO usuari_associacio (idUsu, idAsso) VALUES (?, ?)';
+    db.query(query, [idUsu, idAsso], (err, result) => {
+      db.end(); // Cerrar la conexión
+
+      if (err) {
+        console.error('Error al associar usuari:', err);
+        return res.status(500).json({ message: 'Error del servidor al asociar usuari' });
+      }
+
+      // Respuesta exitosa
+      const createdAssociation = {
+        idUsu,
+        idAsso,
+        associacioId: result.insertId, // ID de la nueva relación generada
+      };
+      res.status(201).json(createdAssociation); // Enviar el resultado con el nuevo ID
+    });
+  });
 });
 
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token

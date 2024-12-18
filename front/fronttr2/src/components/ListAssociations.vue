@@ -3,7 +3,7 @@
         <h2>Llistat d'Associacions</h2>
         <div v-if="associacions.length > 0">
             <Card v-for="associacio in associacions" :key="associacio.id" class="association-card"
-                @click="goToNoticias(associacio.id)">
+                @click="joinAssociation(associacio.id)">
                 <template #title>
                     <h2>{{ associacio.nom }}</h2>
                 </template>
@@ -28,45 +28,46 @@ import { getAssociacions } from '@/services/comunicationManager';
 import { asignaUsuariAssociacio } from '@/services/comunicationManager';
 
 const router = useRouter();
-const userStore = useUserStore();  // Acceder al store de usuarios
-const associacions = ref([]);      // Lista de asociaciones
+const userStore = useUserStore();
+const userId = userStore.id;
+const associacions = ref([]);
 
 const fetchAssociations = async () => {
     try {
-        const data = await getAssociacions();  // Obtener las asociaciones
-        associacions.value = data;  // Asignar los datos a la variable
+        const data = await getAssociacions();
+        associacions.value = data;
     } catch (error) {
         console.error('Error fetching associations:', error);
     }
 };
 
 const goToCreatePage = () => {
-    router.push('/newAssociacio');  // Navegar a la página de crear asociación
+    router.push('/newAssociacio');
 };
 
-const goToNoticias = async (idAsso) => {
-    // Obtener el usuario logueado desde el store
-    const loggedUser = userStore.getLoggedUser();  
-    console.log('Usuario logueado:', loggedUser);  // Verifica el valor de loggedUser
+const joinAssociation = async (idAsso) => {
+    const userId = userStore.id;
+    console.log('ID del usuario desde Pinia:', userId);
 
-    // Verificar si el usuario está logueado y tiene un ID válido
-    if (!loggedUser || !loggedUser.id) {
-        console.error('No hay usuario logueado o no tiene un ID.');
+    if (!userId) {
+        console.error('No hay ID de usuario guardado.');
         return;
     }
 
     try {
-        const data = await asignaUsuariAssociacio(loggedUser.id, idAsso);
-        console.log('Usuario asignado a la asociación con éxito:', data);
-        userStore.updateUserAssociations(idAsso);  // Actualiza las asociaciones en el store
-        router.push('/noticies');  // Redirige a la página de noticias
+        const result = await asignaUsuariAssociacio(userId, idAsso);
+        console.log('Resultado de la asignación:', result);
+        router.push('/noticies');
     } catch (error) {
-        console.error('Error asignando usuario a asociación:', error);
+        console.error('Error al intentar asociar el usuario con la asociación:', error);
     }
 };
 
 onMounted(() => {
     fetchAssociations();
+    const userId = userStore.userId;
+    console.log('ID del usuario desde Pinia:', userId);
+
     if (!userStore.loggedUser || !userStore.associations.length) {
         console.log('No hay usuario logueado o no tiene asociaciones');
         // Manejar el caso donde no haya asociaciones
@@ -75,6 +76,8 @@ onMounted(() => {
         console.log('Asociaciones:', userStore.associations);
     }
 });
+
+// return { joinAssociation };
 </script>
 
 <style scoped>

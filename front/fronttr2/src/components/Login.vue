@@ -3,6 +3,7 @@
         <Card>
             <template #title>Iniciar sessió</template>
             <template #content>
+                <!-- Campo Correo -->
                 <div class="card flex flex-wrap justify-center items-end gap-4">
                     <FloatLabel variant="in">
                         <label for="correu_label">Correu</label>
@@ -10,6 +11,7 @@
                     </FloatLabel>
                 </div>
 
+                <!-- Campo Contraseña -->
                 <div class="card flex flex-wrap justify-center items-end gap-4">
                     <FloatLabel variant="in">
                         <label for="contrasenya_label">Contrasenya</label>
@@ -17,34 +19,20 @@
                     </FloatLabel>
                 </div>
 
+                <!-- Botón de Inicio de Sesión -->
                 <div class="card flex flex-wrap justify-center items-end gap-4">
-                    <Button class="button secondary-button"
-                        label="Iniciar sessió" 
-                        icon="pi pi-check" 
-                        iconPos="left" 
-                        severity="success" 
-                        :loading="loading" 
-                        @click="login" 
-                    />
+                    <Button class="button secondary-button" label="Iniciar sessió" icon="pi pi-check" iconPos="left"
+                        severity="success" :loading="loading" @click="login" />
                 </div>
 
-                <Dialog 
-                    :visible="visible" 
-                    modal 
-                    header="Alerta" 
-                    :style="{ width: '25rem' }" 
-                    class="bg-white"
-                >
+                <!-- Diálogo de Alerta -->
+                <Dialog :visible="visible" modal header="Alerta" :style="{ width: '25rem' }" class="bg-white">
                     <span class="text-surface-500 dark:text-surface-400 block mb-8">
                         Es requereix un Correu i una Contrasenya
                     </span>
                     <div class="flex justify-end gap-2">
-                        <Button  class="button secondary-button"
-                            type="button" 
-                            label="Entesos" 
-                            @click="visible = false" 
-                            severity="success" 
-                        />
+                        <Button class="button secondary-button" type="button" label="Entesos" @click="visible = false"
+                            severity="success" />
                     </div>
                 </Dialog>
             </template>
@@ -64,11 +52,13 @@ import { useUserStore } from '@/stores/users';
 
 import { loginUsuari } from './../services/comunicationManager';
 
+// Refs para campos y estado
 const correu = ref(null);
 const contrasenya = ref(null);
 const loading = ref(false);
-var visible = ref(false);
+const visible = ref(false);
 
+const userStore = useUserStore();
 const router = useRouter();
 
 async function login() {
@@ -80,8 +70,22 @@ async function login() {
     loading.value = true;
     try {
         const result = await loginUsuari(correu.value, contrasenya.value);
-        if (result) {
-            alert('Inici de sessió exitós!');
+
+        console.log("result: ", result);
+        console.log("token: ", result.token);
+
+        if (result && result.token) {
+            
+            userStore.setUserData({
+                id: result.id,
+                token: result.token,
+                nom: result.nom,
+                cognoms: result.cognoms,
+                correu: result.correu,
+                associacionsId: result.associacionsId || [],
+            });
+
+            console.log('Login exitoso, datos guardados:', result);
             router.push('/');
         } else {
             alert('Correu o contrasenya incorrectes');
