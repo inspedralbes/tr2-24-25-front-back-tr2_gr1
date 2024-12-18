@@ -195,6 +195,7 @@ app.put('/api/proposta', (req, res) => {
 
 // --- ENDPOINTS PARA COMENTARIS ---
 // GET Endpoint per IDPROP
+// GET Endpoint per IDPROP con sockets
 app.get('/api/comentaris/:idProp', (req, res) => {
   const db = connectToDatabase();
   const { idProp } = req.params;
@@ -236,8 +237,7 @@ app.get('/api/comentaris/:idProp', (req, res) => {
   db.end();
 });
 
-
-// POST Endpoint per IDPROP
+// POST Endpoint per IDPROP con sockets
 app.post('/api/comentaris/:idProp', (req, res) => {
   const db = connectToDatabase();
   const { idProp } = req.params;
@@ -252,7 +252,7 @@ app.post('/api/comentaris/:idProp', (req, res) => {
       VALUES (?, ?, ?, true)
     `;
 
-  const autorId = 1;
+  const autorId = 1; // Puedes ajustar el autor según sea necesario.
 
   db.query(query, [autorId, idProp, contenido], (err, results) => {
     if (err) {
@@ -260,20 +260,21 @@ app.post('/api/comentaris/:idProp', (req, res) => {
       return res.status(500).send('Error adding comment');
     }
 
-    const currentDate = new Date().toLocaleString();
-
     const newComment = {
       id: results.insertId,
       autor: { nomUsuari: 'Tu Nom' },
       contingut: contenido,
-      data: currentDate,
     };
+
+    // Emitir el nuevo comentario a los clientes conectados
+    io.emit('newComment', { idProp, newComment });
 
     res.status(200).json(newComment);
   });
 
   db.end();
 });
+  
 
 // --- ENDPOINTS PARA VOTACIONS ---
 // POST Endpoint 
@@ -294,6 +295,8 @@ app.post('/api/votacions', (req, res) => {
   const checkVoteQuery = 'SELECT * FROM VOTACIONS WHERE idProp = ? AND idUsu = ?';
   
   let checkResults = [];
+
+  // Cambiar per MongoDB
 
   db.query(checkVoteQuery, [idProp, idUsu], (err, results) => {
     if (err) {
