@@ -47,8 +47,7 @@ const userStore = useLoggedUsers();
 
 const imatge = ref('https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541');
 
-const users = userStore.users;
-const user = ref(users[users.length - 1]);
+const user = ref(userStore.currentUser);
 
 const associacions = ref([]);
 
