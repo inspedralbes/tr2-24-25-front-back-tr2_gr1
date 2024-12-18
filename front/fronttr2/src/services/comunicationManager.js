@@ -4,6 +4,7 @@ import router from "@/router";
 
 const URL = import.meta.env.VITE_API_ROUTE;
 const URLNOTICIAS = 'http://localhost:3002';
+const URLPROPOSTES = 'http://localhost:3003';
 
 export const crearAssociacio = async (nom, desc) => {
     try {
@@ -149,6 +150,120 @@ export const loginUsuari = async (correu, contrasenya) => {
         return false;
     }
 };
+
+
+export const getPropostes = async () => {
+    try {
+        const response = await fetch(`${URLPROPOSTES}/api/proposta`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Propostes:', data);
+            return data.map(item => ({
+                id: item.id,
+                titol: item.titol,
+                subtitol: item.subtitol,
+                contingut: item.contingut,
+                autor: item.autor,
+                data: new Date(item.data).toLocaleDateString(),
+            }));
+        } else {
+            console.error('Unexpected error', response.status);
+            return [];
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+        throw err;
+    }
+};
+
+export const getPropostaById = async (id) => {
+    try {
+        const response = await fetch(`${URLPROPOSTES}/api/proposta/${id}`);
+        if (response.ok) {
+            const data = await response.json();
+            return {
+                id: data.id,
+                titol: data.titol,
+                subtitol: data.subtitol,
+                contingut: data.contingut,
+                autor: data.autor,
+                data: new Date(data.data).toLocaleDateString(),
+            };
+        } else {
+            console.error('Proposal not found', response.status);
+            return null;
+        }
+    } catch (err) {
+        console.error('Error fetching proposal:', err);
+        throw err;
+    }
+};
+
+export const getComentarios = async (idProp) => {
+    try {
+      const response = await fetch(`${URLPROPOSTES}/api/comentaris/${idProp}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Comentarios:', data);
+        return data;
+      } else {
+        console.error('Error fetching comments:', response.status);
+        return [];
+      }
+    } catch (err) {
+      console.error('Error during fetch:', err);
+      throw err;
+    }
+  };
+  
+  export const addComentario = async (idProp, comentario) => {
+    try {
+      const response = await fetch(`${URLPROPOSTES}/api/comentaris/${idProp}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ contenido: comentario }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al añadir el comentario');
+      }
+  
+      const data = await response.json();
+      console.log('Comentario añadido:', data);
+      return data;
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      throw error;
+    }
+  };
+
+  export async function submitVotacio(idProposta, idUsuari, resposta) {
+    try {
+      const response = await fetch(`${URLPROPOSTES}/api/votacions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idProp: idProposta,
+          idUsu: idUsuari,
+          resposta: resposta,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al registrar la votación');
+      }
+  
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error al enviar la votación:', error);
+      throw error;
+    }
+  }
 
 export const getNoticies = async () => {
     try {

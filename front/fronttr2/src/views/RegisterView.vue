@@ -89,7 +89,7 @@ export default {
                         permisos: 'user',
                     });
                     if(response==true){
-                        router.push('/');
+                        router.push('/noticies');
 
                     }
                 } catch (error) {

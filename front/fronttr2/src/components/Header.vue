@@ -20,7 +20,7 @@ const items = ref([
     {
         label: 'About',
         icon: 'pi pi-pw pi-id-card',
-        command: () => router.push('/about'),
+        command: () => router.push('/perfil'),
     },
     {
         label: 'Associacions',

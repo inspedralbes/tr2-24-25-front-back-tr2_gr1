@@ -76,6 +76,22 @@ const router = createRouter({
       path: '/loading',
       name: 'loading',
       component: () => import('../views/LoadingView.vue')
+    },
+    {
+      path: '/perfil',
+      name: 'perfil',
+      component: () => import('../views/PerfilView.vue')
+    },
+    {
+      path: '/propostes',
+      name: 'propostes',
+      component: () => import('../views/PropostesView.vue'),
+    },
+    {
+      path: '/propostes/:id',
+      name: 'PropostaDetall',
+      component:  () => import('../views/PropostaDetall.vue'),
+      props: true 
     }
   ],
 });
