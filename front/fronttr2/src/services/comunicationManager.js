@@ -202,11 +202,18 @@ export const getComentarios = async (idProp) => {
   };
   
   export const addComentario = async (idProp, comentario) => {
+    const { currentUser } = useLoggedUsers();
+    
     try {
+      if (!currentUser.value || !currentUser.value.token) {
+        throw new Error('No se encontró el token. El usuario no está autenticado.');
+      }
+  
       const response = await fetch(`${URLPROPOSTES}/api/comentaris/${idProp}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentUser.value.token}`,
         },
         body: JSON.stringify({ contenido: comentario }),
       });
@@ -370,3 +377,34 @@ export const getActivities=async () => {
         return false;
     }
 };
+
+export const crearProposta = async (titol, subtitol, contingut, idAsso, data) => {
+    try {
+      const response = await fetch(`${URLPROPOSTES}/api/proposta`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          titol,
+          subtitol,
+          contingut,
+          autor: 1,
+          idAsso: idAsso || 1,
+          data
+        }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Proposta creada correctamente:', data);
+        return data;
+      } else {
+        console.error('Error al crear la proposta:', response.status);
+        throw new Error('Error al crear la proposta');
+      }
+    } catch (err) {
+      console.error('Error durante la petición:', err);
+      throw err;
+    }
+  };  

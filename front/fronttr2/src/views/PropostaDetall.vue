@@ -42,6 +42,7 @@ import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { io } from 'socket.io-client';
 import { getPropostaById, getComentarios, addComentario, submitVotacio } from '@/services/comunicationManager.js';
 import NavigationBar from '@/components/NavigationBar.vue';
+import { useLoggedUsers } from '@/stores/users';
 
 const props = defineProps({
   id: {
@@ -55,9 +56,10 @@ const comments = ref([]);
 const newComment = ref('');
 const textarea = ref(null);
 const voted = ref(false);
-const userId = ref(1); // Suponiendo que el ID del usuario está disponible (debe ser dinámico en un caso real)
 
-const socket = io('http://localhost:3003'); // Cambia la URL según tu configuración
+const { currentUser } = useLoggedUsers();
+
+const socket = io('http://localhost:3003');
 
 onMounted(async () => {
   try {
@@ -70,7 +72,6 @@ onMounted(async () => {
 
     comments.value = await getComentarios(id);
 
-    // Escuchar nuevos comentarios mediante sockets
     socket.on('newComment', (data) => {
       if (data.idProp === id) {
         comments.value.push(data.newComment);
@@ -82,7 +83,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  socket.disconnect(); // Desconectar el socket cuando se desmonte el componente
+  socket.disconnect();
 });
 
 const submitComment = async () => {
@@ -90,15 +91,16 @@ const submitComment = async () => {
     const id = props.id;
     const comment = newComment.value;
 
-    // Enviar el nuevo comentario al servidor
+    if (!currentUser.value || !currentUser.value.token) {
+      console.error('Usuario no autenticado');
+      return;
+    }
+
     await addComentario(id, comment);
 
-    // Limpiar el campo de entrada
     newComment.value = '';
     await nextTick();
     autoResize();
-
-    // **No actualizamos manualmente los comentarios.**
   } catch (error) {
     console.error('Error adding comment:', error);
   }
@@ -127,7 +129,7 @@ const vote = async (option) => {
 
   try {
     const propostaId = proposta.value.id;
-    const userIdValue = userId.value;
+    const userIdValue = currentUser.value?.id;
 
     await submitVotacio(propostaId, userIdValue, resposta);
 
