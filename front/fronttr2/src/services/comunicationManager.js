@@ -1,5 +1,6 @@
 import { useLoggedUsers } from "@/stores/users";
 import bcrypt from "bcryptjs";
+import router from "@/router";
 
 const URL = import.meta.env.VITE_API_ROUTE;
 const URLNOTICIAS = 'http://localhost:3002';
@@ -7,10 +8,13 @@ const URLPROPOSTES = 'http://localhost:3003';
 
 export const crearAssociacio = async (nom, desc) => {
     try {
+        const loggedUsersStore = useLoggedUsers();
+        let user = loggedUsersStore.getUser();
         const response = await fetch(`${URL}/api/associacio`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify({ nom: nom, descripcio: desc }),
         });
@@ -19,6 +23,8 @@ export const crearAssociacio = async (nom, desc) => {
             console.log('Associacio created successfully:', data);
         } else if (response.status === 400) {
             console.error('Invalid input');
+        } else if (response.status === 401) {
+            noLogged();
         } else {
             console.error('Unexpected error', response.status);
         }
@@ -28,12 +34,20 @@ export const crearAssociacio = async (nom, desc) => {
 };
 
 export const getAssociacions = async () => {
+    const loggedUsersStore = useLoggedUsers();
+    let user = loggedUsersStore.getUser();
     try {
-        const response = await fetch(`${URL}/api/associacio`);
+        const response = await fetch(`${URL}/api/associacio`, {
+            headers: {
+                'Authorization': 'Bearer ' + user.token
+            }
+        });
         if (response.ok) {
             const data = await response.json();
             console.log('Associacions:', data);
             return data;
+        } else if (response.status === 401) {
+            noLogged();
         } else {
             console.error('Unexpected error', response.status);
             return [];
@@ -48,10 +62,8 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
     try {
         console.log('Dades enviades (abans del hash): ', { nom, cognoms, contrasenya, correu, imatge, permisos });
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(contrasenya, salt);
-
-        console.log('Contrasenya encriptada: ', hashedPassword);
+       
+        console.log('Contrasenya encriptada: ', contrasenya);
 
         const response = await fetch(`${URL}/api/usuari`, {
             method: 'POST',
@@ -61,7 +73,7 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
             body: JSON.stringify({
                 nom,
                 cognoms,
-                contrasenya: hashedPassword,
+                contrasenya: contrasenya,
                 correu,
                 imatge,
                 permisos,
@@ -71,13 +83,15 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
         if (response.ok) {
             const data = await response.json();
             console.log('Usuari creat amb èxit:', data);
-            let returnData=loginUsuari(data.correu, contrasenya)
-            console.log(returnData)
+            let returnData = await loginUsuari(data.correu, contrasenya);
+            console.log(returnData);
             return returnData;
         } else if (response.status === 400) {
             const errorDetails = await response.json();
             console.error('Error 400: Input no vàlid:', errorDetails);
             throw new Error(errorDetails.message || 'Input no vàlid');
+        } else if (response.status === 401) {
+            noLogged();
         } else {
             console.error('Error inesperat:', response.status);
             throw new Error('Unexpected error occurred');
@@ -90,6 +104,7 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
 
 export const loginUsuari = async (correu, contrasenya) => {
     const loggedUsersStore = useLoggedUsers();
+    console.log(contrasenya)
     try {
         const response = await fetch('http://localhost:3000/api/login', {
             method: 'POST',
@@ -103,7 +118,7 @@ export const loginUsuari = async (correu, contrasenya) => {
         });
 
         if (!response.ok) {
-            console.log(response)
+            console.log(response);
             throw new Error(`L'inici de sessió ha fallat`);
         }
 
@@ -129,7 +144,7 @@ export const loginUsuari = async (correu, contrasenya) => {
             console.error('Usuari o contrasenya incorrectes');
             return false;
         }
-        
+
     } catch (error) {
         console.error('Error al intentar autenticar:', error);
         return false;
@@ -259,11 +274,19 @@ export const getComentarios = async (idProp) => {
 
 export const getNoticies = async () => {
     try {
-        const response = await fetch(`${URLNOTICIAS}/api/noticia`);
+        const loggedUsersStore = useLoggedUsers();
+        let user = loggedUsersStore.getUser();
+        const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
+            headers: {
+                'Authorization': 'Bearer ' + user.token
+            }
+        });
         if (response.ok) {
             const data = await response.json();
             console.log('Noticies:', data);
             return data;
+        } else if (response.status === 401) {
+            noLogged();
         } else {
             console.error('Unexpected error', response.status);
             return [];
@@ -276,11 +299,19 @@ export const getNoticies = async () => {
 
 export const getNoticia = async (id) => {
     try {
-        const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`);
+        const loggedUsersStore = useLoggedUsers();
+        let user = loggedUsersStore.getUser();
+        const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
+            headers: {
+                'Authorization': 'Bearer ' + user.token
+            }
+        });
         if (response.ok) {
             const data = await response.json();
             console.log('Noticia:', data);
             return data;
+        } else if (response.status === 401) {
+            noLogged();
         } else {
             console.error('Unexpected error', response.status);
             return null;
@@ -293,10 +324,13 @@ export const getNoticia = async (id) => {
 
 export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor, idAsso }) => {
     try {
+        const loggedUsersStore = useLoggedUsers();
+        let user = loggedUsersStore.getUser();
         const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
         });
@@ -305,6 +339,8 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
             console.log('Noticia created successfully:', data);
         } else if (response.status === 400) {
             console.error('Invalid input');
+        } else if (response.status === 401) {
+            noLogged();
         } else {
             console.error('Unexpected error', response.status);
         }
@@ -315,10 +351,13 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
 
 export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, autor, idAsso }) => {
     try {
+        const loggedUsersStore = useLoggedUsers();
+        let user = loggedUsersStore.getUser();
         const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
         });
@@ -327,6 +366,8 @@ export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, auto
             console.log('Noticia edited successfully:', data);
         } else if (response.status === 400) {
             console.error('Invalid input');
+        } else if (response.status === 401) {
+            noLogged();
         } else {
             console.error('Unexpected error', response.status);
         }
@@ -336,12 +377,19 @@ export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, auto
 };
 
 export const deleteNoticia = async (id) => {
+    const loggedUsersStore = useLoggedUsers();
+    let user = loggedUsersStore.getUser();
     try {
         const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
             method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + user.token
+            }
         });
         if (response.ok) {
             console.log('Noticia deleted successfully');
+        } else if (response.status === 401) {
+            noLogged();
         } else {
             console.error('Unexpected error', response.status);
         }
@@ -350,30 +398,42 @@ export const deleteNoticia = async (id) => {
     }
 };
 
-export const getActivities=async () => {
+export const getActivities = async () => {
     try {
-        const response = await fetch('http://localhost:3000/api/activities', {
-            
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const loggedUsersStore = useLoggedUsers();
+        let user = loggedUsersStore.getUser()
+        if (user.token == undefined || user.token == false || user.token == null || user.token == false) {
+            noLogged
+        }
+        else {
+            const response = await fetch('http://localhost:3000/api/activities', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                },
+            });
 
-        if (!response.ok) {
-            throw new Error('No es poden obtenir activitats del calendari');
+            if (!response.ok) {
+                if (response.status === 401) {
+                    noLogged();
+                } else {
+                    throw new Error('No es poden obtenir activitats del calendari');
+                }
+            }
+
+            const activities = await response.json();
+
+            console.log("holiwi" + activities);
+
+            return activities;
         }
 
-        const activities = await response.json();
-
-        console.log("holiwi"+activities)
-
-        return activities
-       
-
-        
     } catch (error) {
         console.error('Error al intentar conseguir activitats: ', error);
+        if (!user) {
+            noLogged()
+        }
         return false;
     }
 };
@@ -408,3 +468,38 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data) =>
       throw err;
     }
   };  
+
+export const checkToken = async () => {
+    const loggedUsersStore = useLoggedUsers();
+    let user = loggedUsersStore.getUser();
+    console.log(user);
+    if (!user) {
+        console.log("PINGAPONGA")
+        noLogged
+        return {"status": 401}
+    }
+    else {
+        console.log("bababoi")
+        const response = await fetch(`${URL}/prova`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+        });
+        console.log("Response" + response);
+        if (response.status === 401) {
+            noLogged();
+        }
+        let responseJson = await response.json();
+        console.log("respondoe" + responseJson);
+        return responseJson;
+    }
+};
+
+export const noLogged = async () => {
+    console.log("Pal lobby")
+    const loggedUsersStore = useLoggedUsers();
+    loggedUsersStore.emptyUser();
+    router.push('/login');
+};

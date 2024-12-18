@@ -35,7 +35,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { createUser } from '@/services/comunicationManager';
 import Card from 'primevue/card';
-
+import { hashPassword } from '@/services/hasher';
 export default {
     setup() {
         const router = useRouter();
@@ -78,10 +78,12 @@ export default {
         const onFormSubmit = async () => {
             if (validateForm()) {
                 try {
+                    const hashedPassword= await hashPassword(form.value.contrasenya)
+                    // console.log(hashedPassword)
                     const response = await createUser({
                         nom: form.value.nom,
                         cognoms: form.value.cognoms,
-                        contrasenya: form.value.contrasenya,
+                        contrasenya: hashedPassword,
                         correu: form.value.correu,
                         imatge: 'default-image.png',
                         permisos: 'user',

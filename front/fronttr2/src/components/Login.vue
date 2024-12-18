@@ -73,7 +73,7 @@ import Dialog from 'primevue/dialog';
 import Card from 'primevue/card';
 import { loginUsuari } from './../services/comunicationManager';
 import Checkbox from 'primevue/checkbox';
-
+import { hashPassword } from '@/services/hasher';
 
 const correu = ref(null);
 const contrasenya = ref(null);
@@ -99,13 +99,14 @@ async function login() {
 
     loading.value = true;
     try {
-        const result = await loginUsuari(correu.value, contrasenya.value);
+        let hashedPassword= await hashPassword(contrasenya.value);
+        const result = await loginUsuari(correu.value, hashedPassword);
     
         if (result) {
             alert('Inici de sessió exitós!');
             if(session.value){
                 localStorage.setItem("correu", correu.value);
-                localStorage.setItem("contrasenya", contrasenya.value)
+                localStorage.setItem("contrasenya", hashedPassword)
             }
             router.push('/noticies');
         } else {
