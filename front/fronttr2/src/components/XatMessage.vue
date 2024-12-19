@@ -1,5 +1,5 @@
 <template>
-<div class="flex items-start gap-2.5 max-w-[80%]" v-if="false"> <!-- v-if="messageData.userid == storage.userid" -->
+<div class="flex items-start gap-2.5 max-w-[80%]" v-if="loggedUsersStore.currentUser.id!=messageData.userid"> <!-- v-if="messageData.userid == storage.userid" -->
    <img class=" w-8 h-8 rounded-full profilePicture" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0d613azJ2R2wo9p-0X4dVXID_4fAT4MP90w&s" :alt="'Foto de perfil '+messageData.username">
    <div class="flex flex-col min-w-[10%] max-w-[80%] leading-1.5 p-4 border-gray-200 bg-CustomLightAccen rounded-e-xl rounded-es-xl dark:bg-CustomLightAccent">
       <div class="flex items-center space-x-2 rtl:space-x-reverse">
@@ -47,9 +47,9 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-
+import { useLoggedUsers } from '@/stores/users';
 import { defineProps } from 'vue';
-
+const loggedUsersStore = useLoggedUsers();
 const props = defineProps({
    messageData: {
       type: Object,

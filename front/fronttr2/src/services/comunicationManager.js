@@ -457,8 +457,9 @@ export const getActivities = async () => {
             noLogged
         }
         else {
+            let currentAssiciacio=user.currentAssiciacio
             // user.currentAsso
-            const response = await fetch('http://localhost:3003/api/activities/'+2, {
+            const response = await fetch('http://localhost:3003/api/activities/'+currentAssiciacio, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

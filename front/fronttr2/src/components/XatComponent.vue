@@ -18,7 +18,7 @@ import NavigationBar from '@/components/NavigationBar.vue';
 import XatMessage from './XatMessage.vue';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-
+import { useLoggedUsers } from '@/stores/users';
 const message = ref('');
 const messages = ref([])
     onMounted(() => {
@@ -40,11 +40,13 @@ const messages = ref([])
 
     //function to send a message
     function sendMessage(){
+        const loggedUsersStore = useLoggedUsers();
+        
         let auxObject={
-            idUser: 1, //This must be changed to the user id
+            idUser: loggedUsersStore.currentUser.id, //This must be changed to the user id
             message: message.value,
-            idAsso: 1, //This must be changed to the association id
-            username: "sample" //This must be changed to the user name
+            idAsso: loggedUsersStore.currentUser.currentAssiciacio, //This must be changed to the association id
+            username: loggedUsersStore.currentUser.nom+" "+loggedUsersStore.currentUser.cognoms //This must be changed to the user name
         }
         console.log("Sending message: ", auxObject);
         socket.emit('newMessage', auxObject);
