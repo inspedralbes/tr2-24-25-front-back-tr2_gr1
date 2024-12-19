@@ -19,26 +19,14 @@
                     </FloatLabel>
                 </div>
                 <div class="flex items-center gap-2">
-        <Checkbox v-model="session" inputId="session" name="session" value="session" />
-        <label for="session"> Mantenir sessió iniciada </label>
-    </div>
+                    <Checkbox v-model="session" inputId="session" name="session" value="session" />
+                    <label for="session"> Mantenir sessió iniciada </label>
+                </div>
                 <div class="card flex flex-wrap justify-center items-end gap-4">
-                    <Button class="button secondary-button"
-                        label="Iniciar sessió" 
-                        icon="pi pi-check" 
-                        iconPos="left" 
-                        severity="success" 
-                        :loading="loading" 
-                        @click="login" 
-                    />
-                    <Button class="button secondary-button"
-                        label="Registrar-se" 
-                        icon="pi pi-arrow-right" 
-                        iconPos="left" 
-                        severity="success" 
-                        :loading="loading" 
-                        @click="router.push('/register')" 
-                    />
+                    <Button class="button secondary-button" label="Iniciar sessió" icon="pi pi-check" iconPos="left"
+                        severity="success" :loading="loading" @click="login" />
+                    <Button class="button secondary-button" label="Registrar-se" icon="pi pi-arrow-right" iconPos="left"
+                        severity="success" :loading="loading" @click="router.push('/register')" />
                 </div>
 
                 <!-- Diálogo de Alerta -->
@@ -64,7 +52,7 @@ import FloatLabel from 'primevue/floatlabel';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Card from 'primevue/card';
-import { useUserStore } from '@/stores/users';
+import { useLoggedUsers } from '@/stores/users';
 
 import { loginUsuari } from './../services/comunicationManager';
 import Checkbox from 'primevue/checkbox';
@@ -76,19 +64,18 @@ const contrasenya = ref(null);
 const loading = ref(false);
 var visible = ref(false);
 var session = ref(false);
-const visible = ref(false);
 
-const userStore = useUserStore();
+const userStore = useLoggedUsers();
 const router = useRouter();
 
-    onMounted(() => {
-        if(localStorage.getItem("correu") && localStorage.getItem("contrasenya")){
-            correu.value=localStorage.getItem("correu");
-            contrasenya.value=localStorage.getItem("contrasenya")
-            login()
-        }
+onMounted(() => {
+    if (localStorage.getItem("correu") && localStorage.getItem("contrasenya")) {
+        correu.value = localStorage.getItem("correu");
+        contrasenya.value = localStorage.getItem("contrasenya")
+        login()
+    }
 
-    })
+})
 
 async function login() {
     if (!correu.value || !contrasenya.value) {
@@ -98,13 +85,10 @@ async function login() {
 
     loading.value = true;
     try {
-        const result = await loginUsuari(correu.value, contrasenya.value);
-
-        console.log("result: ", result);
-        console.log("token: ", result.token);
+        const hashedPassword = await hashPassword(contrasenya.value); // Si utilizas hashing
+        const result = await loginUsuari(correu.value, hashedPassword);
 
         if (result && result.token) {
-            
             userStore.setUserData({
                 id: result.id,
                 token: result.token,
@@ -114,18 +98,18 @@ async function login() {
                 associacionsId: result.associacionsId || [],
             });
 
-            console.log('Login exitoso, datos guardados:', result);
             router.push('/');
         } else {
-            alert('Correu o contrasenya incorrectes');
+            alert('Correo o contraseña incorrectos');
         }
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
-        alert('Hi ha hagut un error en iniciar la sessió.');
+        alert('Error al conectar con el servidor.');
     } finally {
         loading.value = false;
     }
 }
+
 
 </script>
 

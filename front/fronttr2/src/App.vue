@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import 'primeicons/primeicons.css'
 import Header from '@/components/Header.vue'
-import { useUserStore } from '@/stores/users';
+// import { useUserStore } from '@/stores/users';
 const color = ref(null)
 import { onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
@@ -11,26 +11,28 @@ import { useLoggedUsers } from "@/stores/users";
 const router = useRouter()
 
 const logRouteChange = async () => {
-  if(router.currentRoute.value.fullPath!="/" && router.currentRoute.value.fullPath!="/register" && router.currentRoute.value.fullPath!="/login" && router.currentRoute.value.fullPath!="/loading"){
-    console.log("entering"+router.currentRoute.value.fullPath )
-    let response= await checkToken()
-    console.log("et"+response)
+  if (router.currentRoute.value.fullPath != "/" && router.currentRoute.value.fullPath != "/register" && router.currentRoute.value.fullPath != "/login" && router.currentRoute.value.fullPath != "/loading") {
+    console.log("entering" + router.currentRoute.value.fullPath)
+    let response = await checkToken()
+    console.log("et" + response)
     console.log(response.status)
-    if(response.status!=200){
+    if (response.status != 200) {
       const loggedUsersStore = useLoggedUsers();
       loggedUsersStore.emptyUser();
       router.push('/login')
     }
   }
- 
+
 }
 
 onMounted(() => {
   router.afterEach(logRouteChange)
+  const userStore = useLoggedUsers();
+  userStore.initializeUserData();
 })
 
 onBeforeUnmount(() => {
-  router.afterEach(() => {})
+  router.afterEach(() => { })
 })
 </script>
 

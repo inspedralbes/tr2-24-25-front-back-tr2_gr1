@@ -21,14 +21,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/users';
+import { useLoggedUsers } from '@/stores/users';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import { getAssociacions } from '@/services/comunicationManager';
 import { asignaUsuariAssociacio } from '@/services/comunicationManager';
 
 const router = useRouter();
-const userStore = useUserStore();
+const userStore = useLoggedUsers();
 const userId = userStore.id;
 const associacions = ref([]);
 

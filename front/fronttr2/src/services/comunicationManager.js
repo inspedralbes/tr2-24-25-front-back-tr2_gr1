@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import router from "@/router";
+import { useLoggedUsers } from "@/stores/users";
 
 const URL = import.meta.env.VITE_API_ROUTE;
 const URLNOTICIAS = 'http://localhost:3002';
@@ -101,9 +102,7 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
     }
 };
 
-export const loginUsuari = async (correu, contrasenya) => {
-    const loggedUsersStore = useLoggedUsers();
-    console.log(contrasenya)
+export async function loginUsuari(correu, contrasenya) {
     try {
         const response = await fetch(`${URL}/api/login`, {
             method: 'POST',
@@ -112,8 +111,7 @@ export const loginUsuari = async (correu, contrasenya) => {
         });
 
         if (!response.ok) {
-            console.log(response);
-            throw new Error(`L'inici de sessió ha fallat`);
+            throw new Error('Error en el login');
         }
 
         const result = await response.json();
@@ -126,8 +124,6 @@ export const loginUsuari = async (correu, contrasenya) => {
         throw error;  // Propaga el error para manejarlo en el componente
     }
 }
-
-
 
 export const getPropostes = async () => {
     try {

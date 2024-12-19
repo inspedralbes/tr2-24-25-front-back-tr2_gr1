@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useUserStore = defineStore('user', {
+export const useLoggedUsers = defineStore('user', {
     state: () => ({
         id: null,
         token: null,
@@ -11,9 +11,6 @@ export const useUserStore = defineStore('user', {
     }),
     actions: {
         setUserData(userData) {
-
-          
-
             this.id = userData.id;
             this.token = userData.token;
             this.nom = userData.nom;
@@ -43,6 +40,16 @@ export const useUserStore = defineStore('user', {
                 const userData = JSON.parse(storedUser);
                 this.setUserData(userData);
             }
+        },
+        getUser() {
+            return {
+                id: this.id,
+                token: this.token,
+                nom: this.nom,
+                cognoms: this.cognoms,
+                correu: this.correu,
+                associacionsId: this.associacionsId,
+            };
         },
     },
 });
