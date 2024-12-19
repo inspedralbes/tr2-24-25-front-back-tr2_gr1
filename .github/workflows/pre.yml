@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying TR2G1 on pre-production 🌯
 on:
   push:
     branches:
-      - pre-prod
+      - feature-revisit-github-actions
 
 jobs:
   STOP-SCREEN:

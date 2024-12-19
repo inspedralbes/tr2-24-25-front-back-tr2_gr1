@@ -5,13 +5,15 @@ dotenv.config();
 
 import express from 'express';
 import { createServer, get } from 'node:http';
-import { join } from 'node:path';
+// import { join } from 'node:path';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import { createChat, getChatByAssoId } from './routes/chat.js';
 import { createMessage, getMessagesByAssoId } from './routes/message.js';
 
+
+console.log(process.env.TRY_PATATITA);
 
 const app = express();
 app.use(cors({
