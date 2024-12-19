@@ -7,6 +7,8 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import mysql from 'mysql2';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import { createVot, getVotByActUserID } from './routes/vot.js';
 
 const app = express();
 const PORT = 3003;
@@ -35,6 +37,10 @@ const connectionConfig = {
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DB,
 };
+
+mongoose.connect(process.env.MONGO_URL)
+    .then(() => console.log('Connectat a MongoDB'))
+    .catch((err) => console.error('Error al connectar a MongoDB', err));
 
 function connectToDatabase() {
   const connection = mysql.createConnection(connectionConfig);
@@ -349,55 +355,64 @@ app.post('/api/votacions', (req, res) => {
     return res.status(400).json({ message: 'Faltan datos requeridos: idProp, idUsu, resposta.' });
   }
 
-  const db = connectToDatabase();
-
-  const checkVoteQuery = 'SELECT * FROM VOTACIONS WHERE idProp = ? AND idUsu = ?';
-  
-  let checkResults = [];
-
-  // Cambiar per MongoDB
-
-  db.query(checkVoteQuery, [idProp, idUsu], (err, results) => {
-    if (err) {
-      console.error('Error al verificar la votación existente:', err);
-      db.end();
-      return res.status(500).json({ message: 'Error al verificar la votación existente', error: err.message });
+  getVotByActUserID(idProp, idUsu).then((result) => {
+    if (result.valid) {
+      console.log("vot valid");
+      createVot({ idProp, idUsu, resposta }).then((result) => {
+        res.json(result);
+      });
+    } else {
+      res.json(result);
     }
-
-    checkResults = results;
-
-    db.end();
   });
 
-    if (results.length > 0) {
-      return res.status(400).json({ message: 'Ya has votado para esta propuesta.' });
-    } else {
+  // const db = connectToDatabase();
+
+  // const checkVoteQuery = 'SELECT * FROM VOTACIONS WHERE idProp = ? AND idUsu = ?';
+  
+  // let checkResults = [];
+
+  // db.query(checkVoteQuery, [idProp, idUsu], (err, results) => {
+  //   if (err) {
+  //     console.error('Error al verificar la votación existente:', err);
+  //     db.end();
+  //     return res.status(500).json({ message: 'Error al verificar la votación existente', error: err.message });
+  //   }
+
+  //   checkResults = results;
+
+  //   db.end();
+  // });
+
+    // if (results.length > 0) {
+    //   return res.status(400).json({ message: 'Ya has votado para esta propuesta.' });
+    // } else {
       
-      const db = connectToDatabase();
+    //   const db = connectToDatabase();
 
-      const insertVoteQuery = `
-        INSERT INTO VOTACIONS (idProp, idUsu, resposta)
-        VALUES (?, ?, ?)
-      `;
+    //   const insertVoteQuery = `
+    //     INSERT INTO VOTACIONS (idProp, idUsu, resposta)
+    //     VALUES (?, ?, ?)
+    //   `;
 
-      db.query(insertVoteQuery, [idProp, idUsu, resposta], (err, result) => {
-        if (err) {
-          console.error('Error al registrar la votación:', err);
-          db.end();
-          return res.status(500).json({ message: 'Error al registrar la votación', error: err.message });
-        }
+    //   db.query(insertVoteQuery, [idProp, idUsu, resposta], (err, result) => {
+    //     if (err) {
+    //       console.error('Error al registrar la votación:', err);
+    //       db.end();
+    //       return res.status(500).json({ message: 'Error al registrar la votación', error: err.message });
+    //     }
 
-        if (result.affectedRows > 0) {
-          // db.end();
-          return res.status(200).json({ message: 'Votación registrada correctamente.' });
-        } else {
-          // db.end();
-          return res.status(500).json({ message: 'No se pudo registrar la votación. Intenta de nuevo.' });
-        }
-      });
+    //     if (result.affectedRows > 0) {
+    //       // db.end();
+    //       return res.status(200).json({ message: 'Votación registrada correctamente.' });
+    //     } else {
+    //       // db.end();
+    //       return res.status(500).json({ message: 'No se pudo registrar la votación. Intenta de nuevo.' });
+    //     }
+    //   });
 
-      db.end();
-    }
+    //   db.end();
+    // }
 
 
 });
