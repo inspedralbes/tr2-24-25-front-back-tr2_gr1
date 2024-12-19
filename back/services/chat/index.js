@@ -28,7 +28,7 @@ const io = new Server(server, {
     }
 });
 
-mongoose.connect('mongodb://root:example@localhost:27017/')
+mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('Connectat a MongoDB'))
     .catch((err) => console.error('Error al connectar a MongoDB', err));
 

@@ -52,6 +52,7 @@ export function login(db, SECRET_KEY) {
         const associacionsId = assocResults.map((row) => row.idAssociacio);
 
         res.status(200).json({
+          id: user.id,
           token: token,
           id: user.id,
           nom: user.nom,

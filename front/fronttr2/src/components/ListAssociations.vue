@@ -2,7 +2,8 @@
     <div class="page-background bg-[--main-color]">
         <h2>Llistat d'Associacions</h2>
         <div v-if="associacions.length > 0">
-            <Card v-for="associacio in associacions" :key="associacio.id" class="association-card">
+            <Card v-for="associacio in associacions" :key="associacio.id" class="association-card"
+                @click="joinAssociation(associacio.id)">
                 <template #title>
                     <h2>{{ associacio.nom }}</h2>
                 </template>
@@ -13,7 +14,6 @@
         </div>
         <p v-else>No hay asociaciones disponibles.</p>
 
-        <!-- Botón para crear una nueva asociación -->
         <Button label="Crear Associació" icon="pi pi-plus" @click="goToCreatePage" class="create-association-btn" />
     </div>
 </template>
@@ -21,12 +21,15 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useLoggedUsers } from '@/stores/users';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import { getAssociacions } from '@/services/comunicationManager';
+import { asignaUsuariAssociacio } from '@/services/comunicationManager';
 
 const router = useRouter();
-
+const userStore = useLoggedUsers();
+const userId = userStore.id;
 const associacions = ref([]);
 
 const fetchAssociations = async () => {
@@ -38,14 +41,43 @@ const fetchAssociations = async () => {
     }
 };
 
-
 const goToCreatePage = () => {
     router.push('/newAssociacio');
 };
 
+const joinAssociation = async (idAsso) => {
+    const userId = userStore.id;
+    console.log('ID del usuario desde Pinia:', userId);
+
+    if (!userId) {
+        console.error('No hay ID de usuario guardado.');
+        return;
+    }
+
+    try {
+        const result = await asignaUsuariAssociacio(userId, idAsso);
+        console.log('Resultado de la asignación:', result);
+        router.push('/noticies');
+    } catch (error) {
+        console.error('Error al intentar asociar el usuario con la asociación:', error);
+    }
+};
+
 onMounted(() => {
     fetchAssociations();
+    const userId = userStore.userId;
+    console.log('ID del usuario desde Pinia:', userId);
+
+    if (!userStore.loggedUser || !userStore.associations.length) {
+        console.log('No hay usuario logueado o no tiene asociaciones');
+        // Manejar el caso donde no haya asociaciones
+    } else {
+        console.log('Usuario logueado:', userStore.loggedUser);
+        console.log('Asociaciones:', userStore.associations);
+    }
 });
+
+// return { joinAssociation };
 </script>
 
 <style scoped>
@@ -79,7 +111,12 @@ h2 {
 .association-card {
     background-color: var(--secondary-light-color);
     color: var(--bold-color);
+    cursor: pointer;
     margin-bottom: 16px;
+}
+
+.association-card:hover {
+    transform: scale(1.02);
 }
 
 .create-association-btn {

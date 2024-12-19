@@ -1,6 +1,6 @@
-import { useLoggedUsers } from "@/stores/users";
 import bcrypt from "bcryptjs";
 import router from "@/router";
+import { useLoggedUsers } from "@/stores/users";
 
 const URL = import.meta.env.VITE_API_ROUTE;
 const URLNOTICIAS = 'http://localhost:3002';
@@ -102,27 +102,19 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
     }
 };
 
-export const loginUsuari = async (correu, contrasenya) => {
-    const loggedUsersStore = useLoggedUsers();
-    console.log(contrasenya)
+export async function loginUsuari(correu, contrasenya) {
     try {
-        const response = await fetch('http://localhost:3000/api/login', {
+        const response = await fetch(`${URL}/api/login`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                correu,
-                contrasenya
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correu, contrasenya }),
         });
 
         if (!response.ok) {
-            console.log(response);
-            throw new Error(`L'inici de sessió ha fallat`);
+            throw new Error('Error en el login');
         }
 
-        const user = await response.json();
+        const result = await response.json();
 
         const currentAssiciacio = 0;
 
@@ -433,6 +425,28 @@ export const deleteNoticia = async (id) => {
     }
 };
 
+export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
+    try {
+        const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idUsu, idAsso }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al asignar usuario a la asociación.');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error en la asignación de usuario:', error);
+        throw error;
+    }
+};
+
 export const getActivities = async () => {
     try {
         const loggedUsersStore = useLoggedUsers();
@@ -463,6 +477,12 @@ export const getActivities = async () => {
 
             return activities;
         }
+
+        console.log("holiwi" + activities)
+
+        return activities
+
+
 
     } catch (error) {
         console.error('Error al intentar conseguir activitats: ', error);
