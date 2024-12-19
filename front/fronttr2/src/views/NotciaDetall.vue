@@ -4,9 +4,14 @@
     <h3>{{ noticia.subtitol }}</h3>
     <img :src="noticia.imatge" alt="Imatge de la noticia" />
     <p>{{ noticia.contingut }}</p>
+    <p>{{ noticia.contingut }}</p>
+    <p>{{ noticia.contingut }}</p>
+    <p>{{ noticia.contingut }}</p>
+    <p>{{ noticia.contingut }}</p>
+    <p>{{ noticia.contingut }}</p>
     <p class="author">Per {{ noticia.autor }} el {{ noticia.updatedAt }}</p>
+    <NavigationBar />
   </div>
-  <NavigationBar />
 </template>
 
 <script setup>
@@ -29,7 +34,7 @@ onMounted(() => {
 .main {
   background-color: var(--main-color);
   padding: 1rem;
-  padding-bottom: 8rem;
+  padding-bottom: 4rem;
   width: 100%;
   box-sizing: border-box;
   margin: 0;

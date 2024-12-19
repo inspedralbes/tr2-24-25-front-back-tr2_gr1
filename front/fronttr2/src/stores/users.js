@@ -1,21 +1,48 @@
-import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
-export const useLoggedUsers = defineStore('loggedUsers', () => {
-    const currentUser = ref(null);
+export const useUserStore = defineStore('user', {
+    state: () => ({
+        id: null,
+        token: null,
+        nom: '',
+        cognoms: '',
+        correu: '',
+        associacionsId: [],
+    }),
+    actions: {
+        setUserData(userData) {
 
-    const newUser = (user) => {
-        currentUser.value = user;
-    };
+          
 
-    const getUser = () => {
-        console.log("BIRDISTHEWORD"+users.value[0])
-        return users.value[0]
-    }
+            this.id = userData.id;
+            this.token = userData.token;
+            this.nom = userData.nom;
+            this.cognoms = userData.cognoms;
+            this.correu = userData.correu;
+            this.associacionsId = userData.associacionsId || [];
 
-    const emptyUser=()=>{
-        users.value=[]
-    }
 
-    return { users, newUser, getUser, emptyUser };
+            console.log("this is the user: ", userData);
+            // Guardar en localStorage
+            localStorage.setItem('user', JSON.stringify(userData));
+        },
+        clearUserData() {
+            this.id = null;
+            this.token = null;
+            this.nom = '';
+            this.cognoms = '';
+            this.correu = '';
+            this.associacionsId = [];
+
+            // Limpiar localStorage
+            localStorage.removeItem('user');
+        },
+        initializeUserData() {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                const userData = JSON.parse(storedUser);
+                this.setUserData(userData);
+            }
+        },
+    },
 });

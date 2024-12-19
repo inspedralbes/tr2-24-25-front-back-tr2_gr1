@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import 'primeicons/primeicons.css'
 import Header from '@/components/Header.vue'
+import { useUserStore } from '@/stores/users';
 const color = ref(null)
 import { onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
@@ -34,7 +35,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div>
+  <div class="bg-[--main-color] h-max">
     <header>
       <!-- <div class="wrapper">
       <nav>

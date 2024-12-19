@@ -1,4 +1,3 @@
-import { useLoggedUsers } from "@/stores/users";
 import bcrypt from "bcryptjs";
 import router from "@/router";
 
@@ -106,15 +105,10 @@ export const loginUsuari = async (correu, contrasenya) => {
     const loggedUsersStore = useLoggedUsers();
     console.log(contrasenya)
     try {
-        const response = await fetch('http://localhost:3000/api/login', {
+        const response = await fetch(`${URL}/api/login`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                correu,
-                contrasenya
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correu, contrasenya }),
         });
 
         if (!response.ok) {
@@ -122,34 +116,17 @@ export const loginUsuari = async (correu, contrasenya) => {
             throw new Error(`L'inici de sessió ha fallat`);
         }
 
-        const user = await response.json();
+        const result = await response.json();
 
-        const currentAssiciacio = 0;
-
-        loggedUsersStore.newUser({
-            token: user.token,
-            nom: user.nom,
-            cognoms: user.cognoms,
-            correu: user.correu,
-            associacionsId: user.associacionsId,
-            currentAssiciacio
-        });
-
-        console.log(loggedUsersStore.users);
-
-        if (response.ok) {
-            console.log('Usuari autenticat amb èxit');
-            return true;
-        } else {
-            console.error('Usuari o contrasenya incorrectes');
-            return false;
-        }
+        // Aquí ya recibes todos los datos (token, ID, etc.)
+        return result;  // Retorna los datos al componente que realizó la solicitud
 
     } catch (error) {
-        console.error('Error al intentar autenticar:', error);
-        return false;
+        console.error('Error en loginUsuari:', error);
+        throw error;  // Propaga el error para manejarlo en el componente
     }
-};
+}
+
 
 
 export const getPropostes = async () => {
@@ -391,6 +368,28 @@ export const deleteNoticia = async (id) => {
     }
 };
 
+export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
+    try {
+        const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idUsu, idAsso }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al asignar usuario a la asociación.');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error en la asignación de usuario:', error);
+        throw error;
+    }
+};
+
 export const getActivities = async () => {
     try {
         const loggedUsersStore = useLoggedUsers();
@@ -421,6 +420,12 @@ export const getActivities = async () => {
 
             return activities;
         }
+
+        console.log("holiwi" + activities)
+
+        return activities
+
+
 
     } catch (error) {
         console.error('Error al intentar conseguir activitats: ', error);
