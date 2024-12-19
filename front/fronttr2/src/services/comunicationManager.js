@@ -438,7 +438,7 @@ export const getActivities = async () => {
     }
 };
 
-export const crearProposta = async (titol, subtitol, contingut, idAsso, data) => {
+export const crearProposta = async (titol, subtitol, contingut, idAsso, data, color) => {
     try {
       const response = await fetch(`${URLPROPOSTES}/api/proposta`, {
         method: 'POST',
@@ -451,7 +451,8 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data) =>
           contingut,
           autor: 1,
           idAsso: idAsso || 1,
-          data
+          data,
+          color,
         }),
       });
   
@@ -467,7 +468,7 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data) =>
       console.error('Error durante la petición:', err);
       throw err;
     }
-  };  
+};  
 
 export const checkToken = async () => {
     const loggedUsersStore = useLoggedUsers();

@@ -195,12 +195,12 @@ app.put('/api/proposta', (req, res) => {
 
 // POST Endpoint para crear una nueva propuesta
 app.post('/api/proposta', (req, res) => {
-  const { titol, subtitol, contingut, autor, data } = req.body;
+  const { titol, subtitol, contingut, autor, data, color } = req.body;
 
   const autorId = autor || 1;
   const associacioId = 1;
-
   const currentDate = data || new Date().toISOString().split('T')[0];
+  const proposalColor = color || '#FFFFFF';
 
   if (!titol || !subtitol || !contingut) {
     return res.status(400).json({ description: "Invalid input. All fields except autor and idAsso are required." });
@@ -209,11 +209,11 @@ app.post('/api/proposta', (req, res) => {
   const db = connectToDatabase();
 
   const query = `
-    INSERT INTO PROPOSTA (titol, subtitol, contingut, autor, idAsso, data)
-    VALUES (?, ?, ?, ?, ?, ?);
+    INSERT INTO PROPOSTA (titol, subtitol, contingut, autor, idAsso, data, color)
+    VALUES (?, ?, ?, ?, ?, ?, ?);
   `;
 
-  const params = [titol, subtitol, contingut, autorId, associacioId, currentDate];
+  const params = [titol, subtitol, contingut, autorId, associacioId, currentDate, proposalColor];
 
   db.query(query, params, (err, result) => {
     if (err) {
@@ -230,7 +230,8 @@ app.post('/api/proposta', (req, res) => {
       contingut,
       autor: autorId,
       idAsso: associacioId,
-      data: currentDate
+      data: currentDate,
+      color: proposalColor,
     };
 
     res.status(201).json(newProposal);

@@ -3,7 +3,6 @@
     <Card>
       <template #title>Nova Proposta</template>
       <template #content>
-        <!-- Campos de la propuesta -->
         <div class="card flex flex-wrap justify-center items-end gap-4">
           <FloatLabel variant="in">
             <label for="titol_label">Títol</label>
@@ -79,18 +78,17 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Card from 'primevue/card';
 import { crearProposta } from '@/services/comunicationManager';
-import ColorPicker from 'primevue/colorpicker'; // Importa el componente ColorPicker
+import ColorPicker from 'primevue/colorpicker';
 
 const titol = ref(null);
 const subtitol = ref(null);
 const contingut = ref(null);
-const color = ref('#FFFFFF'); // Color por defecto (blanco)
+const color = ref('#FFFFFF');
 const loading = ref(false);
 let visible = ref(false);
 let visible2 = ref(false);
 let visible3 = ref(false);
 
-// Función para formatear la fecha a 'YYYY-MM-DD'
 function formatDate(date) {
   const d = new Date(date);
   const year = d.getFullYear();
@@ -107,19 +105,18 @@ async function newProposta() {
 
   loading.value = true;
   try {
-    // Generamos la fecha actual con el formato adecuado
-    const currentDate = formatDate(new Date()); // Formato 'YYYY-MM-DD'
+    const currentDate = formatDate(new Date());
     
     console.log('Nueva Proposta:', {
       titol: titol.value,
       subtitol: subtitol.value,
       contingut: contingut.value,
-      color: color.value,  // Pasamos el color seleccionado
-      idAsso: 1,  // Asignamos automáticamente 1 como ID de la Asociación
-      data: currentDate  // Se pasa la fecha generada
+      color: color.value,
+      idAsso: 1,
+      data: currentDate
     });
 
-    await crearProposta(titol.value, subtitol.value, contingut.value, 1, currentDate, color.value); // Llamada al backend, pasando el color
+    await crearProposta(titol.value, subtitol.value, contingut.value, 1, currentDate, color.value);
     visible2.value = true;
   } catch (error) {
     console.error('Error al crear propuesta:', error);
@@ -139,7 +136,7 @@ async function newProposta() {
   gap: 5px;
   height: 100vh;
   padding: 10px;
-  background-color: var(--main-color); /* Igual que en la página de inicio de sesión */
+  background-color: var(--main-color);
 }
 
 .card {
