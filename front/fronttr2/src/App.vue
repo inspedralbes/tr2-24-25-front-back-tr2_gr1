@@ -27,8 +27,6 @@ const logRouteChange = async () => {
 
 onMounted(() => {
   router.afterEach(logRouteChange)
-  const userStore = useLoggedUsers();
-  userStore.initializeUserData();
 })
 
 onBeforeUnmount(() => {

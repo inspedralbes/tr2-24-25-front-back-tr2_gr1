@@ -57,7 +57,6 @@ import { useLoggedUsers } from '@/stores/users';
 import { loginUsuari } from './../services/comunicationManager';
 import Checkbox from 'primevue/checkbox';
 import { hashPassword } from '@/services/hasher';
-import { useLoggedUsers } from '@/stores/users';
 
 // Refs para campos y estado
 const correu = ref(null);

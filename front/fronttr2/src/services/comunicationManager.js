@@ -114,9 +114,11 @@ export async function loginUsuari(correu, contrasenya) {
             throw new Error('Error en el login');
         }
 
-        const result = await response.json();
+        const user = await response.json();
 
         const currentAssiciacio = 0;
+
+        const loggedUsersStore = useLoggedUsers();
 
         loggedUsersStore.newUser({
             token: user.token,
