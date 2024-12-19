@@ -1,5 +1,10 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+async function hashPassword(contrasenya){
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(contrasenya, salt);
+  return hashedPassword
+}
 
 export function login(db, SECRET_KEY) {
   return (req, res) => {
@@ -24,8 +29,9 @@ export function login(db, SECRET_KEY) {
       }
 
       const user = results[0];
-
+      console.log(user.contrasenya, contrasenya)
       const isMatch = await bcrypt.compare(contrasenya, user.contrasenya);
+      console.log(isMatch)
       if (!isMatch) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }

@@ -6,6 +6,7 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import mysql from 'mysql2';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const PORT = 3003;
@@ -192,9 +193,57 @@ app.put('/api/proposta', (req, res) => {
   db.end();
 });
 
+// POST Endpoint para crear una nueva propuesta
+app.post('/api/proposta', (req, res) => {
+  const { titol, subtitol, contingut, autor, data, color } = req.body;
+
+  const autorId = autor || 1;
+  const associacioId = 1;
+  const currentDate = data || new Date().toISOString().split('T')[0];
+  const proposalColor = color || '#FFFFFF';
+
+  if (!titol || !subtitol || !contingut) {
+    return res.status(400).json({ description: "Invalid input. All fields except autor and idAsso are required." });
+  }
+
+  const db = connectToDatabase();
+
+  const query = `
+    INSERT INTO PROPOSTA (titol, subtitol, contingut, autor, idAsso, data, color)
+    VALUES (?, ?, ?, ?, ?, ?, ?);
+  `;
+
+  const params = [titol, subtitol, contingut, autorId, associacioId, currentDate, proposalColor];
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error creating proposal:', err);
+      return res.status(500).send('Error creating proposal');
+    }
+
+    const newProposalId = result.insertId;
+
+    const newProposal = {
+      id: newProposalId,
+      titol,
+      subtitol,
+      contingut,
+      autor: autorId,
+      idAsso: associacioId,
+      data: currentDate,
+      color: proposalColor,
+    };
+
+    res.status(201).json(newProposal);
+  });
+
+  db.end();
+});
+
 
 // --- ENDPOINTS PARA COMENTARIS ---
 // GET Endpoint per IDPROP
+// GET Endpoint per IDPROP con sockets
 app.get('/api/comentaris/:idProp', (req, res) => {
   const db = connectToDatabase();
   const { idProp } = req.params;
@@ -236,44 +285,55 @@ app.get('/api/comentaris/:idProp', (req, res) => {
   db.end();
 });
 
-
-// POST Endpoint per IDPROP
+// POST Endpoint per IDPROP con sockets
 app.post('/api/comentaris/:idProp', (req, res) => {
   const db = connectToDatabase();
   const { idProp } = req.params;
   const { contenido } = req.body;
 
-  if (!contenido || contenido.trim() === '') {
-    return res.status(400).send('El comentario no puede estar vacío.');
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).send('Token is required');
   }
 
-  const query = `
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+    if (err) {
+      return res.status(401).send('Invalid or expired token');
+    }
+
+    const autorId = decoded.id;
+
+    if (!contenido || contenido.trim() === '') {
+      return res.status(400).send('El comentario no puede estar vacío.');
+    }
+
+    const query = `
       INSERT INTO COMENTARI (autor, idProp, contingut, actiu) 
       VALUES (?, ?, ?, true)
     `;
 
-  const autorId = 1;
+    db.query(query, [autorId, idProp, contenido], (err, results) => {
+      if (err) {
+        console.error('Error inserting comment:', err);
+        return res.status(500).send('Error adding comment');
+      }
 
-  db.query(query, [autorId, idProp, contenido], (err, results) => {
-    if (err) {
-      console.error('Error inserting comment:', err);
-      return res.status(500).send('Error adding comment');
-    }
+      const newComment = {
+        id: results.insertId,
+        autor: { nomUsuari: 'Tu Nom' },
+        contingut: contenido,
+      };
 
-    const currentDate = new Date().toLocaleString();
+      io.emit('newComment', { idProp, newComment });
 
-    const newComment = {
-      id: results.insertId,
-      autor: { nomUsuari: 'Tu Nom' },
-      contingut: contenido,
-      data: currentDate,
-    };
+      res.status(200).json(newComment);
+    });
 
-    res.status(200).json(newComment);
+    db.end();
   });
-
-  db.end();
 });
+  
 
 // --- ENDPOINTS PARA VOTACIONS ---
 // POST Endpoint 
@@ -294,6 +354,8 @@ app.post('/api/votacions', (req, res) => {
   const checkVoteQuery = 'SELECT * FROM VOTACIONS WHERE idProp = ? AND idUsu = ?';
   
   let checkResults = [];
+
+  // Cambiar per MongoDB
 
   db.query(checkVoteQuery, [idProp, idUsu], (err, results) => {
     if (err) {

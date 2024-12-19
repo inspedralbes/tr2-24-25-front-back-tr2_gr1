@@ -31,6 +31,7 @@
       </div>
       
     </Dialog>
+    <button @click="getActivities">TEST</button>
   </div>
   <NavigationBar />
 </template>

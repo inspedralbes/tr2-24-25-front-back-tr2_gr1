@@ -33,15 +33,16 @@
       ></textarea>
       <button @click="submitComment" :disabled="!newComment.trim()">Afegir Comentari</button>
     </div>
-
   </div>
   <NavigationBar />
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { io } from 'socket.io-client';
 import { getPropostaById, getComentarios, addComentario, submitVotacio } from '@/services/comunicationManager.js';
 import NavigationBar from '@/components/NavigationBar.vue';
+import { useLoggedUsers } from '@/stores/users';
 
 const props = defineProps({
   id: {
@@ -52,10 +53,13 @@ const props = defineProps({
 
 const proposta = ref({});
 const comments = ref([]);
-const newComment = ref("");
+const newComment = ref('');
 const textarea = ref(null);
 const voted = ref(false);
-const userId = ref(1);  // Suponiendo que el ID del usuario está disponible (debe ser dinámico en un caso real)
+
+const { currentUser } = useLoggedUsers();
+
+const socket = io('http://localhost:3003');
 
 onMounted(async () => {
   try {
@@ -67,9 +71,19 @@ onMounted(async () => {
     }
 
     comments.value = await getComentarios(id);
+
+    socket.on('newComment', (data) => {
+      if (data.idProp === id) {
+        comments.value.push(data.newComment);
+      }
+    });
   } catch (error) {
     console.error('Error fetching proposal or comments:', error);
   }
+});
+
+onUnmounted(() => {
+  socket.disconnect();
 });
 
 const submitComment = async () => {
@@ -77,11 +91,14 @@ const submitComment = async () => {
     const id = props.id;
     const comment = newComment.value;
 
-    const addedComment = await addComentario(id, comment);
+    if (!currentUser.value || !currentUser.value.token) {
+      console.error('Usuario no autenticado');
+      return;
+    }
 
-    comments.value.push(addedComment);
+    await addComentario(id, comment);
 
-    newComment.value = "";
+    newComment.value = '';
     await nextTick();
     autoResize();
   } catch (error) {
@@ -94,7 +111,7 @@ const autoResize = () => {
   if (el) {
     el.style.height = 'auto';
     const screenHeight = window.innerHeight;
-    const limitHeight = screenHeight <= 768 ? maxHeightMobile : maxHeight;
+    const limitHeight = screenHeight <= 768 ? 300 : 500;
     const scrollHeight = el.scrollHeight;
     if (scrollHeight <= limitHeight) {
       el.style.height = `${scrollHeight}px`;
@@ -108,11 +125,11 @@ const autoResize = () => {
 const vote = async (option) => {
   if (voted.value) return;
 
-  const resposta = option === 'aFavor' ? true : false;
+  const resposta = option === 'aFavor';
 
   try {
     const propostaId = proposta.value.id;
-    const userIdValue = userId.value;
+    const userIdValue = currentUser.value?.id;
 
     await submitVotacio(propostaId, userIdValue, resposta);
 

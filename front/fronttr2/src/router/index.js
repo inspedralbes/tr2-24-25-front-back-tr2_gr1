@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import NewAssociacio from '../views/NewAssociacioView.vue'
 import Login from '@/components/Login.vue';
+import bcrypt from "bcryptjs";
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -71,6 +73,11 @@ const router = createRouter({
       component: () => import('../views/Calendar.vue')
     },
     {
+      path: '/loading',
+      name: 'loading',
+      component: () => import('../views/LoadingView.vue')
+    },
+    {
       path: '/perfil',
       name: 'perfil',
       component: () => import('../views/PerfilView.vue')
@@ -85,6 +92,11 @@ const router = createRouter({
       name: 'PropostaDetall',
       component:  () => import('../views/PropostaDetall.vue'),
       props: true 
+    },
+    {
+      path: '/propostes/add',
+      name: 'AfegirProposta',
+      component:  () => import('../views/NewActivity.vue'),
     }
   ],
 });
