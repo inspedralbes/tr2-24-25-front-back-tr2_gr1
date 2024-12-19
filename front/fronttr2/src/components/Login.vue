@@ -74,6 +74,7 @@ import Card from 'primevue/card';
 import { loginUsuari } from './../services/comunicationManager';
 import Checkbox from 'primevue/checkbox';
 import { hashPassword } from '@/services/hasher';
+import { useLoggedUsers } from '@/stores/users';
 
 const correu = ref(null);
 const contrasenya = ref(null);
@@ -102,13 +103,18 @@ async function login() {
         let hashedPassword= await hashPassword(contrasenya.value);
         const result = await loginUsuari(correu.value, hashedPassword);
     
-        if (result) {
+        if (result.state) {
             alert('Inici de sessió exitós!');
             if(session.value){
                 localStorage.setItem("correu", correu.value);
                 localStorage.setItem("contrasenya", hashedPassword)
             }
-            router.push('/noticies');
+            console.log(result.associacionsId);
+            if (result.associacionsId.length === 0) {
+                router.push('/show');
+            } else {
+                router.push('/noticies');
+            }
         } else {
             alert('Correu o contrasenya incorrectes');
         }

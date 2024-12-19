@@ -19,18 +19,23 @@
                     <p class="mt-4 text-gray-700 text-base font-semibold">Formo part de:</p>
                 </div>
                 <div class="mt-4 grid gap-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
-                    <Card
-                        v-for="associacio in associacions"
-                        :key="associacio.id"
-                        class="association-card p-4"
-                    >
-                        <template #title>
-                            <h2 class="font-bold text-lg text-white">{{ associacio.nom }}</h2>
-                        </template>
-                        <template #content>
-                            <p class="text-sm text-white">{{ associacio.descripcio }}</p>
-                        </template>
-                    </Card>
+                    <template v-if="associacions.length > 0">
+                        <Card
+                            v-for="associacio in associacions"
+                            :key="associacio.id"
+                            class="association-card p-4"
+                        >
+                            <template #title>
+                                <h2 class="font-bold text-lg text-white">{{ associacio.nom }}</h2>
+                            </template>
+                            <template #content>
+                                <p class="text-sm text-white">{{ associacio.descripcio }}</p>
+                            </template>
+                        </Card>
+                    </template>
+                    <template v-else>
+                        <p class="text-center text-gray-500">Encara no formes part de cap associació</p>
+                    </template>
                 </div>
                 <div class="flex justify-center mt-4">
                     <Button class="secondary-button" label="Editar Perfil" @click="visible = true" />
@@ -92,7 +97,7 @@ const fetchAssociations = async () => {
 const saveProfile = async () => {
     userStore.newUser(user);
     console.log("Actalitzant Usuari: ", user.value);
-    await updateUsuari(user.value.id, user.value.nom, user.value.cognoms, user.value.contrasenya, user.value.correu, user.value.imatge, user.value.permisos);
+    await updateUsuari(user.value.id, user.value.nom, user.value.cognoms, user.value.contrasenya, user.value.correu, user.value.imatge, user.value.permisos, user.value.token);
     visible.value = false;
     console.log('Profile updated');
 };

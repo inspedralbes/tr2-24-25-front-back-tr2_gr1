@@ -71,6 +71,7 @@ connection.connect((err) => {
 
 function verifyTokenMiddleware(req, res, next) {
   const verificacio = verifyToken(SECRET_KEY, req);
+  console.log(verificacio.message);
   if (verificacio.status === 401) {
     return res.status(401).json(verificacio);
   }

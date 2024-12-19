@@ -132,6 +132,7 @@ export const loginUsuari = async (correu, contrasenya) => {
             nom: user.nom,
             cognoms: user.cognoms,
             correu: user.correu,
+            contrasenya: user.contrasenya,
             imatge: user.imatge,
             permisos: user.permisos,
             associacionsId: user.associacionsId,
@@ -142,24 +143,25 @@ export const loginUsuari = async (correu, contrasenya) => {
 
         if (response.ok) {
             console.log('Usuari autenticat amb èxit');
-            return true;
+            return { state: true, associacionsId: user.associacionsId };
         } else {
             console.error('Usuari o contrasenya incorrectes');
-            return false;
+            return { state: false };
         }
 
     } catch (error) {
         console.error('Error al intentar autenticar:', error);
-        return false;
+        return { state: false };
     }
 };
 
-export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge, permisos) => {
+export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge, permisos, token) => {
     try{
         const response = await fetch('http://localhost:3000/api/usuari', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 id,
