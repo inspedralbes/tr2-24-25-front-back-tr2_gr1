@@ -52,10 +52,15 @@ export function login(db, SECRET_KEY) {
         const associacionsId = assocResults.map((row) => row.idAssociacio);
 
         res.status(200).json({
+          id: user.id,
           token: token,
+          id: user.id,
           nom: user.nom,
           cognoms: user.cognoms,
           correu: user.correu,
+          contrasenya: user.contrasenya,
+          imatge: user.imatge,
+          permisos: user.permisos,
           associacionsId: associacionsId,
         });
       });
@@ -64,9 +69,9 @@ export function login(db, SECRET_KEY) {
 }
 
 export function verifyToken(SECRET_KEY, req) {
-  console.log('Hola: ', req.headers.authorization);
+  console.log('Header Auth: ', req.headers.authorization);
   const token = req.headers.authorization?.split(' ')[1];
-  console.log(token);
+  console.log('Token de Sessió: ', token);
   if (!token) {
     return { message: "Token is required", login: false, user: null, status: 401 };
   }

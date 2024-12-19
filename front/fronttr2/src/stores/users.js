@@ -1,6 +1,5 @@
-import { ref } from 'vue';
 import { defineStore } from 'pinia';
-
+import { ref } from 'vue';
 export const useLoggedUsers = defineStore('loggedUsers', () => {
     const currentUser = ref(null);
 

@@ -1,6 +1,6 @@
-import { useLoggedUsers } from "@/stores/users";
 import bcrypt from "bcryptjs";
 import router from "@/router";
+import { useLoggedUsers } from "@/stores/users";
 
 const URL = import.meta.env.VITE_API_ROUTE;
 const URLNOTICIAS = 'http://localhost:3002';
@@ -102,55 +102,84 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
     }
 };
 
-export const loginUsuari = async (correu, contrasenya) => {
-    const loggedUsersStore = useLoggedUsers();
-    console.log(contrasenya)
+export async function loginUsuari(correu, contrasenya) {
     try {
-        const response = await fetch('http://localhost:3000/api/login', {
+        const response = await fetch(`${URL}/api/login`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                correu,
-                contrasenya
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correu, contrasenya }),
         });
 
         if (!response.ok) {
-            console.log(response);
-            throw new Error(`L'inici de sessió ha fallat`);
+            throw new Error('Error en el login');
         }
 
         const user = await response.json();
 
         const currentAssiciacio = 0;
 
+        const loggedUsersStore = useLoggedUsers();
+
         loggedUsersStore.newUser({
             token: user.token,
+            id: user.id,
             nom: user.nom,
             cognoms: user.cognoms,
             correu: user.correu,
+            contrasenya: user.contrasenya,
+            imatge: user.imatge,
+            permisos: user.permisos,
             associacionsId: user.associacionsId,
             currentAssiciacio
         });
 
-        console.log(loggedUsersStore.users);
+        console.log(loggedUsersStore.currentUser);
 
         if (response.ok) {
             console.log('Usuari autenticat amb èxit');
-            return true;
+            return { state: true, associacionsId: user.associacionsId };
         } else {
             console.error('Usuari o contrasenya incorrectes');
-            return false;
+            return { state: false };
         }
 
     } catch (error) {
         console.error('Error al intentar autenticar:', error);
-        return false;
+        return { state: false };
     }
 };
 
+export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge, permisos, token) => {
+    try{
+        const response = await fetch('http://localhost:3000/api/usuari', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                id,
+                nom,
+                cognoms,
+                contrasenya,
+                correu,
+                imatge,
+                permisos
+            })
+        });
+
+        if (response.ok) {
+            console.log('Usuari actualitzat amb èxit: ', response);
+        } else if (response.status === 404) {
+            console.log('Usuari no trobat: ', response);
+        } else {
+            console.log('Dades incorrectes: ', response);
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+        throw err;
+    }
+};
 
 export const getPropostes = async () => {
     try {
@@ -398,6 +427,28 @@ export const deleteNoticia = async (id) => {
     }
 };
 
+export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
+    try {
+        const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idUsu, idAsso }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al asignar usuario a la asociación.');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error en la asignación de usuario:', error);
+        throw error;
+    }
+};
+
 export const getActivities = async () => {
     try {
         const loggedUsersStore = useLoggedUsers();
@@ -430,6 +481,12 @@ export const getActivities = async () => {
             return activities;
         }
 
+        console.log("holiwi" + activities)
+
+        return activities
+
+
+
     } catch (error) {
         console.error('Error al intentar conseguir activitats: ', error);
         if (!user) {
@@ -439,7 +496,7 @@ export const getActivities = async () => {
     }
 };
 
-export const crearProposta = async (titol, subtitol, contingut, idAsso, data) => {
+export const crearProposta = async (titol, subtitol, contingut, idAsso, data, color) => {
     try {
       const response = await fetch(`${URLPROPOSTES}/api/proposta`, {
         method: 'POST',
@@ -452,7 +509,8 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data) =>
           contingut,
           autor: 1,
           idAsso: idAsso || 1,
-          data
+          data,
+          color,
         }),
       });
   
@@ -468,7 +526,7 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data) =>
       console.error('Error durante la petición:', err);
       throw err;
     }
-  };  
+};  
 
 export const checkToken = async () => {
     const loggedUsersStore = useLoggedUsers();
