@@ -32,6 +32,28 @@
                         </template>
                     </Card>
                 </div>
+                <div class="flex justify-center mt-4">
+                    <Button class="secondary-button" label="Editar Perfil" @click="visible = true" />
+                </div>
+                <Dialog :visible="visible" modal header="Edit Profile" :style="{ width: '25rem' }">
+                    <span class="text-surface-500 dark:text-surface-400 block mb-8">Edita el teu perfil.</span>
+                    <div class="flex items-center gap-4 mb-4">
+                        <label for="username" class="font-semibold w-24">Nom</label>
+                        <InputText id="username" v-model="user.nom" class="flex-auto" autocomplete="off" />
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <label for="username" class="font-semibold w-24">Cognoms</label>
+                        <InputText id="username" v-model="user.cognoms" class="flex-auto" autocomplete="off" />
+                    </div>
+                    <div class="flex items-center gap-4 mb-8">
+                        <label for="email" class="font-semibold w-24">Correu</label>
+                        <InputText id="email" v-model="user.correu" class="flex-auto" autocomplete="off" />
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <Button type="button" label="Cancel·lar" severity="secondary" @click="visible = false"></Button>
+                        <Button class="secondary-button" type="button" label="Guardar" @click="saveProfile"></Button>
+                    </div>
+                </Dialog>
             </div>
         </div>
     </div>
@@ -40,8 +62,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useLoggedUsers } from '@/stores/users';
-import { getAssociacions } from '@/services/comunicationManager';
+import { getAssociacions, updateUsuari } from '@/services/comunicationManager';
 import { Card } from 'primevue';
+import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
 
 const userStore = useLoggedUsers();
 
@@ -51,6 +76,8 @@ const user = ref(userStore.currentUser);
 
 const associacions = ref([]);
 
+const visible = ref(false);
+
 const fetchAssociations = async () => {
     try {
         const data = await getAssociacions();
@@ -58,8 +85,16 @@ const fetchAssociations = async () => {
             user.value.associacionsId.includes(associacio.id)
         );
     } catch (error) {
-        console.error('Error fetching associations:', error);
+        console.error('Error fetching associations: ', error);
     }
+};
+
+const saveProfile = async () => {
+    userStore.newUser(user);
+    console.log("Actalitzant Usuari: ", user.value);
+    await updateUsuari(user.value.id, user.value.nom, user.value.cognoms, user.value.contrasenya, user.value.correu, user.value.imatge, user.value.permisos);
+    visible.value = false;
+    console.log('Profile updated');
 };
 
 onMounted(() => {
@@ -89,5 +124,11 @@ onMounted(() => {
     color: var(--bold-color);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.secondary-button {
+    background-color: var(--secondary-light-color) !important;
+    border-color: var(--secondary-light-color) !important;
+    color: white !important;
 }
 </style>

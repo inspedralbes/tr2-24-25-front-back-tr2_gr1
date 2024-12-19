@@ -113,14 +113,17 @@ export const loginUsuari = async (correu, contrasenya) => {
 
         loggedUsersStore.newUser({
             token: user.token,
+            id: user.id,
             nom: user.nom,
             cognoms: user.cognoms,
             correu: user.correu,
+            imatge: user.imatge,
+            permisos: user.permisos,
             associacionsId: user.associacionsId,
             currentAssiciacio
         });
 
-        console.log(loggedUsersStore.users);
+        console.log(loggedUsersStore.currentUser);
 
         if (response.ok) {
             console.log('Usuari autenticat amb èxit');
@@ -136,6 +139,36 @@ export const loginUsuari = async (correu, contrasenya) => {
     }
 };
 
+export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge, permisos) => {
+    try{
+        const response = await fetch('http://localhost:3000/api/usuari', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id,
+                nom,
+                cognoms,
+                contrasenya,
+                correu,
+                imatge,
+                permisos
+            })
+        });
+
+        if (response.ok) {
+            console.log('Usuari actualitzat amb èxit: ', response);
+        } else if (response.status === 404) {
+            console.log('Usuari no trobat: ', response);
+        } else {
+            console.log('Dades incorrectes: ', response);
+        }
+    } catch (err) {
+        console.error('Error during fetch: ', err);
+        throw err;
+    }
+};
 
 export const getPropostes = async () => {
     try {

@@ -255,7 +255,7 @@ app.delete('/api/usuari', (req, res) => {
 app.put('/api/usuari', (req, res) => {
   const db = connectToDatabase();
   const { id, nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
-
+  console.log(req.body);
   // Validación de entrada
   if (!id || !nom || !cognoms || !contrasenya || !correu || !imatge || !permisos) {
     return res.status(400).json({ message: 'Invalid input' });

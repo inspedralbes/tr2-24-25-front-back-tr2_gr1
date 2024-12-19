@@ -47,9 +47,12 @@ export function login(db, SECRET_KEY) {
 
         res.status(200).json({
           token: token,
+          id: user.id,
           nom: user.nom,
           cognoms: user.cognoms,
           correu: user.correu,
+          imatge: user.imatge,
+          permisos: user.permisos,
           associacionsId: associacionsId,
         });
       });
