@@ -92,6 +92,11 @@ const router = createRouter({
       name: 'PropostaDetall',
       component:  () => import('../views/PropostaDetall.vue'),
       props: true 
+    },
+    {
+      path: '/propostes/add',
+      name: 'AfegirProposta',
+      component:  () => import('../views/NewActivity.vue'),
     }
   ],
 });
