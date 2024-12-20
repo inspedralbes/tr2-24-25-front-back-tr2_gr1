@@ -65,8 +65,10 @@ connection.connect((err) => {
   if (err) {
     console.error('Error conectando a MySQL:', err);
     process.exit(1);
+  } else {
+    console.log('Conectado a MySQL!');
+    connection.end();
   }
-  console.log('Conectado a MySQL!');
 });
 
 function verifyTokenMiddleware(req, res, next) {
@@ -427,7 +429,6 @@ fs.readdirSync(path.join(__dirname, 'services')).forEach(file => {
     console.log(`File not found: ${error}`);
   }
 
-  console.log(services.find(service => service.name === file).logs);
 
   try {
     let data = fs.readFileSync(path.join(__dirname, 'logs') + `/${file}.error.log`, 'utf8');
@@ -452,13 +453,10 @@ app.get('/services', (req, res) => {
 
 app.post('/changeServiceState', (req, res) => {
 
-  console.log(req.body);
 
   const { id } = req.body
 
   const service = services.find(service => service.id === id);
-
-  console.log(service);
 
   if (service.state === 'tancat') {
     startProcess(service);
@@ -508,7 +506,6 @@ app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
 app.get('/prova', (req, res) => {
   const verificacio = verifyToken(SECRET_KEY, req);
-  console.log(verificacio)
   if (verificacio.status === 401) {
     res.status(401).json(verificacio);
   } else {
@@ -523,18 +520,14 @@ function startProcess(service) {
 
   service.process = process;
   
-  console.log("entering");
-
   process.stdout.on('data', data => {
     const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
-    console.log(date);
     service.logs.push({ log: data.toString(), date: date });
     saveLogs(service, { log: data.toString(), date: date });
   });
 
   process.stderr.on('data', data => {
     const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
-    console.log(date);
     service.errorLogs.push({ log: data.toString(), date: date });
     saveErrorLogs(service, { log: data.toString(), date: date });
 
@@ -550,7 +543,6 @@ function startProcess(service) {
 }
 
 function stopProcess(service) {
-  console.log(process.platform);
   service.process.kill();
   service.process = null;
   service.state = 'tancat';
@@ -572,7 +564,6 @@ function saveLogs(service, objectToSave) {
 }
 
 function saveErrorLogs(service, objectToSave) {
-  console.log(objectToSave);
   const { log, date } = objectToSave;
 
   fs.existsSync(path.join(__dirname, 'logs')) || fs.mkdirSync(path.join(__dirname, 'logs'));
