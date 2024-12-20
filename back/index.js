@@ -53,7 +53,7 @@ const connectionConfig = {
   database: process.env.MYSQL_DB,
 };
 
-function connectToDatabase() {
+export function connectToDatabase() {
   const connection = mysql.createConnection(connectionConfig);
   return connection;
 }
@@ -71,8 +71,6 @@ function connectToDatabase() {
 //     connection.end();
 //   }
 // });
-
-connection.end();
 
 function verifyTokenMiddleware(req, res, next) {
   const verificacio = verifyToken(SECRET_KEY, req);
@@ -505,7 +503,7 @@ app.get('/api/activities',verifyTokenMiddleware, (req,res)=>{
   res.status(200).json(data);
 
 })// --- Login ENDPOINT ---
-app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
+app.post('/api/login', login(SECRET_KEY));
 
 app.post('/asignaUsuariAssociacio', (req, res) => {
   const { idUsu, idAsso } = req.body;

@@ -1,12 +1,17 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { connectToDatabase } from "./index.js";
+
 async function hashPassword(contrasenya){
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(contrasenya, salt);
   return hashedPassword
 }
 
-export function login(db, SECRET_KEY) {
+export function login(SECRET_KEY) {
+
+  const db = connectToDatabase();
+
   return (req, res) => {
     const { correu, contrasenya } = req.body;
 
