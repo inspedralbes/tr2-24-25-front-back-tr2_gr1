@@ -199,6 +199,45 @@ app.put('/api/proposta', (req, res) => {
   db.end();
 });
 
+// GET ALL ACTIVITIES FROM AN ASSOCIATION
+app.get('/api/activities/:idAsso', (req, res) => {
+
+  const db = connectToDatabase();
+  const { idAsso } = req.params;
+
+  console.log(`Fetching activities for association ID: ${idAsso}`);
+  // SELECT data, adreca, nom AS titol, descripcio AS subtitol, 'ESDEVENIMENT' AS tipus, '' AS contingut
+  // FROM ESDEVENIMENT
+  // WHERE idAsso = ? AND data < CURRENT_DATE
+  
+  // UNION ALL
+  const query = `
+  SELECT data, color, titol, subtitol, contingut, color
+  FROM PROPOSTA
+  WHERE idAsso = ? AND data >= CURRENT_DATE;`;
+
+const params=[idAsso, idAsso];
+
+db.query(query, params, (err, results) => {
+  if (err) {
+    console.error('Error retrieving activities:', err.message);
+    return res.status(500).send(`Error retrieving activities: ${err.message}`);
+  }
+
+  console.log('Activities retrieved:', results);
+
+  const formattedResults = results.map(activity => ({
+    date: activity.data,
+    color: activity.color,
+    label: activity.titol,
+    subtitol: activity.subtitol,
+    contingut: activity.contingut,
+  }));
+  res.status(200).json(formattedResults);
+});
+});
+
+
 // POST Endpoint para crear una nueva propuesta
 app.post('/api/proposta', (req, res) => {
   const { titol, subtitol, contingut, autor, data, color } = req.body;

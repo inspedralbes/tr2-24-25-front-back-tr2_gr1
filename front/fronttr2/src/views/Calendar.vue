@@ -74,9 +74,14 @@ function transformEventsToDates(date) {
   date.forEach((element) => {
     attrs.value.push({
       dates: element.date,
-      bar: element.color,
+      bar:{style: {
+        backgroundColor: element.color,
+      }} ,
       link: element.link,
       label: element.label,
+      smDescription: element.subtitol,
+      contingut: element.contingut,
+      
     });
   });
 }

@@ -1,6 +1,5 @@
-import { ref } from 'vue';
 import { defineStore } from 'pinia';
-
+import { ref } from 'vue';
 export const useLoggedUsers = defineStore('loggedUsers', () => {
     const currentUser = ref(null);
 
@@ -9,13 +8,13 @@ export const useLoggedUsers = defineStore('loggedUsers', () => {
     };
 
     const getUser = () => {
-        console.log("BIRDISTHEWORD"+users.value[0])
-        return users.value[0]
+        console.log("BIRDISTHEWORD"+currentUser.value)
+        return currentUser.value
     }
 
     const emptyUser=()=>{
-        users.value=[]
+        users.value={}
     }
 
-    return { users, newUser, getUser, emptyUser };
+    return { currentUser, newUser, getUser, emptyUser };
 });

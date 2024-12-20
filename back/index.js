@@ -26,6 +26,7 @@ async function hashPassword(contrasenya){
 }
 // Crear la aplicación Express
 const app = express();
+const router = express.Router();
 
 
 // Middleware
@@ -73,6 +74,7 @@ connection.connect((err) => {
 
 function verifyTokenMiddleware(req, res, next) {
   const verificacio = verifyToken(SECRET_KEY, req);
+  console.log(verificacio.message);
   if (verificacio.status === 401) {
     return res.status(401).json(verificacio);
   }
@@ -286,7 +288,7 @@ app.delete('/api/usuari', verifyTokenMiddleware, (req, res) => {
 app.put('/api/usuari', verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { id, nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
-
+  console.log(req.body);
   // Validación de entrada
   if (!id || !nom || !cognoms || !contrasenya || !correu || !imatge || !permisos) {
     return res.status(400).json({ message: 'Invalid input' });
@@ -498,10 +500,47 @@ app.get('/api/activities',verifyTokenMiddleware, (req,res)=>{
       color: "green",
     },
   ];
-res.status(200).json(data);
+  res.status(200).json(data);
 
 })// --- Login ENDPOINT ---
 app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
+
+app.post('/asignaUsuariAssociacio', (req, res) => {
+  const { idUsu, idAsso } = req.body;
+  const db = connectToDatabase();
+
+  // Validación de entrada
+  if (!idUsu || !idAsso) {
+    return res.status(400).json({ message: 'Falten paràmetres' });
+  }
+
+  // Conexión a la base de datos
+  db.connect((err) => {
+    if (err) {
+      console.error('Error connecting to the database', err);
+      return res.status(500).json({ message: 'Error connecting to the database' });
+    }
+
+    // Consulta para insertar la asignación
+    const query = 'INSERT INTO usuari_associacio (idUsu, idAsso) VALUES (?, ?)';
+    db.query(query, [idUsu, idAsso], (err, result) => {
+      db.end(); // Cerrar la conexión
+
+      if (err) {
+        console.error('Error al associar usuari:', err);
+        return res.status(500).json({ message: 'Error del servidor al asociar usuari' });
+      }
+
+      // Respuesta exitosa
+      const createdAssociation = {
+        idUsu,
+        idAsso,
+        associacioId: result.insertId, // ID de la nueva relación generada
+      };
+      res.status(201).json(createdAssociation); // Enviar el resultado con el nuevo ID
+    });
+  });
+});
 
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
 app.get('/prova', (req, res) => {

@@ -1,55 +1,67 @@
 <template>
     <div class="spa-16 main">
         <div class="gridMessages">
-            <XatMessage v-for="message in messages" :key="message.id" :messageData="message" />  
+            <XatMessage v-for="oneMessage in messages" :key="oneMessage.id" :messageData="oneMessage" />
         </div>
-        
+
     </div>
     <div class="inputContainer">
-            <InputText type="text" class="chatInput" v-model="message" @keyup.enter="sendMessage" />
-            <Button icon="pi pi-arrow-right" rounded class="buttonSend" @click="sendMessage" />
-        </div>
+        <InputText type="text" class="chatInput" v-model="messageToSend" @keyup.enter="sendMessage" />
+        <Button icon="pi pi-arrow-right" rounded class="buttonSend" @click="sendMessage" />
+    </div>
     <NavigationBar />
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
-import {socket} from '@/services/socket';
+import { ref, onMounted, watch } from 'vue';
+import { useChatStore } from '@/stores/chat';
+import { socket } from '@/services/socket';
 import NavigationBar from '@/components/NavigationBar.vue';
 import XatMessage from './XatMessage.vue';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 
-const message = ref('');
+const messageToSend = ref('');
+const chatStore = useChatStore();
 const messages = ref([])
-    onMounted(() => {
-        console.log('Component is mounted')
-        //getAssociationId
-        socket.emit('joinChat', 1); //This must be changed to the association id
 
-    })
+onMounted(() => {
+    console.log('Component is mounted')
+    //getAssociationId
+    socket.emit('joinChat', 1); //This must be changed to the association id
 
-    // //This code is just for testing
-    // socket.on('allMessages', (data) => {
-    //     messages.value = data;
-    // })
-    // //This code is just for testing
-    // socket.on('chat message', (data) => {
-    //     console.log(data)
-    //     messages.value.push(data);
-    // })
+})
 
-    //function to send a message
-    function sendMessage(){
-        let auxObject={
-            idUser: 1, //This must be changed to the user id
-            message: message.value,
-            idAsso: 1, //This must be changed to the association id
-            username: "sample" //This must be changed to the user name
-        }
-        console.log("Sending message: ", auxObject);
-        socket.emit('newMessage', auxObject);
-        message.value = '';
+watch(
+    () => chatStore.messages,
+    (newMessages) => {
+        messages.value = newMessages;
+        console.log(messages.value[0]?.message);
+    },
+    { immediate: true }
+);
+
+// //This code is just for testing
+// socket.on('allMessages', (data) => {
+//     messages.value = data;
+// })
+// //This code is just for testing
+// socket.on('chat message', (data) => {
+//     console.log(data)
+//     messages.value.push(data);
+// })
+
+//function to send a message
+function sendMessage() {
+    let auxObject = {
+        idUser: 1, //This must be changed to the user id
+        message: messageToSend.value,
+        idAsso: 1, //This must be changed to the association id
+        username: "sample" //This must be changed to the user name
     }
+    console.log("Sending message: ", auxObject);
+    socket.emit('newMessage', auxObject);
+    messageToSend.value = '';
+}
 </script>
 <style scoped>
 .main {
@@ -59,10 +71,11 @@ const messages = ref([])
     width: 100%;
     box-sizing: border-box;
     margin: 0;
-    height: calc(100vh - 4rem); 
-    overflow-y: auto; 
+    height: calc(100vh - 4rem);
+    overflow-y: auto;
 }
-.chatInput{
+
+.chatInput {
     width: 98%;
     margin-left: auto;
     border-radius: 15px;
@@ -70,7 +83,8 @@ const messages = ref([])
     border: 1px solid var(--accent-light-color);
     color: var(--bold-color);
 }
-.inputContainer{
+
+.inputContainer {
     position: fixed;
     bottom: 4rem;
     padding-bottom: 0.5rem;
@@ -82,19 +96,22 @@ const messages = ref([])
     gap: 0.4rem;
     background-color: var(--main-color);
     z-index: 100;
-    border:none;
-    @media screen and (min-width: 768px){
+    border: none;
+
+    @media screen and (min-width: 768px) {
         grid-template-columns: 9fr 1fr;
-        
+
     }
 }
-.buttonSend{
+
+.buttonSend {
     border-radius: 50%;
     border: 1px solid var(--accent-light-color);
     background-color: var(--accent-light-color);
     color: var(--bold-color);
 }
-.gridMessages{
+
+.gridMessages {
     display: grid;
     grid-template-columns: 100%;
     gap: 0.5rem;
