@@ -72,6 +72,8 @@ connection.connect((err) => {
   }
 });
 
+connection.end();
+
 function verifyTokenMiddleware(req, res, next) {
   const verificacio = verifyToken(SECRET_KEY, req);
   console.log(verificacio.message);
