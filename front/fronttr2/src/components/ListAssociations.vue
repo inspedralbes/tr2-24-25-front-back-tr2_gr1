@@ -29,7 +29,7 @@ import { asignaUsuariAssociacio } from '@/services/comunicationManager';
 
 const router = useRouter();
 const userStore = useLoggedUsers();
-const userId = userStore.id;
+// const userId = userStore.currentUser.id;
 const associacions = ref([]);
 
 const fetchAssociations = async () => {
@@ -46,7 +46,7 @@ const goToCreatePage = () => {
 };
 
 const joinAssociation = async (idAsso) => {
-    const userId = userStore.id;
+    const userId = userStore.currentUser.id;
     console.log('ID del usuario desde Pinia:', userId);
 
     if (!userId) {
@@ -58,6 +58,7 @@ const joinAssociation = async (idAsso) => {
         const result = await asignaUsuariAssociacio(userId, idAsso);
         console.log('Resultado de la asignación:', result);
         router.push('/noticies');
+        // console.log('Usuario asignado a la asociación correctamente.', result);
     } catch (error) {
         console.error('Error al intentar asociar el usuario con la asociación:', error);
     }
@@ -65,7 +66,7 @@ const joinAssociation = async (idAsso) => {
 
 onMounted(() => {
     fetchAssociations();
-    const userId = userStore.userId;
+    const userId = userStore.currentUser.userId;
     console.log('ID del usuario desde Pinia:', userId);
 
     if (!userStore.loggedUser || !userStore.associations.length) {
