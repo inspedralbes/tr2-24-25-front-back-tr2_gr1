@@ -45,9 +45,11 @@ export function login(SECRET_KEY) {
         SECRET_KEY,
         { expiresIn: '1h' }
       );
+    db.end();
 
+    const db2 = connectToDatabase();
       const query2 = 'SELECT idAsso FROM USUARI_ASSOCIACIO WHERE idUsu = ?';
-      db.query(query2, [user.id], (err, assocResults) => {
+      db2.query(query2, [user.id], (err, assocResults) => {
         console.log("Query:", query2, "Params:", user.id);
         if (err) {
           console.log(err);
@@ -69,6 +71,7 @@ export function login(SECRET_KEY) {
           associacionsId: associacionsId,
         });
       });
+    db2.end();
     });
   };
 }

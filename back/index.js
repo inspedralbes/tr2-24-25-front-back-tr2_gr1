@@ -67,18 +67,18 @@ export function connectToDatabase() {
 
 
 // Verificar la conexión a la base de datos
-const connection = connectToDatabase();
+//const connection = connectToDatabase();
 
-connection.connect((err) => {
-  if (err) {
-    console.error('Error conectando a MySQL:', err);
-    process.exit(1);
-  } else {
-    console.log('Conectado a MySQL!');
-    connection.end();
-    console.log("conexion cerrada");
-  }
-});
+// connection.connect((err) => {
+//   if (err) {
+//     console.error('Error conectando a MySQL:', err);
+//     process.exit(1);
+//   } else {
+//     console.log('Conectado a MySQL!');
+//     connection.end();
+//     console.log("conexion cerrada");
+//   }
+// });
 
 function verifyTokenMiddleware(req, res, next) {
   const verificacio = verifyToken(SECRET_KEY, req);
