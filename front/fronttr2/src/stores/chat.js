@@ -1,13 +1,17 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useChatMessages = defineStore('chatMessages', () => {
-    const messages = ref([{
-        idAssociacio,
-        user,
-        content, 
-        time
-    }])
-
-    return { messages }
+export const useChatStore = defineStore('chatMessages', {
+    state: () => ({
+        idAsso: null,
+        messages: []
+    }),
+    actions: {
+        addMessage(message) {
+            this.messages.push(message);
+        },
+        setMessages(messages) {
+            this.messages = messages;
+        }
+    }
 })

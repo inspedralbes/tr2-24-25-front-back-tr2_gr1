@@ -49,7 +49,7 @@ export function login(db, SECRET_KEY) {
           return res.status(500).json({ error: 'Database error' });
         }
 
-        const associacionsId = assocResults.map((row) => row.idAssociacio);
+        const associacionsId = assocResults.map((row) => row.idAsso);
 
         res.status(200).json({
           id: user.id,

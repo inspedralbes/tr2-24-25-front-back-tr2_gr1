@@ -38,9 +38,9 @@
    <div class="flex flex-col min-w-[10%] max-w-[80%] leading-1.5 p-4 border-gray-200 bg-CustomLightAccen rounded-s-xl rounded-es-xl rounded-ee-xl dark:bg-CustomLightAccent">
       <div class="flex items-center space-x-2 rtl:space-x-reverse">
          <span class="text-sm font-semibold text-black dark:text-black">{{messageData.username}}</span>
-         <span class="text-sm font-normal text-CustomDarkAccent dark:text-CustomDarkAccent">{{messageData.time}}</span>
+         <span class="text-sm font-normal text-CustomDarkAccent dark:text-CustomDarkAccent">{{messageData.date}}</span>
       </div>
-      <p class="text-sm font-normal py-2.5 text-black dark:text-blackoverflow-visible overflowControl">{{ messageData.content }}</p>
+      <p class="text-sm font-normal py-2.5 text-black dark:text-blackoverflow-visible overflowControl">{{ messageData.message }}</p>
    </div>
   
 </div>

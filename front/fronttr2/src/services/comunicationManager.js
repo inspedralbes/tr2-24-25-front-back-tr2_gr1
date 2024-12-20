@@ -3,8 +3,8 @@ import router from "@/router";
 import { useLoggedUsers } from "@/stores/users";
 
 const URL = import.meta.env.VITE_API_ROUTE;
-const URLNOTICIAS = 'http://localhost:3002';
-const URLPROPOSTES = 'http://localhost:3003';
+const URLNOTICIAS = import.meta.env.VITE_NEWS_ROUTE;
+const URLPROPOSTES = import.meta.env.VITE_ACTIVITY_ROUTE;
 
 export const crearAssociacio = async (nom, desc) => {
     try {
@@ -133,6 +133,8 @@ export async function loginUsuari(correu, contrasenya) {
             currentAssiciacio
         });
 
+        console.log('Usuari autenticat amb èxit', user.associacionsId);
+
         console.log(loggedUsersStore.currentUser);
 
         if (response.ok) {
@@ -151,7 +153,7 @@ export async function loginUsuari(correu, contrasenya) {
 
 export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge, permisos, token) => {
     try{
-        const response = await fetch('http://localhost:3000/api/usuari', {
+        const response = await fetch(`${URL}/api/usuari`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -429,6 +431,7 @@ export const deleteNoticia = async (id) => {
 
 export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
     try {
+        const loggedUsersStore = useLoggedUsers();
         const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
             method: 'POST',
             headers: {
@@ -440,8 +443,9 @@ export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
         if (!response.ok) {
             throw new Error('Error al asignar usuario a la asociación.');
         }
-
         const data = await response.json();
+        loggedUsersStore.currentUser.currentAssiciacio = idAsso;
+        loggedUsersStore.currentUser.associacionsId.push(idAsso);
         return data;
     } catch (error) {
         console.error('Error en la asignación de usuario:', error);
@@ -453,13 +457,13 @@ export const getActivities = async () => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser()
-        if (user.token == undefined || user.token == false || user.token == null || user.token == false) {
+        if (user.token == undefined || user.token == false || user.token == null) {
             noLogged
         }
         else {
             let currentAssiciacio=user.currentAssiciacio
             // user.currentAsso
-            const response = await fetch('http://localhost:3003/api/activities/'+currentAssiciacio, {
+            const response = await fetch(`${URLPROPOSTES}/api/activities/`+user.currentAssiciacio, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
