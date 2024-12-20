@@ -10,7 +10,7 @@ import cors from 'cors';
 import mysql from 'mysql';
 
 const app = express();
-const PORT = 3002;
+const PORT = process.env.NEWS_PORT;
 
 app.use(cors({
     origin: '*',

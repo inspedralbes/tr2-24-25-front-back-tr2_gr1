@@ -13,8 +13,6 @@ import { createChat, getChatByAssoId } from './routes/chat.js';
 import { createMessage, getMessagesByAssoId } from './routes/message.js';
 
 
-console.log(process.env.TRY_PATATITA);
-
 const app = express();
 app.use(cors({
     origin: '*',
@@ -30,7 +28,7 @@ const io = new Server(server, {
     }
 });
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGODB_URL)
     .then(() => console.log('Connectat a MongoDB'))
     .catch((err) => console.error('Error al connectar a MongoDB', err));
 
@@ -117,8 +115,8 @@ function findSocketRoom(socket) {
     }
     return null;
 }
-// const PORT = process.env.PORT || 3001;
-const PORT = 3001;
+const PORT = process.env.CHAT_PORT;
+// const PORT = 3001;
 
 server.listen(PORT, () => {
     console.log(`Servidor en funcionament a http://localhost:${PORT}`);

@@ -38,7 +38,7 @@ const server = createServer(app);
 const io = new Server(server);
 
 // Variables de entorno
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.ROOT_PORT;
 const SECRET_KEY = process.env.SECRET_KEY;
 
 
