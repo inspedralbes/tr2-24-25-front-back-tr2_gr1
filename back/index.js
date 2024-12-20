@@ -19,7 +19,7 @@ dotenv.config();
 import { login, verifyToken } from './tokens.js';
 
 
-async function hashPassword(contrasenya){
+async function hashPassword(contrasenya) {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(contrasenya, salt);
   return hashedPassword
@@ -54,8 +54,15 @@ const connectionConfig = {
 };
 
 export function connectToDatabase() {
-  const connection = mysql.createConnection(connectionConfig);
-  return connection;
+
+  try {
+    
+    const connection = mysql.createConnection(connectionConfig);
+    return connection;
+
+  } catch (e) {
+    console.log(e.stack);
+  }
 }
 
 
@@ -83,7 +90,7 @@ function verifyTokenMiddleware(req, res, next) {
 }
 // --- ENDPOINTS PARA ASSOCIACIO ---
 // GET Endpoint
-app.get('/api/associacio',verifyTokenMiddleware, (req, res) => {
+app.get('/api/associacio', verifyTokenMiddleware, (req, res) => {
   console.log("pidiendo")
   const db = connectToDatabase();
   const query = 'SELECT id, nom, descripcio FROM ASSOCIACIO';
@@ -101,7 +108,7 @@ app.get('/api/associacio',verifyTokenMiddleware, (req, res) => {
 });
 
 // POST Endpoint
-app.post('/api/associacio',verifyTokenMiddleware, (req, res) => {
+app.post('/api/associacio', verifyTokenMiddleware, (req, res) => {
   console.log("pidiendo")
   const db = connectToDatabase();
   const { nom, descripcio } = req.body;
@@ -135,7 +142,7 @@ app.post('/api/associacio',verifyTokenMiddleware, (req, res) => {
 });
 
 // DELETE Endpoint
-app.delete('/api/associacio',verifyTokenMiddleware, (req, res) => {
+app.delete('/api/associacio', verifyTokenMiddleware, (req, res) => {
   console.log("pidiendo")
   const db = connectToDatabase();
   const { id } = req.body;
@@ -164,7 +171,7 @@ app.delete('/api/associacio',verifyTokenMiddleware, (req, res) => {
 });
 
 // PUT Endpoint
-app.put('/api/associacio',verifyTokenMiddleware, (req, res) => {
+app.put('/api/associacio', verifyTokenMiddleware, (req, res) => {
   console.log("pidiendo")
   const db = connectToDatabase();
   const { id, nom, descripcio } = req.body;
@@ -332,7 +339,7 @@ app.put('/api/usuari', verifyTokenMiddleware, (req, res) => {
 // --- ENDPOINTS PER PROPOSTA ---
 
 // GET Endpoint
-app.get('/api/proposta',verifyTokenMiddleware, (req, res) => {
+app.get('/api/proposta', verifyTokenMiddleware, (req, res) => {
   console.log("pidiendo")
   const db = connectToDatabase();
   const query = `
@@ -375,7 +382,7 @@ app.get('/api/proposta',verifyTokenMiddleware, (req, res) => {
 });
 
 // UPDATE Endpoint
-app.put('/api/proposta',verifyTokenMiddleware, (req, res) => {
+app.put('/api/proposta', verifyTokenMiddleware, (req, res) => {
   const { id, titol, subtitol, contingut, autor, idAsso, data } = req.body;
 
   if (!id || !titol || !subtitol || !contingut || !autor || !idAsso || !data) {
@@ -484,8 +491,8 @@ app.post('/changeServiceState', (req, res) => {
 });
 
 // --- ENDPOINTS PER ACTIVITIES ---
-app.get('/api/activities',verifyTokenMiddleware, (req,res)=>{
-  let data=[
+app.get('/api/activities', verifyTokenMiddleware, (req, res) => {
+  let data = [
     {
       id: 1,
       date: new Date(2025, 0, 1),
@@ -570,7 +577,7 @@ function startProcess(service) {
   });
 
   service.process = process;
-  
+
   process.stdout.on('data', data => {
     const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
     service.logs.push({ log: data.toString(), date: date });
