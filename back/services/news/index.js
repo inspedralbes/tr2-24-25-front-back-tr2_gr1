@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import mysql from 'mysql';
+import { verifyTokenMiddleware } from '../../tokens.js';
 
 const app = express();
 const PORT = 3002;
@@ -39,7 +40,7 @@ const db = mysql.createPool({
 
 let news = [];
 
-app.get('/api/noticia', (req, res) => {
+app.get('/api/noticia', verifyTokenMiddleware, (req, res) => {
     try {
         const query = 'SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM noticia';
         db.query(query, (err, result) => {
@@ -57,7 +58,7 @@ app.get('/api/noticia', (req, res) => {
     }
 });
 
-app.get('/api/noticia/:id', (req, res) => {
+app.get('/api/noticia/:id',verifyTokenMiddleware, (req, res) => {
     try {
         const id = req.params.id;
         const query = `SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM noticia WHERE id = ${id}`;
@@ -75,7 +76,7 @@ app.get('/api/noticia/:id', (req, res) => {
     }
 });
 
-app.post('/api/noticia', (req, res) => {
+app.post('/api/noticia',verifyTokenMiddleware, (req, res) => {
     const { titol, subtitol, contingut, imatge, autor, idAsso } = req.body;
 
     const validateAuthorQuery = `SELECT id FROM usuari WHERE id = '${autor}'`;
@@ -105,7 +106,7 @@ app.post('/api/noticia', (req, res) => {
     });
 });
 
-app.put('/api/noticia/:id', (req, res) => {
+app.put('/api/noticia/:id',verifyTokenMiddleware, (req, res) => {
     const id = req.params.id; // ID de la noticia a editar
     const { titol, subtitol, contingut, imatge, autor, idAsso } = req.body;
 
@@ -155,7 +156,7 @@ app.put('/api/noticia/:id', (req, res) => {
     });
 });
 
-app.delete('/api/noticia/:id', (req, res) => {
+app.delete('/api/noticia/:id',verifyTokenMiddleware, (req, res) => {
     const id = req.params.id;
 
     const deleteQuery = `DELETE FROM noticia WHERE id = ${id}`;

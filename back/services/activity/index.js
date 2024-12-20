@@ -9,7 +9,7 @@ import mysql from 'mysql2';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { createVot, getVotByActUserID } from './routes/vot.js';
-
+import { verifyTokenMiddleware } from '../../tokens.js';
 const app = express();
 const PORT = 3003;
 
@@ -62,7 +62,7 @@ connection.connect((err) => {
 // ** Endpoint de Propuestas **
 // p. Significa que agafa les dades de la taula PROPOSTES, es una forma de fer-ho mes curt per no posar el nom tota l'estona.
 // Obtener todas las propuestas
-app.get('/api/proposta/', (req, res) => {
+app.get('/api/proposta/',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const query = `
       SELECT 
@@ -105,7 +105,7 @@ app.get('/api/proposta/', (req, res) => {
 
 
 //GET Endpoint por ID
-app.get('/api/proposta/:id', (req, res) => {
+app.get('/api/proposta/:id',verifyTokenMiddleware, (req, res) => {
   const propostaId = req.params.id;  // Obtener el ID desde la URL
   const db = connectToDatabase();
 
@@ -157,7 +157,7 @@ app.get('/api/proposta/:id', (req, res) => {
 });
 
 // UPDATE Endpoint
-app.put('/api/proposta', (req, res) => {
+app.put('/api/proposta', verifyTokenMiddleware,(req, res) => {
   const { id, titol, subtitol, contingut, autor, idAsso, data } = req.body;
 
   if (!id || !titol || !subtitol || !contingut || !autor || !idAsso || !data) {
@@ -200,7 +200,7 @@ app.put('/api/proposta', (req, res) => {
 });
 
 // GET ALL ACTIVITIES FROM AN ASSOCIATION
-app.get('/api/activities/:idAsso', (req, res) => {
+app.get('/api/activities/:idAsso',verifyTokenMiddleware, (req, res) => {
 
   const db = connectToDatabase();
   const { idAsso } = req.params;
@@ -239,7 +239,7 @@ db.query(query, params, (err, results) => {
 
 
 // POST Endpoint para crear una nueva propuesta
-app.post('/api/proposta', (req, res) => {
+app.post('/api/proposta',verifyTokenMiddleware, (req, res) => {
   const { titol, subtitol, contingut, autor, data, color } = req.body;
 
   const autorId = autor || 1;
@@ -289,7 +289,7 @@ app.post('/api/proposta', (req, res) => {
 // --- ENDPOINTS PARA COMENTARIS ---
 // GET Endpoint per IDPROP
 // GET Endpoint per IDPROP con sockets
-app.get('/api/comentaris/:idProp', (req, res) => {
+app.get('/api/comentaris/:idProp',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { idProp } = req.params;
 
@@ -331,7 +331,7 @@ app.get('/api/comentaris/:idProp', (req, res) => {
 });
 
 // POST Endpoint per IDPROP con sockets
-app.post('/api/comentaris/:idProp', (req, res) => {
+app.post('/api/comentaris/:idProp',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { idProp } = req.params;
   const { contenido } = req.body;
@@ -382,7 +382,7 @@ app.post('/api/comentaris/:idProp', (req, res) => {
 
 // --- ENDPOINTS PARA VOTACIONS ---
 // POST Endpoint 
-app.post('/api/votacions', (req, res) => {
+app.post('/api/votacions', verifyTokenMiddleware, (req, res) => {
   
   // idProp: integer, idUsu: integer, resposta: boolean
 

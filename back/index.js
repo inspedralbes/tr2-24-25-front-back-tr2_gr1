@@ -16,7 +16,7 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import bcrypt from 'bcryptjs';
 dotenv.config();
-import { login, verifyToken } from './tokens.js';
+import { login, verifyTokenMiddleware } from './tokens.js';
 
 
 async function hashPassword(contrasenya){
@@ -70,14 +70,7 @@ connection.connect((err) => {
   console.log('Conectado a MySQL!');
 });
 
-function verifyTokenMiddleware(req, res, next) {
-  const verificacio = verifyToken(SECRET_KEY, req);
-  console.log(verificacio.message);
-  if (verificacio.status === 401) {
-    return res.status(401).json(verificacio);
-  }
-  next();
-}
+
 // --- ENDPOINTS PARA ASSOCIACIO ---
 // GET Endpoint
 app.get('/api/associacio',verifyTokenMiddleware, (req, res) => {

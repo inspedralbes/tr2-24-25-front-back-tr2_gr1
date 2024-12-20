@@ -185,9 +185,16 @@ export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge
 
 export const getPropostes = async () => {
     try {
-        const response = await fetch(`${URLPROPOSTES}/api/proposta`);
+        const response = await fetch(`${URLPROPOSTES}/api/proposta`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            }
+        });
         if (response.ok) {
             const data = await response.json();
+            headers
             console.log('Propostes:', data);
             return data.map(item => ({
                 id: item.id,
@@ -209,7 +216,13 @@ export const getPropostes = async () => {
 
 export const getPropostaById = async (id) => {
     try {
-        const response = await fetch(`${URLPROPOSTES}/api/proposta/${id}`);
+        const response = await fetch(`${URLPROPOSTES}/api/proposta/${id}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            }
+        });
         if (response.ok) {
             const data = await response.json();
             return {
@@ -232,7 +245,13 @@ export const getPropostaById = async (id) => {
 
 export const getComentarios = async (idProp) => {
     try {
-      const response = await fetch(`${URLPROPOSTES}/api/comentaris/${idProp}`);
+      const response = await fetch(`${URLPROPOSTES}/api/comentaris/${idProp}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + user.token
+        }
+    });
       if (response.ok) {
         const data = await response.json();
         console.log('Comentarios:', data);
@@ -259,7 +278,7 @@ export const getComentarios = async (idProp) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${currentUser.value.token}`,
+         'Authorization': `Bearer ${currentUser.value.token}`,
         },
         body: JSON.stringify({ contenido: comentario }),
       });
@@ -283,6 +302,7 @@ export const getComentarios = async (idProp) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.value.token}`,
         },
         body: JSON.stringify({
           idProp: idProposta,
@@ -436,6 +456,7 @@ export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${currentUser.value.token}`,
             },
             body: JSON.stringify({ idUsu, idAsso }),
         });
@@ -507,6 +528,7 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data, co
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.value.token}`,
         },
         body: JSON.stringify({
           titol,

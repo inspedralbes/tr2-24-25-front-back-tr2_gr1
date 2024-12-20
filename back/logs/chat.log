@@ -79,3 +79,20 @@
 {"log":"chat message {\n  idUser: 5,\n  message: 'Callaros ya e iros a un motel',\n  idAsso: 0,\n  username: 'Elver Gallarga'\n}\n","date":"2024-12-20 09:22:15"}||
 {"log":"{\n  idUser: 5,\n  message: 'Callaros ya e iros a un motel',\n  idAsso: 0,\n  username: 'Elver Gallarga',\n  date: 2024-12-20T09:22:15.602Z\n}\nrooms Map(4) {\n  '8iTU5gdGbROR7HDdAAAH' => Set(1) { '8iTU5gdGbROR7HDdAAAH' },\n  0 => Set(3) {\n    '8iTU5gdGbROR7HDdAAAH',\n    'KVb_pIs-rOl32VYJAAAJ',\n    'iYqBpS3C4u1R2pJxAAAN'\n  },\n  'KVb_pIs-rOl32VYJAAAJ' => Set(1) { 'KVb_pIs-rOl32VYJAAAJ' },\n  'iYqBpS3C4u1R2pJxAAAN' => Set(1) { 'iYqBpS3C4u1R2pJxAAAN' }\n}\nroom 0\nroom 0\n{\n  room: 0,\n  participants: [],\n  messages: [\n    {\n      idUser: 4,\n      message: 'Hola bebe',\n      idAsso: 0,\n      username: 'hola como va',\n      date: 2024-12-20T09:04:10.813Z\n    },\n    {\n      idUser: 3,\n      message: 'Hola jefe',\n      idAsso: 0,\n      username: 'as as',\n      date: 2024-12-20T09:06:58.253Z\n    },\n    {\n      idUser: 4,\n      message: 'Bombona?',\n      idAsso: 0,\n      username: 'hola como va',\n      date: 2024-12-20T09:19:37.621Z\n    },\n    {\n      idUser: 3,\n      message: 'Estoy casada',\n      idAsso: 0,\n      username: 'as as',\n      date: 2024-12-20T09:20:05.413Z\n    }\n  ]\n}\n","date":"2024-12-20 09:22:15"}||
 {"log":"{\n  valid: true,\n  message: {\n    idAsso: 0,\n    idUser: 5,\n    message: 'Callaros ya e iros a un motel',\n    date: 2024-12-20T09:22:15.602Z,\n    _id: new ObjectId('676537478782b3f8c3c0617d'),\n    createdAt: 2024-12-20T09:22:15.605Z,\n    updatedAt: 2024-12-20T09:22:15.605Z,\n    __v: 0\n  }\n}\n","date":"2024-12-20 09:22:15"}||
+{"log":"a user connected\n","date":"2024-12-20 09:24:13"}||
+{"log":"a user connected\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 0\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 1\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 0\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 0\njoinChat 0\n","date":"2024-12-20 09:24:13"}||
+{"log":"[]\n","date":"2024-12-20 09:24:13"}||
+{"log":"I joined the room 1\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 1\n","date":"2024-12-20 09:24:13"}||
+{"log":"a user connected\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 0\n","date":"2024-12-20 09:24:13"}||
+{"log":"a user connected\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 0\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 0\njoinChat 0\njoinChat 0\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 0\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 0\n","date":"2024-12-20 09:24:13"}||
+{"log":"joinChat 0\njoinChat 0\n","date":"2024-12-20 09:24:13"}||

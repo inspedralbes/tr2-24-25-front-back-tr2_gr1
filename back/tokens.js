@@ -68,7 +68,7 @@ export function login(db, SECRET_KEY) {
   };
 }
 
-export function verifyToken(SECRET_KEY, req) {
+ function verifyToken(SECRET_KEY, req) {
   console.log('Header Auth: ', req.headers.authorization);
   const token = req.headers.authorization?.split(' ')[1];
   console.log('Token de Sessió: ', token);
@@ -85,4 +85,12 @@ export function verifyToken(SECRET_KEY, req) {
     }
     return { message: "Invalid token", login: false, user: null, status: 401 };
   }
+}
+export function verifyTokenMiddleware(req, res, next) {
+  const verificacio = verifyToken(SECRET_KEY, req);
+  console.log(verificacio.message);
+  if (verificacio.status === 401) {
+    return res.status(401).json(verificacio);
+  }
+  next();
 }

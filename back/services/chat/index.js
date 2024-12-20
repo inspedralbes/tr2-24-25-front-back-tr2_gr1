@@ -11,7 +11,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { createChat, getChatByAssoId } from './routes/chat.js';
 import { createMessage, getMessagesByAssoId } from './routes/message.js';
-
+import { verifyTokenMiddleware } from '../../tokens.js';
 
 const app = express();
 app.use(cors({
@@ -105,7 +105,7 @@ io.on('connection', (socket) => {
     });
 });
 
-app.post("/chat", (req, res) => {
+app.post("/chat",verifyTokenMiddleware, (req, res) => {
     createChat(req.body).then((result) => {
         res.json(result);
     });
@@ -123,9 +123,6 @@ function findSocketRoom(socket) {
     return null;
 }
 
-app.get('/ping', (req, res) => {
-    res.send('pong');
-});
 // const PORT = process.env.PORT || 3001;
 const PORT = 3001;
 
