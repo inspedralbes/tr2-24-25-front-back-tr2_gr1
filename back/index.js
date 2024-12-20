@@ -53,7 +53,6 @@ const connectionConfig = {
   database: process.env.MYSQL_DB,
 };
 
-console.log("pidiendo")
 export function connectToDatabase() {
   const connection = mysql.createConnection(connectionConfig);
   return connection;
@@ -61,18 +60,18 @@ export function connectToDatabase() {
 
 
 // Verificar la conexión a la base de datos
-console.log("pidiendo")
-// const connection = connectToDatabase();
+const connection = connectToDatabase();
 
-// connection.connect((err) => {
-//   if (err) {
-//     console.error('Error conectando a MySQL:', err);
-//     process.exit(1);
-//   } else {
-//     console.log('Conectado a MySQL!');
-//     connection.end();
-//   }
-// });
+connection.connect((err) => {
+  if (err) {
+    console.error('Error conectando a MySQL:', err);
+    process.exit(1);
+  } else {
+    console.log('Conectado a MySQL!');
+    connection.end();
+    console.log("conexion cerrada");
+  }
+});
 
 function verifyTokenMiddleware(req, res, next) {
   const verificacio = verifyToken(SECRET_KEY, req);
