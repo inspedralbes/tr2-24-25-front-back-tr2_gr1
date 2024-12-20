@@ -56,7 +56,7 @@ const connectionConfig = {
 export function connectToDatabase() {
 
   try {
-    
+
     const connection = mysql.createConnection(connectionConfig);
     return connection;
 
@@ -533,12 +533,12 @@ app.post('/asignaUsuariAssociacio', (req, res) => {
     return res.status(400).json({ message: 'Falten paràmetres' });
   }
 
-  // Conexión a la base de datos
-  db.connect((err) => {
-    if (err) {
-      console.error('Error connecting to the database', err);
-      return res.status(500).json({ message: 'Error connecting to the database' });
-    }
+  // // Conexión a la base de datos
+  // db.connect((err) => {
+  //   if (err) {
+  //     console.error('Error connecting to the database', err);
+  //     return res.status(500).json({ message: 'Error connecting to the database' });
+  //   }
 
     // Consulta para insertar la asignación
     const query = 'INSERT INTO usuari_associacio (idUsu, idAsso) VALUES (?, ?)';
@@ -558,7 +558,7 @@ app.post('/asignaUsuariAssociacio', (req, res) => {
       };
       res.status(201).json(createdAssociation); // Enviar el resultado con el nuevo ID
     });
-  });
+  // });
 });
 
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
