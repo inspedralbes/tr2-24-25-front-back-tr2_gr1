@@ -53,6 +53,7 @@ const connectionConfig = {
   database: process.env.MYSQL_DB,
 };
 
+console.log("pidiendo")
 export function connectToDatabase() {
   const connection = mysql.createConnection(connectionConfig);
   return connection;
@@ -60,6 +61,7 @@ export function connectToDatabase() {
 
 
 // Verificar la conexión a la base de datos
+console.log("pidiendo")
 // const connection = connectToDatabase();
 
 // connection.connect((err) => {
@@ -83,6 +85,7 @@ function verifyTokenMiddleware(req, res, next) {
 // --- ENDPOINTS PARA ASSOCIACIO ---
 // GET Endpoint
 app.get('/api/associacio',verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const query = 'SELECT id, nom, descripcio FROM ASSOCIACIO';
 
@@ -100,6 +103,7 @@ app.get('/api/associacio',verifyTokenMiddleware, (req, res) => {
 
 // POST Endpoint
 app.post('/api/associacio',verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { nom, descripcio } = req.body;
 
@@ -133,6 +137,7 @@ app.post('/api/associacio',verifyTokenMiddleware, (req, res) => {
 
 // DELETE Endpoint
 app.delete('/api/associacio',verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { id } = req.body;
 
@@ -161,6 +166,7 @@ app.delete('/api/associacio',verifyTokenMiddleware, (req, res) => {
 
 // PUT Endpoint
 app.put('/api/associacio',verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { id, nom, descripcio } = req.body;
 
@@ -195,6 +201,7 @@ app.put('/api/associacio',verifyTokenMiddleware, (req, res) => {
 // --- ENDPOINTS PARA USUARI ---
 // GET Endpoint
 app.get('/api/usuari', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const query = 'SELECT id, nom, cognoms, contrasenya, correu, imatge, permisos FROM USUARI';
 
@@ -212,6 +219,7 @@ app.get('/api/usuari', verifyTokenMiddleware, (req, res) => {
 
 // POST Endpoint
 app.post('/api/usuari', async (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
 
@@ -260,6 +268,7 @@ app.post('/api/usuari', async (req, res) => {
 
 // DELETE Endpoint
 app.delete('/api/usuari', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { id } = req.body;
 
@@ -286,6 +295,7 @@ app.delete('/api/usuari', verifyTokenMiddleware, (req, res) => {
 
 // PUT Endpoint
 app.put('/api/usuari', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { id, nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
   console.log(req.body);
@@ -324,6 +334,7 @@ app.put('/api/usuari', verifyTokenMiddleware, (req, res) => {
 
 // GET Endpoint
 app.get('/api/proposta',verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const query = `
     SELECT 
@@ -372,6 +383,7 @@ app.put('/api/proposta',verifyTokenMiddleware, (req, res) => {
     return res.status(400).json({ description: "Invalid input" });
   }
 
+  console.log("pidiendo")
   const db = connectToDatabase();
   const query = `
     UPDATE PROPOSTA 
@@ -507,6 +519,7 @@ app.post('/api/login', login(SECRET_KEY));
 
 app.post('/asignaUsuariAssociacio', (req, res) => {
   const { idUsu, idAsso } = req.body;
+  console.log("pidiendo")
   const db = connectToDatabase();
 
   // Validación de entrada
