@@ -55,6 +55,7 @@ io.on('connection', (socket) => {
                 socket.emit('allMessages', chat.find(room => room.room === data).messages);
     
                 socket.join(data);
+                console.log("I joined the room", data);
             }).catch((error) => {
                 console.error('Error fetching chat or messages:', error);
             });
@@ -121,6 +122,10 @@ function findSocketRoom(socket) {
     }
     return null;
 }
+
+app.get('/ping', (req, res) => {
+    res.send('pong');
+});
 // const PORT = process.env.PORT || 3001;
 const PORT = 3001;
 
