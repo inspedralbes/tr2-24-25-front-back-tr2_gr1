@@ -524,7 +524,7 @@ app.get('/api/activities', verifyTokenMiddleware, (req, res) => {
   res.status(200).json(data);
 
 })// --- Login ENDPOINT ---
-app.post('/api/login', login(SECRET_KEY));
+app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
 
 app.post('/asignaUsuariAssociacio', (req, res) => {
   const { idUsu, idAsso } = req.body;

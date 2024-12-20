@@ -1,16 +1,15 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { connectToDatabase } from "./index.js";
-
 async function hashPassword(contrasenya){
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(contrasenya, salt);
   return hashedPassword
 }
 
-export function login(SECRET_KEY) {
+export function login(db, SECRET_KEY) {
 
-  const db = connectToDatabase();
+  // const db = connectToDatabase();
 
   return (req, res) => {
     const { correu, contrasenya } = req.body;
@@ -45,11 +44,12 @@ export function login(SECRET_KEY) {
         SECRET_KEY,
         { expiresIn: '1h' }
       );
-    db.end();
+    // db.end();
 
-    const db2 = connectToDatabase();
+    // const db2 = connectToDatabase();
       const query2 = 'SELECT idAsso FROM USUARI_ASSOCIACIO WHERE idUsu = ?';
-      db2.query(query2, [user.id], (err, assocResults) => {
+      // db2.query(query2, [user.id], (err, assocResults) => {
+      db.query(query2, [user.id], (err, assocResults) => {
         console.log("Query:", query2, "Params:", user.id);
         if (err) {
           console.log(err);
@@ -71,7 +71,7 @@ export function login(SECRET_KEY) {
           associacionsId: associacionsId,
         });
       });
-    db2.end();
+    // db2.end();
     });
   };
 }
