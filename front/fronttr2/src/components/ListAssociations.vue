@@ -29,7 +29,7 @@ import { asignaUsuariAssociacio } from '@/services/comunicationManager';
 
 const router = useRouter();
 const userStore = useLoggedUsers();
-const userId = userStore.id;
+const userId = userStore.currentUser.id;
 const associacions = ref([]);
 
 const fetchAssociations = async () => {
@@ -46,7 +46,7 @@ const goToCreatePage = () => {
 };
 
 const joinAssociation = async (idAsso) => {
-    const userId = userStore.id;
+    // const userId = userStore.id;
     console.log('ID del usuario desde Pinia:', userId);
 
     if (!userId) {

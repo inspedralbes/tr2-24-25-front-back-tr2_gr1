@@ -440,7 +440,6 @@ export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
         if (!response.ok) {
             throw new Error('Error al asignar usuario a la asociación.');
         }
-
         const data = await response.json();
         return data;
     } catch (error) {
