@@ -133,6 +133,8 @@ export async function loginUsuari(correu, contrasenya) {
             currentAssiciacio
         });
 
+        console.log('Usuari autenticat amb èxit', user.associacionsId);
+
         console.log(loggedUsersStore.currentUser);
 
         if (response.ok) {
@@ -429,6 +431,7 @@ export const deleteNoticia = async (id) => {
 
 export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
     try {
+        const loggedUsersStore = useLoggedUsers();
         const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
             method: 'POST',
             headers: {
@@ -441,6 +444,8 @@ export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
             throw new Error('Error al asignar usuario a la asociación.');
         }
         const data = await response.json();
+        loggedUsersStore.currentUser.currentAssiciacio = idAsso;
+        loggedUsersStore.currentUser.associacionsId.push(idAsso);
         return data;
     } catch (error) {
         console.error('Error en la asignación de usuario:', error);
