@@ -18,6 +18,9 @@ import bcrypt from 'bcryptjs';
 dotenv.config();
 import { login, verifyToken } from './tokens.js';
 
+try {
+
+
 
 async function hashPassword(contrasenya) {
   const salt = await bcrypt.genSalt(10);
@@ -53,7 +56,7 @@ const connectionConfig = {
   database: process.env.MYSQL_DB,
 };
 
-export function connectToDatabase() {
+function connectToDatabase() {
 
   try {
 
@@ -645,3 +648,8 @@ function enviarServeis() {
 server.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
 });
+
+} catch (e) {
+  console.log("LO TENEMOS");
+  console.log(e.stack);
+}
