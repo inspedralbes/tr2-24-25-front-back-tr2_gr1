@@ -490,7 +490,7 @@ export const getActivities = async () => {
 
     } catch (error) {
         console.error('Error al intentar conseguir activitats: ', error);
-        if (!user) {
+        if (user==undefined||!user) {
             noLogged()
         }
         return false;
@@ -533,8 +533,7 @@ export const checkToken = async () => {
     const loggedUsersStore = useLoggedUsers();
     let user = loggedUsersStore.getUser();
     console.log(user);
-    if (!user) {
-        console.log("PINGAPONGA")
+    if (user==undefined||!user) {
         noLogged
         return {"status": 401}
     }

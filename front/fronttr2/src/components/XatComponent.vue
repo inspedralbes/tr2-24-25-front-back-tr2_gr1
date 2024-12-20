@@ -45,7 +45,7 @@ const messages = ref([])
         let auxObject={
             idUser: loggedUsersStore.currentUser.id, //This must be changed to the user id
             message: message.value,
-            idAsso: loggedUsersStore.currentUser.currentAssiciacio, //This must be changed to the association id
+            idAsso: 1, //This must be changed to the association id
             username: loggedUsersStore.currentUser.nom+" "+loggedUsersStore.currentUser.cognoms //This must be changed to the user name
         }
         console.log("Sending message: ", auxObject);

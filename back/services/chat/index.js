@@ -87,11 +87,17 @@ io.on('connection', (socket) => {
 
         let room = findSocketRoom(socket);
         console.log('room', room);
-        io.to(room).emit('chat message', data);
-        console.log('room', room);
-        let chatAux = chat.find(chatroom => chatroom.room === room)
-        console.log(chatAux);
-        chatAux.messages.push(data);
+        if(room!=null){
+            io.to(room).emit('chat message', data);
+            console.log('room', room);
+            let chatAux = chat.find(chatroom => chatroom.room === room)
+            console.log(chatAux);
+            chatAux.messages.push(data);
+        }
+        else{
+            console.log('room not found');
+            console.log('socket', socket.id);
+        }
 
 
 
