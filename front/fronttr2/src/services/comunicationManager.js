@@ -3,8 +3,8 @@ import router from "@/router";
 import { useLoggedUsers } from "@/stores/users";
 
 const URL = import.meta.env.VITE_API_ROUTE;
-const URLNOTICIAS = 'http://localhost:3002';
-const URLPROPOSTES = 'http://localhost:3003';
+const URLNOTICIAS = import.meta.env.VITE_NEWS_ROUTE;
+const URLPROPOSTES = import.meta.env.VITE_ACTIVITY_ROUTE;
 
 export const crearAssociacio = async (nom, desc) => {
     try {
@@ -151,7 +151,7 @@ export async function loginUsuari(correu, contrasenya) {
 
 export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge, permisos, token) => {
     try{
-        const response = await fetch('http://localhost:3000/api/usuari', {
+        const response = await fetch(`${URL}/api/usuari`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -453,12 +453,12 @@ export const getActivities = async () => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser()
-        if (user.token == undefined || user.token == false || user.token == null || user.token == false) {
+        if (user.token == undefined || user.token == false || user.token == null) {
             noLogged
         }
         else {
             // user.currentAsso
-            const response = await fetch('http://localhost:3003/api/activities/'+2, {
+            const response = await fetch(`${URLPROPOSTES}/api/activities/`+user.currentAssiciacio, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

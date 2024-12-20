@@ -60,7 +60,7 @@ function sendMessage() {
     }
     console.log("Sending message: ", auxObject);
     socket.emit('newMessage', auxObject);
-    message.value = '';
+    messageToSend.value = '';
 }
 </script>
 <style scoped>
