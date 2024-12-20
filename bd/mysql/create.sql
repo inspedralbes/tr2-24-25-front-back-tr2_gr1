@@ -34,6 +34,7 @@ CREATE TABLE PROPOSTA (
     autor INT,
     idAsso INT,
     data DATE,
+    color VARCHAR(7) DEFAULT '#FFFFFF',
     FOREIGN KEY (autor) REFERENCES USUARI(id),
     FOREIGN KEY (idAsso) REFERENCES ASSOCIACIO(id)
 );
@@ -81,4 +82,15 @@ CREATE TABLE NOTICIA (
     idAsso INT,
     FOREIGN KEY (autor) REFERENCES USUARI(id),
     FOREIGN KEY (idAsso) REFERENCES ASSOCIACIO(id)
+);
+
+-- Tabla VOTACIONS
+CREATE TABLE VOTACIONS (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idProp INT,
+    idUsu INT,
+    resposta BOOLEAN,
+    UNIQUE(idProp, idUsu),
+    FOREIGN KEY (idProp) REFERENCES PROPOSTA(id),
+    FOREIGN KEY (idUsu) REFERENCES USUARI(id)
 );

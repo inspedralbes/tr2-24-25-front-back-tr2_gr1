@@ -1,6 +1,6 @@
 <template>
     <main>
-        <div class="pb-16 main">
+        <div class="bg-[--main-color] mx-6 my-6 main">
             <div class="grid">
                 <Card style="width: 100%; overflow: hidden" v-for="noticia in noticies" class="cardNew"
                     :key="noticia.id" @click="router.push({ path: `/noticies/${noticia.id}` })">
@@ -49,7 +49,14 @@ onMounted(async () => {
 
 <style scoped>
 .main {
-    background-color: var(--main-color);
+  /* background-color: var(--main-color); */
+  padding: 1rem;
+  padding-bottom: 8rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  height: calc(100vh - 4rem);
+  overflow-y: auto;
 }
 
 .grid {

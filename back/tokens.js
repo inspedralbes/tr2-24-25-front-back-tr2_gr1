@@ -1,5 +1,10 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+async function hashPassword(contrasenya){
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(contrasenya, salt);
+  return hashedPassword
+}
 
 export function login(db, SECRET_KEY) {
   return (req, res) => {
@@ -24,8 +29,9 @@ export function login(db, SECRET_KEY) {
       }
 
       const user = results[0];
-
+      console.log(user.contrasenya, contrasenya)
       const isMatch = await bcrypt.compare(contrasenya, user.contrasenya);
+      console.log(isMatch)
       if (!isMatch) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
@@ -46,10 +52,15 @@ export function login(db, SECRET_KEY) {
         const associacionsId = assocResults.map((row) => row.idAssociacio);
 
         res.status(200).json({
+          id: user.id,
           token: token,
+          id: user.id,
           nom: user.nom,
           cognoms: user.cognoms,
           correu: user.correu,
+          contrasenya: user.contrasenya,
+          imatge: user.imatge,
+          permisos: user.permisos,
           associacionsId: associacionsId,
         });
       });
@@ -58,9 +69,9 @@ export function login(db, SECRET_KEY) {
 }
 
 export function verifyToken(SECRET_KEY, req) {
-  console.log('Hola: ', req.headers.authorization);
+  console.log('Header Auth: ', req.headers.authorization);
   const token = req.headers.authorization?.split(' ')[1];
-  console.log(token);
+  console.log('Token de Sessió: ', token);
   if (!token) {
     return { message: "Token is required", login: false, user: null, status: 401 };
   }

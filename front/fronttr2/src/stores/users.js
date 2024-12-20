@@ -1,12 +1,20 @@
-import { ref } from 'vue';
 import { defineStore } from 'pinia';
-
+import { ref } from 'vue';
 export const useLoggedUsers = defineStore('loggedUsers', () => {
-    const users = ref([]);
+    const currentUser = ref(null);
 
     const newUser = (user) => {
-        users.value.push(user);
+        currentUser.value = user;
     };
 
-    return { users, newUser };
+    const getUser = () => {
+        console.log("BIRDISTHEWORD"+currentUser.value)
+        return currentUser.value
+    }
+
+    const emptyUser=()=>{
+        users.value={}
+    }
+
+    return { currentUser, newUser, getUser, emptyUser };
 });
