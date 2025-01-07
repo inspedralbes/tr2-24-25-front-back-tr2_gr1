@@ -59,20 +59,20 @@ const connectionConfig = {
 
 function connectToDatabase() {
 
-  // try {
+  try {
 
-  //   const connection = mysql.createConnection(connectionConfig);
-  //   connection.on('error', (err) => { 
-  //       console.error('Error  en MySQL:', err);
-  //       process.exit(1);
+    const connection = mysql.createConnection(connectionConfig);
+    connection.on('error', (err) => { 
+        console.error('Error  en MySQL:', err);
+        process.exit(1);
       
-  //   });
+    });
 
-  //   return connection;
+    return connection;
 
-  // } catch (e) {
-  //   console.log(e.stack);
-  // }
+  } catch (e) {
+    console.log(e.stack);
+  }
 }
 
 
