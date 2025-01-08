@@ -556,7 +556,7 @@ app.post('/asignaUsuariAssociacio', (req, res) => {
   //   }
 
     // Consulta para insertar la asignación
-    const query = 'INSERT INTO usuari_associacio (idUsu, idAsso) VALUES (?, ?)';
+    const query = 'INSERT INTO USUARI_ASSOCIACIO (idUsu, idAsso) VALUES (?, ?)';
     db.query(query, [idUsu, idAsso], (err, result) => {
       db.end(); // Cerrar la conexión
 
