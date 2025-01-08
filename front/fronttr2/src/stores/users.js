@@ -13,7 +13,7 @@ export const useLoggedUsers = defineStore('loggedUsers', () => {
     }
 
     const emptyUser=()=>{
-        users.value={}
+        currentUser.value={}
     }
 
     return { currentUser, newUser, getUser, emptyUser };

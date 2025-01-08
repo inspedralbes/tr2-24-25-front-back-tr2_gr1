@@ -539,9 +539,10 @@ app.post('/asignaUsuariAssociacio', (req, res) => {
 
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
 app.get('/prova', (req, res) => {
-  const verificacio = verifyToken(SECRET_KEY, req);
+  const verificacio = verifyToken( process.env.SECRET_KEY, req);
   console.log(verificacio)
   if (verificacio.status === 401) {
+    console.log('lol, lmao')
     res.status(401).json(verificacio);
   } else {
     res.status(200).json(verificacio);
