@@ -432,7 +432,7 @@ export const deleteNoticia = async (id) => {
 export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
     try {
         const loggedUsersStore = useLoggedUsers();
-        const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
+        const response = await fetch(`${URL}/asignaUsuariAssociacio`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
