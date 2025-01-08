@@ -57,8 +57,7 @@ const newComment = ref('');
 const textarea = ref(null);
 const voted = ref(false);
 
-const { currentUser } = useLoggedUsers();
-
+const loggedUsersStore = useLoggedUsers(); // Usamos el store directamente
 const socket = io('http://localhost:3003');
 
 onMounted(async () => {
@@ -91,8 +90,9 @@ const submitComment = async () => {
     const id = props.id;
     const comment = newComment.value;
 
-    if (!currentUser.value || !currentUser.value.token) {
-      console.error('Usuario no autenticado');
+    const userId = loggedUsersStore.currentUser?.id;
+    if (!userId) {
+      alert('Debes iniciar sesión para añadir un comentario.');
       return;
     }
 
@@ -129,9 +129,14 @@ const vote = async (option) => {
 
   try {
     const propostaId = proposta.value.id;
-    const userIdValue = currentUser.value?.id;
+    const userId = loggedUsersStore.currentUser?.id;
 
-    await submitVotacio(propostaId, userIdValue, resposta);
+    if (!userId) {
+      alert('Debes iniciar sesión para votar.');
+      return;
+    }
+
+    await submitVotacio(propostaId, userId, resposta);
 
     voted.value = true;
 

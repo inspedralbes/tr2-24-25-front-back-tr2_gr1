@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '../../.env' });
+
+console.log("SECRET_KEY:", process.env.SECRET_KEY);
 
 import express from 'express';
 import { createServer } from 'node:http';
