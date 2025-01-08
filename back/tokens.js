@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { connectToDatabase } from "./index.js";
+// import { connectToDatabase } from "./index.js";
 async function hashPassword(contrasenya){
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(contrasenya, salt);
