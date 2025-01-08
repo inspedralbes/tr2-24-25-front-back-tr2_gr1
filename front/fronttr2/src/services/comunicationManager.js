@@ -222,7 +222,6 @@ export const getPropostes = async () => {
         });
         if (response.ok) {
             const data = await response.json();
-            headers
             console.log('Propostes:', data);
             return data.map(item => ({
                 id: item.id,
