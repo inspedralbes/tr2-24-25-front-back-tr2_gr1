@@ -68,7 +68,7 @@ export function login(db, SECRET_KEY) {
   };
 }
 
- function verifyToken(SECRET_KEY, req) {
+ export function verifyToken(SECRET_KEY, req) {
   console.log('Header Auth: ', req.headers.authorization);
   const token = req.headers.authorization?.split(' ')[1];
   console.log('Token de Sessió: ', token);

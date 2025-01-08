@@ -16,7 +16,7 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import bcrypt from 'bcryptjs';
 dotenv.config();
-import { login, verifyTokenMiddleware } from './tokens.js';
+import { login, verifyTokenMiddleware, verifyToken } from './tokens.js';
 
 
 async function hashPassword(contrasenya){
