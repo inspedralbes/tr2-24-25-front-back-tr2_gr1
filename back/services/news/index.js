@@ -42,19 +42,41 @@ let news = [];
 
 app.get('/api/noticia', verifyTokenMiddleware, (req, res) => {
     try {
-        const query = 'SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM noticia';
-        db.query(query, (err, result) => {
+        const userId = req.user.id;  // Asumiendo que el ID del usuario está en req.user.id
+        const db = mysql.createPool({
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'tr2-g1',
+        });
+
+        // Primero, obtener la asociación del usuario desde la base de datos
+        const queryAsso = 'SELECT idAsso FROM usuari WHERE id = ?';
+        db.query(queryAsso, [userId], (err, result) => {
             if (err) {
-                console.error('Error al obtenir les notícies:', err);
-                res.status(500).send('Error al obtenir les notícies');
-                return;
+                console.error('Error al obtener la asociación del usuario:', err);
+                return res.status(500).send('Error al obtener la asociación del usuario');
             }
-            news = result;
-            res.json(news);
+
+            if (result.length === 0) {
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+
+            const idAsso = result[0].idAsso;
+
+            // Ahora obtener las noticias de esa asociación
+            const queryNoticia = 'SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM noticia WHERE idAsso = ?';
+            db.query(queryNoticia, [idAsso], (err, result) => {
+                if (err) {
+                    console.error('Error al obtener las noticias:', err);
+                    return res.status(500).send('Error al obtener las noticias');
+                }
+                res.json(result);  // Devolver solo las noticias de la asociación del usuario
+            });
         });
     } catch (err) {
-        console.error('Error al obtenir les notícies:', err);
-        res.status(500).send('Error al obtenir les notícies');
+        console.error('Error al obtener las noticias:', err);
+        res.status(500).send('Error al obtener las noticias');
     }
 });
 

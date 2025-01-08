@@ -396,6 +396,18 @@ export const getNoticies = async () => {
                 'Authorization': 'Bearer ' + token
             }
         });
+        const responseText = await response.text();  // Leemos la respuesta como texto
+        console.log('Response:', responseText);  // Imprime la respuesta
+        
+        try {
+            const data = JSON.parse(responseText);  // Intenta analizar el JSON manualmente
+            console.log('Noticies:', data);
+            return data;
+        } catch (err) {
+            console.error('Error parsing JSON:', err);
+            return [];
+        }
+        
         if (response.ok) {
             const data = await response.json();
             console.log('Noticies:', data);
