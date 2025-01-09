@@ -11,7 +11,7 @@ export const crearAssociacio = async (nom, desc) => {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -43,7 +43,7 @@ export const getAssociacions = async () => {
     const loggedUsersStore = useLoggedUsers();
     let user = loggedUsersStore.getUser();
     let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -168,7 +168,7 @@ export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -208,7 +208,7 @@ export const getPropostes = async () => {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -246,7 +246,7 @@ export const getPropostaById = async (id) => {
     const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -283,7 +283,7 @@ export const getComentarios = async (idProp) => {
     const loggedUsersStore = useLoggedUsers();
     let user = loggedUsersStore.getUser();
     let token="";
-    if (user.token == undefined || user.token == false || user.token == null) {
+    if (!user || !user.token){
         noLogged
     } else {
         token = user.token;
@@ -314,7 +314,7 @@ export const getComentarios = async (idProp) => {
     const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -350,7 +350,7 @@ export const getComentarios = async (idProp) => {
     const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -386,7 +386,7 @@ export const getNoticies = async () => {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -430,7 +430,7 @@ export const getNoticia = async (id) => {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -461,7 +461,7 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -494,7 +494,7 @@ export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, auto
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -526,7 +526,7 @@ export const deleteNoticia = async (id) => {
     const loggedUsersStore = useLoggedUsers();
     let user = loggedUsersStore.getUser();
     let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -557,7 +557,7 @@ export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -589,7 +589,7 @@ export const getActivities = async () => {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -622,6 +622,7 @@ export const getActivities = async () => {
 
 
     } catch (error) {
+        let user = loggedUsersStore.getUser();
         console.error('Error al intentar conseguir activitats: ', error);
         if (user==undefined||!user) {
             noLogged()
@@ -635,7 +636,7 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data, co
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
@@ -675,7 +676,7 @@ export const checkToken = async () => {
     const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token="";
-        if (user.token == undefined || user.token == false || user.token == null) {
+        if (!user || !user.token){
             noLogged
         } else {
             token = user.token;
