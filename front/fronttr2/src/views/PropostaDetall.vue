@@ -73,7 +73,7 @@ onMounted(async () => {
 
     socket.on('newComment', (data) => {
       if (data.idProp === id) {
-        comments.value.push(data.newComment);
+        comments.value.unshift(data.newComment);
       }
     });
   } catch (error) {

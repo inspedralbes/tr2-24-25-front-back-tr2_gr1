@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: '../../.env' });
-
+console.log("--------------------------------------------")
 console.log("SECRET_KEY:", process.env.SECRET_KEY);
 
 import express from 'express';
@@ -333,7 +333,8 @@ app.get('/api/comentaris/:idProp',verifyTokenMiddleware, (req, res) => {
 });
 
 // POST Endpoint per IDPROP con sockets
-app.post('/api/comentaris/:idProp',verifyTokenMiddleware, (req, res) => {
+// POST Endpoint per IDPROP amb sockets
+app.post('/api/comentaris/:idProp', verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { idProp } = req.params;
   const { contenido } = req.body;
@@ -344,7 +345,7 @@ app.post('/api/comentaris/:idProp',verifyTokenMiddleware, (req, res) => {
     return res.status(401).send('Token is required');
   }
 
-  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+  jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
     if (err) {
       return res.status(401).send('Invalid or expired token');
     }
@@ -355,31 +356,47 @@ app.post('/api/comentaris/:idProp',verifyTokenMiddleware, (req, res) => {
       return res.status(400).send('El comentario no puede estar vacío.');
     }
 
-    const query = `
-      INSERT INTO COMENTARI (autor, idProp, contingut, actiu) 
-      VALUES (?, ?, ?, true)
-    `;
-
-    db.query(query, [autorId, idProp, contenido], (err, results) => {
-      if (err) {
-        console.error('Error inserting comment:', err);
-        return res.status(500).send('Error adding comment');
+    // Realizamos una consulta para obtener el nombre del autor
+    const userQuery = 'SELECT nom, cognoms FROM USUARI WHERE id = ?';
+    db.query(userQuery, [autorId], (err, userResults) => {
+      if (err || userResults.length === 0) {
+        db.end(); // Cerrar la conexión si hay un error
+        return res.status(500).send('Error retrieving user information');
       }
 
-      const newComment = {
-        id: results.insertId,
-        autor: { nomUsuari: 'Tu Nom' },
-        contingut: contenido,
-      };
+      const userName = `${userResults[0].nom} ${userResults[0].cognoms}`;
 
-      io.emit('newComment', { idProp, newComment });
+      const query = `
+        INSERT INTO COMENTARI (autor, idProp, contingut, actiu) 
+        VALUES (?, ?, ?, true)
+      `;
+  
+      db.query(query, [autorId, idProp, contenido], (err, results) => {
+        if (err) {
+          console.error('Error inserting comment:', err);
+          db.end(); // Cerrar la conexión si hay un error
+          return res.status(500).send('Error adding comment');
+        }
 
-      res.status(200).json(newComment);
+        // Creamos el comentario con el nombre correcto
+        const newComment = {
+          id: results.insertId,
+          autor: { nomUsuari: userName },
+          contingut: contenido,
+        };
+
+        io.emit('newComment', { idProp, newComment });
+
+        // Enviamos la respuesta con el nombre correcto del autor
+        res.status(200).json(newComment);
+
+        // Ahora que hemos enviado la respuesta, cerramos la conexión
+        db.end();
+      });
     });
-
-    db.end();
   });
 });
+
   
 
 // --- ENDPOINTS PARA VOTACIONS ---
