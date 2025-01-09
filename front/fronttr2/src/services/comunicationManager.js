@@ -194,7 +194,6 @@ export const getPropostes = async () => {
         });
         if (response.ok) {
             const data = await response.json();
-            headers
             console.log('Propostes:', data);
             return data.map(item => ({
                 id: item.id,
@@ -267,34 +266,42 @@ export const getComentarios = async (idProp) => {
   };
   
   export const addComentario = async (idProp, comentario) => {
-    const { currentUser } = useLoggedUsers();
-    
-    try {
-      if (!currentUser.value || !currentUser.value.token) {
-        throw new Error('No se encontró el token. El usuario no está autenticado.');
-      }
+    const loggedUsersStore = useLoggedUsers();
+    const user = loggedUsersStore.currentUser;
+    const token = user?.token || '';
+
+    console.log('Token:', token);
+console.log('Body enviado:', JSON.stringify({ contenido: comentario }));
   
+    if (!token) {
+      throw new Error('No se encontró el token. El usuario no está autenticado.');
+    }
+  
+    try {
       const response = await fetch(`${URLPROPOSTES}/api/comentaris/${idProp}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-         'Authorization': `Bearer ${currentUser.value.token}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ contenido: comentario }),
       });
   
       if (!response.ok) {
-        throw new Error('Error al añadir el comentario');
+        const errorText = await response.text();
+        console.error('Response error:', response.status, errorText);
+        throw new Error(`Error al añadir el comentario: ${errorText}`);
       }
   
       const data = await response.json();
       console.log('Comentario añadido:', data);
       return data;
     } catch (error) {
-      console.error('Error adding comment:', error);
+      console.error('Error adding comment:', error.message);
       throw error;
     }
   };
+  
 
   export async function submitVotacio(idProposta, idUsuari, resposta) {
     try {
