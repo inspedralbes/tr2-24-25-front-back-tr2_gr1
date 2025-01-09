@@ -96,3 +96,21 @@
 {"log":"joinChat 0\n","date":"2024-12-20 09:24:13"}||
 {"log":"joinChat 0\n","date":"2024-12-20 09:24:13"}||
 {"log":"joinChat 0\njoinChat 0\n","date":"2024-12-20 09:24:13"}||
+{"log":"Servidor en funcionament a http://localhost:3001\n","date":"2025-01-09 07:50:14"}||
+{"log":"Connectat a MongoDB\n","date":"2025-01-09 07:50:14"}||
+{"log":"a user connected\n","date":"2025-01-09 07:50:18"}||
+{"log":"joinChat 0\n","date":"2025-01-09 07:50:18"}||
+{"log":"[]\n","date":"2025-01-09 07:50:18"}||
+{"log":"I joined the room 0\n","date":"2025-01-09 07:50:18"}||
+{"log":"chat message {\n  idUser: 3,\n  message: 'Missatge de prova',\n  idAsso: 0,\n  username: 'Martí Clavé Casals'\n}\n","date":"2025-01-09 07:50:18"}||
+{"log":"{\n  idUser: 3,\n  message: 'Missatge de prova',\n  idAsso: 0,\n  username: 'Martí Clavé Casals',\n  date: 2025-01-09T07:50:18.614Z\n}\n","date":"2025-01-09 07:50:18"}||
+{"log":"rooms Map(2) {\n  'IuSrbFrS4HLzX0e4AAAB' => Set(1) { 'IuSrbFrS4HLzX0e4AAAB' },\n  0 => Set(1) { 'IuSrbFrS4HLzX0e4AAAB' }\n}\n","date":"2025-01-09 07:50:18"}||
+{"log":"room 0\n","date":"2025-01-09 07:50:18"}||
+{"log":"room 0\n{ room: 0, participants: [], messages: [] }\n","date":"2025-01-09 07:50:18"}||
+{"log":"{\n  valid: true,\n  message: {\n    idAsso: 0,\n    idUser: 3,\n    message: 'Missatge de prova',\n    date: 2025-01-09T07:50:18.614Z,\n    _id: new ObjectId('677f7fbacdf1b49e4e4a3766'),\n    createdAt: 2025-01-09T07:50:18.624Z,\n    updatedAt: 2025-01-09T07:50:18.624Z,\n    __v: 0\n  }\n}\n","date":"2025-01-09 07:50:18"}||
+{"log":"chat message {\n  idUser: 3,\n  message: 'Missatge de prova 2',\n  idAsso: 0,\n  username: 'Martí Clavé Casals'\n}\n","date":"2025-01-09 07:50:39"}||
+{"log":"{\n  idUser: 3,\n  message: 'Missatge de prova 2',\n  idAsso: 0,\n  username: 'Martí Clavé Casals',\n  date: 2025-01-09T07:50:39.416Z\n}\n","date":"2025-01-09 07:50:39"}||
+{"log":"rooms Map(2) {\n  'IuSrbFrS4HLzX0e4AAAB' => Set(1) { 'IuSrbFrS4HLzX0e4AAAB' },\n  0 => Set(1) { 'IuSrbFrS4HLzX0e4AAAB' }\n}\n","date":"2025-01-09 07:50:39"}||
+{"log":"room 0\nroom 0\n{\n  room: 0,\n  participants: [],\n  messages: [\n    {\n      idUser: 3,\n      message: 'Missatge de prova',\n      idAsso: 0,\n      username: 'Martí Clavé Casals',\n      date: 2025-01-09T07:50:18.614Z\n    }\n  ]\n}\n","date":"2025-01-09 07:50:39"}||
+{"log":"{\n  valid: true,\n  message: {\n    idAsso: 0,\n    idUser: 3,\n    message: 'Missatge de prova 2',\n    date: 2025-01-09T07:50:39.416Z,\n    _id: new ObjectId('677f7fcfcdf1b49e4e4a3768'),\n    createdAt: 2025-01-09T07:50:39.418Z,\n    updatedAt: 2025-01-09T07:50:39.418Z,\n    __v: 0\n  }\n}\n","date":"2025-01-09 07:50:39"}||
+{"log":"a user connected\n","date":"2025-01-09 08:08:25"}||

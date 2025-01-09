@@ -1,0 +1,62 @@
+[
+  {
+    "_id": "677f7fbacdf1b49e4e4a3766",
+    "idAsso": 0,
+    "idUser": 3,
+    "message": "Missatge de prova",
+    "date": "2025-01-09T07:50:18.614Z",
+    "createdAt": "2025-01-09T07:50:18.624Z",
+    "updatedAt": "2025-01-09T07:50:18.624Z",
+    "__v": 0
+  },
+  {
+    "_id": "677f7fcfcdf1b49e4e4a3768",
+    "idAsso": 0,
+    "idUser": 3,
+    "message": "Missatge de prova 2",
+    "date": "2025-01-09T07:50:39.416Z",
+    "createdAt": "2025-01-09T07:50:39.418Z",
+    "updatedAt": "2025-01-09T07:50:39.418Z",
+    "__v": 0
+  },
+  {
+    "_id": "677f7fcfcdf1b49e4e4a3768",
+    "idAsso": 0,
+    "idUser": 2,
+    "message": "Missatge de prova 2",
+    "date": "2025-01-09T07:50:39.416Z",
+    "createdAt": "2025-01-09T07:50:39.418Z",
+    "updatedAt": "2025-01-09T07:50:39.418Z",
+    "__v": 0
+  },
+  {
+    "_id": "677f7fcfcdf1b49e4e4a3768",
+    "idAsso": 0,
+    "idUser": 2,
+    "message": "Missatge de prova 2",
+    "date": "2025-01-09T07:50:39.416Z",
+    "createdAt": "2025-01-09T07:50:39.418Z",
+    "updatedAt": "2025-01-09T07:50:39.418Z",
+    "__v": 0
+  },
+  {
+    "_id": "677f7fcfcdf1b49e4e4a3768",
+    "idAsso": 0,
+    "idUser": 2,
+    "message": "Missatge de prova 2",
+    "date": "2025-01-09T07:50:39.416Z",
+    "createdAt": "2025-01-09T07:50:39.418Z",
+    "updatedAt": "2025-01-09T07:50:39.418Z",
+    "__v": 0
+  },
+  {
+    "_id": "677f7fcfcdf1b49e4e4a3768",
+    "idAsso": 0,
+    "idUser": 1,
+    "message": "Missatge de prova 2",
+    "date": "2025-01-09T07:50:39.416Z",
+    "createdAt": "2025-01-09T07:50:39.418Z",
+    "updatedAt": "2025-01-09T07:50:39.418Z",
+    "__v": 0
+  }
+]
