@@ -10,6 +10,7 @@ import cors from 'cors';
 import fs, { read } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { spawn } from 'node:child_process';
 import { Server } from 'socket.io';
