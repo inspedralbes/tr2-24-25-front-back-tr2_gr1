@@ -1,15 +1,10 @@
 import dotenv from 'dotenv';
-import express from 'express';
 import mongoose from 'mongoose';
 import fs from 'fs';
-import path from 'path';
+import { spawn } from 'child_process';
 
 dotenv.config();
 
-const app = express();
-const PORT = 3005;
-
-app.use(express.json());
 
 console.log('MONGO_URL:', process.env.MONGO_URL);
 
@@ -28,17 +23,25 @@ const messageSchema = new mongoose.Schema({
 
 const Message = mongoose.model('Message', messageSchema);
 
-app.get('/api/messages', async (req, res) => {
+const fetchAndWriteMessages = async () => {
     try {
         const messages = await Message.find();
         fs.writeFileSync('messages.json', JSON.stringify(messages, null, 2));
-        res.json(messages);
+        console.log('Messages written to messages.json');
+
+        const pythonProcess = spawn('python', ['chatStats.py']);
+        pythonProcess.stdout.on('data', (data) => {
+            console.log(`stdout: ${data}`);
+        });
+        pythonProcess.stderr.on('data', (data) => {
+            console.error(`stderr: ${data}`);
+        });
+        pythonProcess.on('close', (code) => {
+            console.log(`child process exited with code ${code}`);
+        });
     } catch (err) {
         console.error('Error retrieving items:', err);
-        res.status(500).send('Error retrieving items');
     }
-});
+};
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+setInterval(fetchAndWriteMessages, 60000);
