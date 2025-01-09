@@ -10,17 +10,11 @@ export const crearAssociacio = async (nom, desc) => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
         const response = await fetch(`${URL}/api/associacio`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify({ nom: nom, descripcio: desc }),
         });
@@ -42,16 +36,10 @@ export const crearAssociacio = async (nom, desc) => {
 export const getAssociacions = async () => {
     const loggedUsersStore = useLoggedUsers();
     let user = loggedUsersStore.getUser();
-    let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
     try {
         const response = await fetch(`${URL}/api/associacio`, {
             headers: {
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             }
         });
         if (response.ok) {
@@ -165,14 +153,6 @@ export async function loginUsuari(correu, contrasenya) {
 
 export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge, permisos, token) => {
     try{
-        const loggedUsersStore = useLoggedUsers();
-        let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
         const response = await fetch(`${URL}/api/usuari`, {
             method: 'PUT',
             headers: {
@@ -205,19 +185,11 @@ export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge
 
 export const getPropostes = async () => {
     try {
-        const loggedUsersStore = useLoggedUsers();
-        let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
         const response = await fetch(`${URLPROPOSTES}/api/proposta`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             }
         });
         if (response.ok) {
@@ -243,20 +215,12 @@ export const getPropostes = async () => {
 };
 
 export const getPropostaById = async (id) => {
-    const loggedUsersStore = useLoggedUsers();
-        let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
     try {
         const response = await fetch(`${URLPROPOSTES}/api/proposta/${id}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             }
         });
         if (response.ok) {
@@ -280,20 +244,12 @@ export const getPropostaById = async (id) => {
 };
 
 export const getComentarios = async (idProp) => {
-    const loggedUsersStore = useLoggedUsers();
-    let user = loggedUsersStore.getUser();
-    let token="";
-    if (!user || !user.token){
-        noLogged
-    } else {
-        token = user.token;
-    }
     try {
       const response = await fetch(`${URLPROPOSTES}/api/comentaris/${idProp}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
+            'Authorization': 'Bearer ' + user.token
         }
     });
       if (response.ok) {
@@ -311,16 +267,10 @@ export const getComentarios = async (idProp) => {
   };
   
   export const addComentario = async (idProp, comentario) => {
-    const loggedUsersStore = useLoggedUsers();
-        let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
+    const { currentUser } = useLoggedUsers();
+    
     try {
-      if (!currentUser.value || token=="") {
+      if (!currentUser.value || !currentUser.value.token) {
         throw new Error('No se encontró el token. El usuario no está autenticado.');
       }
   
@@ -347,20 +297,12 @@ export const getComentarios = async (idProp) => {
   };
 
   export async function submitVotacio(idProposta, idUsuari, resposta) {
-    const loggedUsersStore = useLoggedUsers();
-        let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
     try {
       const response = await fetch(`${URLPROPOSTES}/api/votacions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${currentUser.value.token}`,
         },
         body: JSON.stringify({
           idProp: idProposta,
@@ -385,15 +327,9 @@ export const getNoticies = async () => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
         const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
             headers: {
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             }
         });
         if (response.ok) {
@@ -414,18 +350,11 @@ export const getNoticies = async () => {
 
 export const getNoticia = async (id) => {
     try {
-        
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
         const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
             headers: {
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             }
         });
         if (response.ok) {
@@ -448,17 +377,11 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
         const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
         });
@@ -481,17 +404,11 @@ export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, auto
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
         const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
         });
@@ -513,17 +430,11 @@ export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, auto
 export const deleteNoticia = async (id) => {
     const loggedUsersStore = useLoggedUsers();
     let user = loggedUsersStore.getUser();
-    let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
     try {
         const response = await fetch(`${URLNOTICIAS}/api/noticia/${id}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             }
         });
         if (response.ok) {
@@ -540,21 +451,12 @@ export const deleteNoticia = async (id) => {
 
 export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
     try {
-
-        
         const loggedUsersStore = useLoggedUsers();
-        let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
         const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${currentUser.value.token}`,
             },
             body: JSON.stringify({ idUsu, idAsso }),
         });
@@ -575,21 +477,18 @@ export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
 export const getActivities = async () => {
     try {
         const loggedUsersStore = useLoggedUsers();
-        let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
+        let user = loggedUsersStore.getUser()
+        if (user.token == undefined || user.token == false || user.token == null) {
             noLogged
-        } else {
-            token = user.token;
         }
-        
+        else {
             let currentAssiciacio=user.currentAssiciacio
             // user.currentAsso
             const response = await fetch(`${URLPROPOSTES}/api/activities/`+user.currentAssiciacio, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + user.token
                 },
             });
 
@@ -606,11 +505,15 @@ export const getActivities = async () => {
             console.log("holiwi" + activities);
 
             return activities;
+        }
+
+        console.log("holiwi" + activities)
+
+        return activities
 
 
 
     } catch (error) {
-        let user = loggedUsersStore.getUser();
         console.error('Error al intentar conseguir activitats: ', error);
         if (user==undefined||!user) {
             noLogged()
@@ -621,19 +524,11 @@ export const getActivities = async () => {
 
 export const crearProposta = async (titol, subtitol, contingut, idAsso, data, color) => {
     try {
-        const loggedUsersStore = useLoggedUsers();
-        let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
       const response = await fetch(`${URLPROPOSTES}/api/proposta`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${currentUser.value.token}`,
         },
         body: JSON.stringify({
           titol,
@@ -662,13 +557,7 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data, co
 
 export const checkToken = async () => {
     const loggedUsersStore = useLoggedUsers();
-        let user = loggedUsersStore.getUser();
-        let token="";
-        if (!user || !user.token){
-            noLogged
-        } else {
-            token = user.token;
-        }
+    let user = loggedUsersStore.getUser();
     console.log(user);
     if (user==undefined||!user) {
         noLogged
@@ -680,7 +569,7 @@ export const checkToken = async () => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + user.token
             },
         });
         console.log("Response" + response);
@@ -699,3 +588,18 @@ export const noLogged = async () => {
     loggedUsersStore.emptyUser();
     router.push('/login');
 };
+
+export const getServiceStatus = async (serviceName) => {
+    console.log("HOLA")
+    const response = await fetch(`${URL}/api/checkServiceStatus`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "serviceName": serviceName })
+      });
+      const data = await response.json();
+      console.log("this is the data"+ data)
+        return data;
+    
+    }    

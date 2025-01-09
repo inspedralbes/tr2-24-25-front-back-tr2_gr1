@@ -17,6 +17,7 @@ import { createServer } from 'http';
 import bcrypt from 'bcryptjs';
 dotenv.config();
 import { login, verifyTokenMiddleware, verifyToken } from './tokens.js';
+import { stat } from 'node:fs';
 
 
 async function hashPassword(contrasenya){
@@ -549,6 +550,14 @@ app.get('/prova', (req, res) => {
   };
 });
 
+//Endpoint per a comprovar l'estat d'un servei
+app.post('/api/checkServiceStatus', (req, res) => {
+  const { serviceName } = req.body;
+  console.log(serviceName);
+  const status = checkServiceStatus(serviceName);
+  res.status(200).json({ "status": status });
+});
+
 function startProcess(service) {
   const process = spawn('node', [path.join(__dirname, 'services') + `/${service.name}/index.js`], {
     cwd: path.join(__dirname, 'services') + `/${service.name}`,
@@ -625,7 +634,20 @@ function enviarServeis() {
   })));
 }
 
+function checkServiceStatus(serviceName) {
+  const service = services.find(service => service.name === serviceName);
+  if (!service) {
+    return 'not found';
+  }
+  else{
+  let status="funcionant";
+  if (service.state === 'tancat') {
+    status="tancat";
+  }
+  return status;
+}
 
+}
 server.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
 });

@@ -13,6 +13,7 @@ import { createChat, getChatByAssoId } from './routes/chat.js';
 import { createMessage, getMessagesByAssoId } from './routes/message.js';
 import { verifyTokenMiddleware } from '../../tokens.js';
 
+
 const app = express();
 app.use(cors({
     origin: '*',
@@ -122,6 +123,7 @@ function findSocketRoom(socket) {
     }
     return null;
 }
+
 
 // const PORT = process.env.PORT || 3001;
 const PORT = 3001;

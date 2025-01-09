@@ -8,7 +8,19 @@ import { onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { checkToken } from './services/comunicationManager';
 import { useLoggedUsers } from "@/stores/users";
+import { getServiceStatus } from './services/comunicationManager';
 const router = useRouter()
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+const notify = () => {
+  toast("Servei en manteniment", {
+    autoClose: 1000,
+    progressClassName: 'toast-progress',
+    theme: 'light',
+    type: 'error'
+  }); // ToastOptions
+}
 
 const logRouteChange = async () => {
   if (router.currentRoute.value.fullPath != "/" && router.currentRoute.value.fullPath != "/register" && router.currentRoute.value.fullPath != "/login" && router.currentRoute.value.fullPath != "/loading") {
@@ -25,7 +37,33 @@ const logRouteChange = async () => {
 
 }
 
+const checkServiceStatus = async (to,from ,next) => {
+  console.log("LOL, LMAO")
+  const service = to.path.includes('/xat') ? 'chat' :
+                  to.path.includes('/noticies') && !from.path.includes('/login') ? 'news' :
+                  to.path.includes('/propostes') || to.path.includes('/calendar') ? 'activity' : null;
+
+  if (!service) {
+    console.log("Not a Service")
+    next(true);
+    return;
+  }
+
+  const status = await getServiceStatus(service);
+  console.log("servei "+status.status)
+    if (status.status === "tancat") {
+      toast.error('Servei en manteniment');
+      next(false); 
+      notify();
+    } else {
+      next(true);
+    }
+  
+  next(false)
+}
+
 onMounted(() => {
+  router.beforeEach(checkServiceStatus)
   router.afterEach(logRouteChange)
 })
 
@@ -54,6 +92,10 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.toast-progress {
+  background-color: #ff2d55;
+  
+}
 header {
   line-height: 1.5;
   max-height: 100vh;
