@@ -47,7 +47,6 @@ const goToCreatePage = () => {
 
 const joinAssociation = async (idAsso) => {
     const userId = userStore.currentUser.id;
-    console.log('ID del usuario desde Pinia:', userId);
 
     if (!userId) {
         console.error('No hay ID de usuario guardado.');
@@ -56,7 +55,6 @@ const joinAssociation = async (idAsso) => {
 
     try {
         const result = await asignaUsuariAssociacio(userId, idAsso);
-        console.log('Resultado de la asignación:', result);
         router.push('/noticies');
         // console.log('Usuario asignado a la asociación correctamente.', result);
     } catch (error) {
@@ -67,7 +65,6 @@ const joinAssociation = async (idAsso) => {
 onMounted(() => {
     fetchAssociations();
     const userId = userStore.currentUser.userId;
-    console.log('ID del usuario desde Pinia:', userId);
 
     if (!userStore.loggedUser || !userStore.associations.length) {
         console.log('No hay usuario logueado o no tiene asociaciones');

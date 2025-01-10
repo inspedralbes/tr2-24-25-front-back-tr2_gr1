@@ -26,8 +26,6 @@ const logRouteChange = async () => {
   if (router.currentRoute.value.fullPath != "/" && router.currentRoute.value.fullPath != "/register" && router.currentRoute.value.fullPath != "/login" && router.currentRoute.value.fullPath != "/loading") {
     console.log("entering" + router.currentRoute.value.fullPath)
     let response = await checkToken()
-    console.log("et" + response)
-    console.log(response.status)
     if (response.status != 200) {
       const loggedUsersStore = useLoggedUsers();
       loggedUsersStore.emptyUser();
@@ -38,19 +36,16 @@ const logRouteChange = async () => {
 }
 
 const checkServiceStatus = async (to,from ,next) => {
-  console.log("LOL, LMAO")
   const service = to.path.includes('/xat') ? 'chat' :
                   to.path.includes('/noticies') && (!from.path.includes('/login')&&!from.path.includes('/register')) ? 'news' :
                   to.path.includes('/propostes') || to.path.includes('/calendar') ? 'activity' : null;
 
   if (!service) {
-    console.log("Not a Service")
     next(true);
     return;
   }
 
   const status = await getServiceStatus(service);
-  console.log("servei "+status.status)
     if (status.status === "tancat") {
       toast.error('Servei en manteniment');
       next(false); 

@@ -107,19 +107,11 @@ async function newProposta() {
   try {
     const currentDate = formatDate(new Date());
     
-    console.log('Nueva Proposta:', {
-      titol: titol.value,
-      subtitol: subtitol.value,
-      contingut: contingut.value,
-      color: color.value,
-      idAsso: 1,
-      data: currentDate
-    });
+   
 
     await crearProposta(titol.value, subtitol.value, contingut.value, 1, currentDate, color.value);
     visible2.value = true;
   } catch (error) {
-    console.error('Error al crear propuesta:', error);
     visible3.value = true;
   } finally {
     loading.value = false;

@@ -124,7 +124,6 @@ async function login() {
                 localStorage.setItem("correu", correu.value);
                 localStorage.setItem("contrasenya", hashedPassword)
             }
-            console.log(result.associacionsId);
             if (result.associacionsId.length === 0) {
                 router.push('/show');
             } else {

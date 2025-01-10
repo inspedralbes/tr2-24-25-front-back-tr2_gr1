@@ -31,7 +31,6 @@
       </div>
       
     </Dialog>
-    <button @click="getActivities">TEST</button>
   </div>
   <NavigationBar />
 </template>
@@ -54,17 +53,13 @@ function changeValueDayData(){
   dayData.value=[]
 }
 function onDayClickHandler({ date }) {
-  console.log("Day clicked", date);
-  console.log(attrs.value);
   let auxArray = [];
   attrs.value.forEach((element) => {
     if (new Date(element.dates).toLocaleDateString('en-GB') == new Date(date).toLocaleDateString('en-GB')) {
-      console.log("HOLA ESTOY ENTRANDO")
       auxArray.push(element);
     }
   });
   dayData.value = auxArray;
-  console.log("this is dayDAta", dayData);
   //   if(dayData){
   //     console.log(dayData.popover.label);
   //   }

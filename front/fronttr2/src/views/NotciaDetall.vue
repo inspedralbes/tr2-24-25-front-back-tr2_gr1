@@ -22,7 +22,6 @@ import NavigationBar from '@/components/NavigationBar.vue';
 const props = defineProps(['id']);
 const noticia = ref({});
 onMounted(() => {
-  console.log('Component is mounted')
   //getNoticies()
   noticia.value = noticiesSample.find(noticia => noticia.id == props.id);
 

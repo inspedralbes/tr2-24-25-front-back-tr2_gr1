@@ -509,12 +509,11 @@ export const getActivities = async () => {
 
             const activities = await response.json();
 
-            console.log("holiwi" + activities);
 
             return activities;
         }
 
-        console.log("holiwi" + activities)
+     
 
         return activities
 
@@ -571,7 +570,7 @@ export const checkToken = async () => {
         return {"status": 401}
     }
     else {
-        console.log("bababoi")
+  
         const response = await fetch(`${URL}/prova`, {
             method: 'GET',
             headers: {
@@ -590,14 +589,14 @@ export const checkToken = async () => {
 };
 
 export const noLogged = async () => {
-    console.log("Pal lobby")
+
     const loggedUsersStore = useLoggedUsers();
     loggedUsersStore.emptyUser();
     router.push('/login');
 };
 
 export const getServiceStatus = async (serviceName) => {
-    console.log("HOLA")
+
     const response = await fetch(`${URL}/api/checkServiceStatus`, {
         method: 'POST',
         headers: {

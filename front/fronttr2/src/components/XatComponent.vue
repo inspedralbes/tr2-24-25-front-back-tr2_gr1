@@ -28,18 +28,14 @@ const loggedUsersStore = useLoggedUsers();
 
 
 onMounted(() => {
-    console.log(socket);
-    console.log('Component is mounted')
     //getAssociationId
     socket.emit('joinChat', loggedUsersStore.currentUser.currentAssiciacio); //This must be changed to the association id
-    console.log("joining chat with id: ", loggedUsersStore.currentUser.currentAssiciacio);
 })
 
 watch(
     () => chatStore.messages,
     (newMessages) => {
         messages.value = newMessages;
-        console.log(messages.value[0]?.message);
     },
     { immediate: true }
 );

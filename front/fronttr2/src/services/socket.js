@@ -4,7 +4,7 @@ import { useChatStore } from '../stores/chat';
 const chatStore = useChatStore();
 
 const URL = import.meta.env.VITE_CHAT_ROUTE ;
-console.log("a0isdfhauioehsfcjoahfuioasehdfio!"+URL);
+
 
 export const socket = io(URL);
 

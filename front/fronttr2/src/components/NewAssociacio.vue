@@ -67,7 +67,6 @@ async function newAssociacio() {
     }
     loading.value = true;
     try {
-        console.log('Nova Associació:', { nom: nom.value, desc: desc.value });
         await crearAssociacio(nom.value, desc.value);
         visible2.value = true;
     } catch (error) {

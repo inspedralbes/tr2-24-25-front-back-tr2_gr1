@@ -79,7 +79,7 @@ export default {
             if (validateForm()) {
                 try {
                     const hashedPassword= await hashPassword(form.value.contrasenya)
-                    // console.log(hashedPassword)
+                   
                     const response = await createUser({
                         nom: form.value.nom,
                         cognoms: form.value.cognoms,
@@ -88,7 +88,6 @@ export default {
                         imatge: 'default-image.png',
                         permisos: 'user',
                     });
-                    console.log(response.state)
                     if(response.state==true){
                         router.push('/noticies');
 
