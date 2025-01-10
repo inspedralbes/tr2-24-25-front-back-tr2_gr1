@@ -88,7 +88,8 @@ export default {
                         imatge: 'default-image.png',
                         permisos: 'user',
                     });
-                    if(response==true){
+                    console.log(response.state)
+                    if(response.state==true){
                         router.push('/noticies');
 
                     }

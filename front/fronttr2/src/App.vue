@@ -40,7 +40,7 @@ const logRouteChange = async () => {
 const checkServiceStatus = async (to,from ,next) => {
   console.log("LOL, LMAO")
   const service = to.path.includes('/xat') ? 'chat' :
-                  to.path.includes('/noticies') && !from.path.includes('/login') ? 'news' :
+                  to.path.includes('/noticies') && (!from.path.includes('/login')&&!from.path.includes('/register')) ? 'news' :
                   to.path.includes('/propostes') || to.path.includes('/calendar') ? 'activity' : null;
 
   if (!service) {
