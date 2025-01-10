@@ -1,17 +1,17 @@
 import dotenv from 'dotenv';
-
-dotenv.config();
-
 import express from 'express';
 import { createServer } from 'node:http';
 import { join } from 'node:path';
 import { Server } from 'socket.io';
 import cors from 'cors';
-import mysql from 'mysql';
+import mysql2 from 'mysql2';
 import { verifyTokenMiddleware } from '../../tokens.js';
 
+// Configurar dotenv
+dotenv.config();
+
 const app = express();
-const PORT = 3002;
+const PORT = process.env.PORT || 3002;
 
 app.use(cors({
     origin: '*',
@@ -23,42 +23,47 @@ app.use(express.json());
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: '*', // Allow requests from this origin
+        origin: '*',
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type'],
         credentials: true
     }
 });
 
-const db = mysql.createPool({
+const db = mysql2.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
     database: 'tr2-g1',
 });
 
-
 let news = [];
 
-app.get('/api/noticia', verifyTokenMiddleware, (req, res) => {
+app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
+    const id = req.params.id;
     try {
-        const query = 'SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM noticia';
-        db.query(query, (err, result) => {
+        const queryNoticia = 'SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM NOTICIA WHERE idAsso = ?';
+        db.query(queryNoticia, [id], (err, result) => {
             if (err) {
-                console.error('Error al obtenir les notícies:', err);
-                res.status(500).send('Error al obtenir les notícies');
-                return;
+                console.error('Error al obtener las noticias:', err);
+                return res.status(500).send('Error al obtener las noticias');
             }
-            news = result;
-            res.json(news);
+
+            if (result.length === 0) {
+                console.log(`No se encontraron noticias para la asociación con id ${id}`);
+                return res.status(404).json({ message: `No se encontraron noticias para la asociación con idAsso ${id}` });
+            }
+
+            console.log(`Noticias encontradas para la asociación ${id}:`, result);
+            res.json(result);
         });
     } catch (err) {
-        console.error('Error al obtenir les notícies:', err);
-        res.status(500).send('Error al obtenir les notícies');
+        console.error('Error al obtener las noticias:', err);
+        res.status(500).send('Error al obtener las noticias');
     }
 });
 
-app.get('/api/noticia/:id',verifyTokenMiddleware, (req, res) => {
+app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
     try {
         const id = req.params.id;
         const query = `SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM noticia WHERE id = ${id}`;
@@ -76,7 +81,7 @@ app.get('/api/noticia/:id',verifyTokenMiddleware, (req, res) => {
     }
 });
 
-app.post('/api/noticia',verifyTokenMiddleware, (req, res) => {
+app.post('/api/noticia', verifyTokenMiddleware, (req, res) => {
     const { titol, subtitol, contingut, imatge, autor, idAsso } = req.body;
 
     const validateAuthorQuery = `SELECT id FROM usuari WHERE id = '${autor}'`;
@@ -106,7 +111,7 @@ app.post('/api/noticia',verifyTokenMiddleware, (req, res) => {
     });
 });
 
-app.put('/api/noticia/:id',verifyTokenMiddleware, (req, res) => {
+app.put('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
     const id = req.params.id; // ID de la noticia a editar
     const { titol, subtitol, contingut, imatge, autor, idAsso } = req.body;
 
@@ -156,7 +161,7 @@ app.put('/api/noticia/:id',verifyTokenMiddleware, (req, res) => {
     });
 });
 
-app.delete('/api/noticia/:id',verifyTokenMiddleware, (req, res) => {
+app.delete('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
     const id = req.params.id;
 
     const deleteQuery = `DELETE FROM noticia WHERE id = ${id}`;

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {"log":"Servidor en funcionament a http://localhost:3001\n","date":"2024-12-19 11:52:35"}||
 {"log":"a user connected\n","date":"2024-12-19 11:52:39"}||
 {"log":"joinChat 1\n","date":"2024-12-19 11:52:39"}||
@@ -161,3 +162,5 @@
 {"log":"a user connected\n","date":"2025-01-08 09:47:34"}||
 {"log":"a user connected\n","date":"2025-01-08 10:58:34"}||
 {"log":"joinChat 0\n","date":"2025-01-08 10:58:34"}||
+=======
+>>>>>>> origin/feat-fix-errorsNoticies
