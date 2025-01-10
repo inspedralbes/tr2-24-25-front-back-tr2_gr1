@@ -90,7 +90,6 @@ export default {
                     });
                     if(response==true){
                         router.push('/noticies');
-
                     }
                 } catch (error) {
                     console.error('Error al crear el usuari:', error);

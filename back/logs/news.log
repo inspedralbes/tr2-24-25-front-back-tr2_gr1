@@ -256,3 +256,7 @@
 {"log":"Token de Sessió:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsImNvcnJldSI6ImZ1Y2tpc3JhZWxAZ21haWwuY29tIiwiaWF0IjoxNzM2NDIyMzk3LCJleHAiOjE3MzY0MjU5OTd9.7bY97DNZz7l2kKi-2e_x9Zic2SfyFhsDpwtCWBocM7M\nETO ES UN SECRETO DE TU MIRADA Y LA MIA -qRAUmqCTv-v8swLdNYS0gVtZmnQVgCUvILO2NIky28\n","date":"2025-01-09 11:33:37"}||
 {"log":"Valid token\n","date":"2025-01-09 11:33:37"}||
 {"log":"Noticias encontradas para la asociación 2: [\n  {\n    id: 2,\n    titol: 'Èxit del torneig',\n    subtitol: 'Gran participació en el torneig',\n    contingut: 'Més de 10 equips van competir al torneig de futbol.',\n    imatge: 'noticia2.jpg',\n    autor: 2,\n    idAsso: 2\n  }\n]\n","date":"2025-01-09 11:33:37"}||
+{"log":"Header Auth:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiY29ycmV1IjoibWFuaW5AZ21haWwuY29tIiwiaWF0IjoxNzM2NTA1NjE2LCJleHAiOjE3MzY1MDkyMTZ9.aA1TQCyWB4VvpPDufdT97Y18Vw3JDmYt1V5uqhccw9Y\n","date":"2025-01-10 10:40:19"}||
+{"log":"Token de Sessió:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiY29ycmV1IjoibWFuaW5AZ21haWwuY29tIiwiaWF0IjoxNzM2NTA1NjE2LCJleHAiOjE3MzY1MDkyMTZ9.aA1TQCyWB4VvpPDufdT97Y18Vw3JDmYt1V5uqhccw9Y\nETO ES UN SECRETO DE TU MIRADA Y LA MIA -qRAUmqCTv-v8swLdNYS0gVtZmnQVgCUvILO2NIky28\n","date":"2025-01-10 10:40:19"}||
+{"log":"Valid token\n","date":"2025-01-10 10:40:19"}||
+{"log":"No se encontraron noticias para la asociación con id 0\n","date":"2025-01-10 10:40:19"}||

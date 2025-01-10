@@ -128,7 +128,11 @@ export async function loginUsuari(correu, contrasenya) {
 
         const user = await response.json();
 
-        const currentAssiciacio = 0;
+        let currentAssiciacio = 0;
+
+        if (user.associacionsId.length > 0) {
+            currentAssiciacio = user.associacionsId[0]
+        }
 
         const loggedUsersStore = useLoggedUsers();
 
