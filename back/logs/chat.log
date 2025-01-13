@@ -170,3 +170,17 @@
 {"log":"joinChat 1\n","date":"2025-01-10 11:14:51"}||
 {"log":"[]\n","date":"2025-01-10 11:14:51"}||
 {"log":"I joined the room 1\n","date":"2025-01-10 11:14:51"}||
+{"log":"Servidor en funcionament a http://localhost:3001\n","date":"2025-01-13 09:19:21"}||
+{"log":"Connectat a MongoDB\n","date":"2025-01-13 09:19:21"}||
+{"log":"Servidor en funcionament a http://localhost:3001\n","date":"2025-01-13 09:24:27"}||
+{"log":"Connectat a MongoDB\n","date":"2025-01-13 09:24:28"}||
+{"log":"a user connected\n","date":"2025-01-13 09:24:29"}||
+{"log":"joinChat 1\n","date":"2025-01-13 09:24:29"}||
+{"log":"[]\n","date":"2025-01-13 09:24:29"}||
+{"log":"I joined the room 1\n","date":"2025-01-13 09:24:29"}||
+{"log":"chat message {\n  idUser: 6,\n  message: 'El ejemplo estuvo aquí',\n  idAsso: 1,\n  username: 'Lol lmao'\n}\n","date":"2025-01-13 09:24:49"}||
+{"log":"{\n  idUser: 6,\n  message: 'El ejemplo estuvo aquí',\n  idAsso: 1,\n  username: 'Lol lmao',\n  date: 2025-01-13T09:24:49.153Z\n}\n","date":"2025-01-13 09:24:49"}||
+{"log":"room 1\n","date":"2025-01-13 09:24:49"}||
+{"log":"rooms Map(2) {\n  'RbY-iWslJZZ2BlYgAAAB' => Set(1) { 'RbY-iWslJZZ2BlYgAAAB' },\n  1 => Set(1) { 'RbY-iWslJZZ2BlYgAAAB' }\n}\n","date":"2025-01-13 09:24:49"}||
+{"log":"room 1\n{ room: 1, participants: [], messages: [] }\n","date":"2025-01-13 09:24:49"}||
+{"log":"{\n  valid: true,\n  message: {\n    idAsso: 1,\n    idUser: 6,\n    message: 'El ejemplo estuvo aquí',\n    date: 2025-01-13T09:24:49.153Z,\n    _id: new ObjectId('6784dbe1b26e0e1dae4c273b'),\n    createdAt: 2025-01-13T09:24:49.169Z,\n    updatedAt: 2025-01-13T09:24:49.169Z,\n    __v: 0\n  }\n}\n","date":"2025-01-13 09:24:49"}||

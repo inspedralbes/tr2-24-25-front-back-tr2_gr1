@@ -16,7 +16,7 @@
 
     <div class="comments-section">
       <h2>Comentaris</h2>
-      <div v-if="comments.length === 0">No hi ha comentaris encara.</div>
+      <div v-if="comments.length === 0">Encara no hi ha comentaris.</div>
       <div v-for="comment in comments" :key="comment.id" class="comment">
         <p><strong>{{ comment.autor.nomUsuari }}</strong></p>
         <p>{{ comment.contingut }}</p>

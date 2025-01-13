@@ -12,17 +12,17 @@
                         <input v-model="form.cognoms" type="text" placeholder="Cognoms" class="p-inputtext p-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#57A2A2]" />
                         <p v-if="errors.cognoms" class="error-message">{{ errors.cognoms }}</p>
                     </div>
+                    <div class="flex flex-col gap-1">
+                        <input v-model="form.correu" type="email" placeholder="Correu" class="p-inputtext p-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#57A2A2]" />
+                        <p v-if="errors.correu" class="error-message">{{ errors.correu }}</p>
+                    </div>
 
                     <div class="flex flex-col gap-1">
                         <input v-model="form.contrasenya" type="password" placeholder="Contrasenya" class="p-inputtext p-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#57A2A2]" />
                         <p v-if="errors.contrasenya" class="error-message">{{ errors.contrasenya }}</p>
                     </div>
 
-                    <div class="flex flex-col gap-1">
-                        <input v-model="form.correu" type="email" placeholder="Correu" class="p-inputtext p-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#57A2A2]" />
-                        <p v-if="errors.correu" class="error-message">{{ errors.correu }}</p>
-                    </div>
-
+                    <button @click="toLogin" class="p-button p-component bg-[#57A2A2] text-white py-2 px-4 rounded-md hover:bg-[#459191] transition-colors">Ja tens compte?</button>
                     <button type="submit" class="p-button p-component bg-[#57A2A2] text-white py-2 px-4 rounded-md hover:bg-[#459191] transition-colors">Registrar</button>
                 </form>
             </div>
@@ -39,7 +39,9 @@ import { hashPassword } from '@/services/hasher';
 export default {
     setup() {
         const router = useRouter();
-
+        const toLogin = () => {
+            router.push('/login');
+        };
         const form = ref({
             nom: '',
             cognoms: '',
@@ -74,6 +76,8 @@ export default {
 
             return isValid;
         };
+        
+       
 
         const onFormSubmit = async () => {
             if (validateForm()) {
@@ -97,7 +101,7 @@ export default {
             }
         };
 
-        return { form, errors, onFormSubmit };
+        return { form, errors, onFormSubmit, toLogin };
     },
 };
 </script>

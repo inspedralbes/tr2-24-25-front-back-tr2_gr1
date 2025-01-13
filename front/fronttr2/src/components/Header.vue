@@ -13,12 +13,12 @@ import { ref } from 'vue';
 
 const items = ref([
     {
-        label: 'Home',
+        label: 'Principal',
         icon: 'pi pi-fw pi-home',
         command: () => router.push('/'),
     },
     {
-        label: 'About',
+        label: 'Perfil',
         icon: 'pi pi-pw pi-id-card',
         command: () => router.push('/perfil'),
     },
