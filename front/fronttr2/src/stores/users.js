@@ -8,12 +8,11 @@ export const useLoggedUsers = defineStore('loggedUsers', () => {
     };
 
     const getUser = () => {
-        console.log("BIRDISTHEWORD"+currentUser.value)
         return currentUser.value
     }
 
     const emptyUser=()=>{
-        users.value={}
+        currentUser.value={}
     }
 
     return { currentUser, newUser, getUser, emptyUser };

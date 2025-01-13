@@ -10,13 +10,15 @@ import cors from 'cors';
 import fs, { read } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { spawn } from 'node:child_process';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import bcrypt from 'bcryptjs';
 dotenv.config();
-import { login, verifyToken } from './tokens.js';
+import { login, verifyTokenMiddleware, verifyToken } from './tokens.js';
+import { stat } from 'node:fs';
 
 try {
 
@@ -82,10 +84,6 @@ connection.connect((err) => {
   if (err) {
     console.error('Error conectando a MySQL:', err);
     process.exit(1);
-  } else {
-    console.log('Conectado a MySQL!');
-    connection.end();
-    console.log("conexion cerrada");
   }
 });
 
@@ -95,8 +93,9 @@ function verifyTokenMiddleware(req, res, next) {
   if (verificacio.status === 401) {
     return res.status(401).json(verificacio);
   }
-  next();
-}
+};
+
+
 // --- ENDPOINTS PARA ASSOCIACIO ---
 // GET Endpoint
 app.get('/api/associacio', verifyTokenMiddleware, (req, res) => {
@@ -577,12 +576,22 @@ app.post('/asignaUsuariAssociacio', (req, res) => {
 
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
 app.get('/prova', (req, res) => {
-  const verificacio = verifyToken(SECRET_KEY, req);
+  const verificacio = verifyToken( process.env.SECRET_KEY, req);
+  console.log(verificacio)
   if (verificacio.status === 401) {
+    console.log('lol, lmao')
     res.status(401).json(verificacio);
   } else {
     res.status(200).json(verificacio);
   };
+});
+
+//Endpoint per a comprovar l'estat d'un servei
+app.post('/api/checkServiceStatus', (req, res) => {
+  const { serviceName } = req.body;
+  console.log(serviceName);
+  const status = checkServiceStatus(serviceName);
+  res.status(200).json({ "status": status });
 });
 
 function startProcess(service) {
@@ -655,7 +664,20 @@ function enviarServeis() {
   })));
 }
 
+function checkServiceStatus(serviceName) {
+  const service = services.find(service => service.name === serviceName);
+  if (!service) {
+    return 'not found';
+  }
+  else{
+  let status="funcionant";
+  if (service.state === 'tancat') {
+    status="tancat";
+  }
+  return status;
+}
 
+}
 server.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
 });

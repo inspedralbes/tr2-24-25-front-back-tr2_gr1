@@ -1,4 +1,6 @@
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 // routes/motocicletes.js
 import express from 'express';

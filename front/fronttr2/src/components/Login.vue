@@ -57,6 +57,8 @@ import { useLoggedUsers } from '@/stores/users';
 import { loginUsuari } from './../services/comunicationManager';
 import Checkbox from 'primevue/checkbox';
 import { hashPassword } from '@/services/hasher';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 // Refs para campos y estado
 const correu = ref(null);
@@ -76,6 +78,34 @@ onMounted(() => {
     }
 
 })
+const notifyLogin = (error) => {
+
+    if(error=="error"){
+        toast("Correu o contrasenya incorrectes", {
+    autoClose: 1000,
+    progressClassName: 'toast-progress',
+    theme: 'light',
+    type: 'error'
+  }); // ToastOptions
+    } else{
+        if(error=="errorServer"){
+            toast("Error al contectar al servidor", {
+    autoClose: 1000,
+    progressClassName: 'toast-progress',
+    theme: 'light',
+    type: 'error'
+    }); // ToastOptions
+            } else{
+        toast("Inici de sessió exitós", {
+    autoClose: 1000,
+    progressClassName: 'toast-progress',
+    theme: 'light',
+    type: 'info'
+  }); // ToastOptions
+}
+    }
+ 
+}
 
 async function login() {
     if (!correu.value || !contrasenya.value) {
@@ -89,23 +119,22 @@ async function login() {
         const result = await loginUsuari(correu.value, hashedPassword);
     
         if (result.state) {
-            alert('Inici de sessió exitós!');
+            notifyLogin("info");
             if(session.value){
                 localStorage.setItem("correu", correu.value);
                 localStorage.setItem("contrasenya", hashedPassword)
             }
-            console.log(result.associacionsId);
             if (result.associacionsId.length === 0) {
                 router.push('/show');
             } else {
                 router.push('/noticies');
             }
         } else {
-            alert('Correo o contraseña incorrectos');
+            notifyLogin("error");
         }
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
-        alert('Error al conectar con el servidor.');
+        notifyLogin("errorServer");
     } finally {
         loading.value = false;
     }

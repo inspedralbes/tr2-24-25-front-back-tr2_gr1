@@ -1,12 +1,12 @@
 <template>
-<div class="flex items-start gap-2.5 max-w-[80%]" v-if="false"> <!-- v-if="messageData.userid == storage.userid" -->
+<div class="flex items-start gap-2.5 max-w-[80%]" v-if="loggedUsersStore.currentUser.id!=messageData.idUser"> <!-- v-if="messageData.userid == storage.userid" -->
    <img class=" w-8 h-8 rounded-full profilePicture" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0d613azJ2R2wo9p-0X4dVXID_4fAT4MP90w&s" :alt="'Foto de perfil '+messageData.username">
    <div class="flex flex-col min-w-[10%] max-w-[80%] leading-1.5 p-4 border-gray-200 bg-CustomLightAccen rounded-e-xl rounded-es-xl dark:bg-CustomLightAccent">
       <div class="flex items-center space-x-2 rtl:space-x-reverse">
          <span class="text-sm font-semibold text-black dark:text-black">{{messageData.username}}</span>
-         <span class="text-sm font-normal text-CustomDarkAccent dark:text-CustomDarkAccent">{{messageData.time}}</span>
+         <span class="text-sm font-normal text-CustomDarkAccent dark:text-CustomDarkAccent">{{messageData.date}}</span>
       </div>
-      <p class="text-sm font-normal py-2.5 text-black dark:text-blackoverflow-visible overflowControl">{{ messageData.content }}</p>
+      <p class="text-sm font-normal py-2.5 text-black dark:text-blackoverflow-visible overflowControl">{{ messageData.message }}</p>
    </div>
    <!-- <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots" data-dropdown-placement="bottom-start" class="inline-flex self-center items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-600" type="button">
       <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
@@ -47,9 +47,9 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-
+import { useLoggedUsers } from '@/stores/users';
 import { defineProps } from 'vue';
-
+const loggedUsersStore = useLoggedUsers();
 const props = defineProps({
    messageData: {
       type: Object,

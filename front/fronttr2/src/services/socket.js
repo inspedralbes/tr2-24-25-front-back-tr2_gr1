@@ -3,7 +3,8 @@ import { useChatStore } from '../stores/chat';
 
 const chatStore = useChatStore();
 
-const URL = `${process.env.VITE_CHAT_ROUTE}`;
+const URL = import.meta.env.VITE_CHAT_ROUTE ;
+
 
 export const socket = io(URL);
 

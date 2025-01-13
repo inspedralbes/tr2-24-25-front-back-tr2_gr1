@@ -1,7 +1,16 @@
+// Cargar configuraciones de entorno
+import dotenv from 'dotenv';
+
+
+
+// Importar dependencias necesarias
+dotenv.config();
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-// import { connectToDatabase } from "./index.js";
-async function hashPassword(contrasenya) {
+
+const SECRET_KEY = process.env.SECRET_KEY;
+
+async function hashPassword(contrasenya){
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(contrasenya, salt);
   return hashedPassword
@@ -76,7 +85,7 @@ export function login(db, db2, SECRET_KEY, req, res) {
 };
 
 
-export function verifyToken(SECRET_KEY, req) {
+ export function verifyToken(SECRET_KEY, req) {
   console.log('Header Auth: ', req.headers.authorization);
   const token = req.headers.authorization?.split(' ')[1];
   console.log('Token de Sessió: ', token);
@@ -85,12 +94,22 @@ export function verifyToken(SECRET_KEY, req) {
   }
 
   try {
+    console.log('ETO ES UN SECRETO DE TU MIRADA Y LA MIA', SECRET_KEY)
     const decoded = jwt.verify(token, SECRET_KEY);
     return { message: "Valid token", login: false, user: decoded, status: 200 };
   } catch (err) {
+    console.log(err)
     if (err.name === "TokenExpiredError") {
       return { message: "Token has expired. Please log in again.", login: true, user: null, status: 401 };
     }
     return { message: "Invalid token", login: false, user: null, status: 401 };
   }
+}
+export function verifyTokenMiddleware(req, res, next) {
+  const verificacio = verifyToken(SECRET_KEY, req);
+  console.log(verificacio.message);
+  if (verificacio.status === 401) {
+    return res.status(401).json(verificacio);
+  }
+  next();
 }

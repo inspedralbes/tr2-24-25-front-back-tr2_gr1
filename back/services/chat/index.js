@@ -11,6 +11,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { createChat, getChatByAssoId } from './routes/chat.js';
 import { createMessage, getMessagesByAssoId } from './routes/message.js';
+import { verifyTokenMiddleware } from '../../tokens.js';
 
 
 const app = express();
@@ -55,6 +56,7 @@ io.on('connection', (socket) => {
                 socket.emit('allMessages', chat.find(room => room.room === data).messages);
     
                 socket.join(data);
+                console.log("I joined the room", data);
             }).catch((error) => {
                 console.error('Error fetching chat or messages:', error);
             });
@@ -87,18 +89,24 @@ io.on('connection', (socket) => {
 
         let room = findSocketRoom(socket);
         console.log('room', room);
-        io.to(room).emit('chat message', data);
-        console.log('room', room);
-        let chatAux = chat.find(chatroom => chatroom.room === room)
-        console.log(chatAux);
-        chatAux.messages.push(data);
+        if(room!=null){
+            io.to(room).emit('chat message', data);
+            console.log('room', room);
+            let chatAux = chat.find(chatroom => chatroom.room === room)
+            console.log(chatAux);
+            chatAux.messages.push(data);
+        }
+        else{
+            console.log('room not found');
+            console.log('socket', socket.id);
+        }
 
 
 
     });
 });
 
-app.post("/chat", (req, res) => {
+app.post("/chat",verifyTokenMiddleware, (req, res) => {
     createChat(req.body).then((result) => {
         res.json(result);
     });

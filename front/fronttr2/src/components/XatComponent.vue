@@ -19,23 +19,23 @@ import NavigationBar from '@/components/NavigationBar.vue';
 import XatMessage from './XatMessage.vue';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import { useLoggedUsers } from "@/stores/users";
 
 const messageToSend = ref('');
 const chatStore = useChatStore();
 const messages = ref([])
+const loggedUsersStore = useLoggedUsers();
+
 
 onMounted(() => {
-    console.log('Component is mounted')
     //getAssociationId
-    socket.emit('joinChat', 1); //This must be changed to the association id
-
+    socket.emit('joinChat', loggedUsersStore.currentUser.currentAssiciacio); //This must be changed to the association id
 })
 
 watch(
     () => chatStore.messages,
     (newMessages) => {
         messages.value = newMessages;
-        console.log(messages.value[0]?.message);
     },
     { immediate: true }
 );
@@ -53,10 +53,10 @@ watch(
 //function to send a message
 function sendMessage() {
     let auxObject = {
-        idUser: 1, //This must be changed to the user id
+        idUser: loggedUsersStore.currentUser.id, //This must be changed to the user id
         message: messageToSend.value,
-        idAsso: 1, //This must be changed to the association id
-        username: "sample" //This must be changed to the user name
+        idAsso: loggedUsersStore.currentUser.currentAssiciacio, //This must be changed to the association id
+        username: loggedUsersStore.currentUser.nom+" "+loggedUsersStore.currentUser.cognoms //This must be changed to the user name
     }
     console.log("Sending message: ", auxObject);
     socket.emit('newMessage', auxObject);
