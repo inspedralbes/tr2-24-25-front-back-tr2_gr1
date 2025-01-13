@@ -48,6 +48,8 @@ const goToCreatePage = () => {
 const joinAssociation = async (idAsso) => {
     const userId = userStore.currentUser.id;
 
+    console.log("Este es el id del usuario: ", userStore.currentUser.id);
+
     if (!userId) {
         console.error('No hay ID de usuario guardado.');
         return;

@@ -557,11 +557,11 @@ export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
         } else {
             token = user.token;
         }
-        const response = await fetch('http://localhost:3000/asignaUsuariAssociacio', {
+        const response = await fetch(`${URL}/asignaUsuariAssociacio`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${currentUser.value.token}`,
+                'Authorization': `Bearer ${user.token}`,
             },
             body: JSON.stringify({ idUsu, idAsso }),
         });
