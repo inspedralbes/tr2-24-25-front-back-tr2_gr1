@@ -39,7 +39,7 @@ for idAsso in idAsso_unics:
 
     # Genera un nom únic per al fitxer basat en la data i l'hora actuals
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f'statImages/grafic_{idAsso}_{timestamp}.png'
+    filename = f'statImages/chat/grafic_{idAsso}_{timestamp}.png'
 
     # Guarda el gràfic a la carpeta statImages
     plt.savefig(filename)
