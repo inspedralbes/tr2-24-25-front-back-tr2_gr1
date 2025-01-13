@@ -84,6 +84,10 @@ connection.connect((err) => {
   if (err) {
     console.error('Error conectando a MySQL:', err);
     process.exit(1);
+  } else {
+    console.log('Conectado a MySQL!');
+    connection.end();
+    console.log("conexion cerrada");
   }
 });
 
@@ -93,6 +97,7 @@ function verifyTokenMiddleware(req, res, next) {
   if (verificacio.status === 401) {
     return res.status(401).json(verificacio);
   }
+  next();
 };
 
 
