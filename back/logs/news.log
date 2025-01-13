@@ -287,3 +287,9 @@
 {"log":"Valid token\n","date":"2025-01-10 10:40:19"}||
 {"log":"No se encontraron noticias para la asociación con id 0\n","date":"2025-01-10 10:40:19"}||
 >>>>>>> origin/feat-fix-errorsNoticies
+{"log":"Server running at http://localhost:3002\n","date":"2025-01-10 11:13:01"}||
+{"log":"Header Auth:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiY29ycmV1Ijoic2FtcGxlQHNhbXBsZS5zYW1wbGUiLCJpYXQiOjE3MzY1MDc2MzcsImV4cCI6MTczNjUxMTIzN30.3cYR1YyIAEZGWqar0fGihPYLuru4zo_s4Q3amWWzSTU\n","date":"2025-01-10 11:13:57"}||
+{"log":"Token de Sessió:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiY29ycmV1Ijoic2FtcGxlQHNhbXBsZS5zYW1wbGUiLCJpYXQiOjE3MzY1MDc2MzcsImV4cCI6MTczNjUxMTIzN30.3cYR1YyIAEZGWqar0fGihPYLuru4zo_s4Q3amWWzSTU\nETO ES UN SECRETO DE TU MIRADA Y LA MIA -qRAUmqCTv-v8swLdNYS0gVtZmnQVgCUvILO2NIky28\n","date":"2025-01-10 11:13:57"}||
+{"log":"Valid token\n","date":"2025-01-10 11:13:57"}||
+{"log":"Valid token\n","date":"2025-01-10 11:15:00"}||
+{"log":"Header Auth:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiY29ycmV1Ijoic2FtcGxlQHNhbXBsZS5zYW1wbGUiLCJpYXQiOjE3MzY1MDc2MzcsImV4cCI6MTczNjUxMTIzN30.3cYR1YyIAEZGWqar0fGihPYLuru4zo_s4Q3amWWzSTU\nToken de Sessió:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiY29ycmV1Ijoic2FtcGxlQHNhbXBsZS5zYW1wbGUiLCJpYXQiOjE3MzY1MDc2MzcsImV4cCI6MTczNjUxMTIzN30.3cYR1YyIAEZGWqar0fGihPYLuru4zo_s4Q3amWWzSTU\nETO ES UN SECRETO DE TU MIRADA Y LA MIA -qRAUmqCTv-v8swLdNYS0gVtZmnQVgCUvILO2NIky28\n","date":"2025-01-10 11:15:00"}||
