@@ -164,3 +164,9 @@
 {"log":"joinChat 0\n","date":"2025-01-08 10:58:34"}||
 =======
 >>>>>>> origin/feat-fix-errorsNoticies
+{"log":"Servidor en funcionament a http://localhost:3001\n","date":"2025-01-10 11:12:23"}||
+{"log":"Connectat a MongoDB\n","date":"2025-01-10 11:12:23"}||
+{"log":"a user connected\n","date":"2025-01-10 11:14:51"}||
+{"log":"joinChat 1\n","date":"2025-01-10 11:14:51"}||
+{"log":"[]\n","date":"2025-01-10 11:14:51"}||
+{"log":"I joined the room 1\n","date":"2025-01-10 11:14:51"}||
