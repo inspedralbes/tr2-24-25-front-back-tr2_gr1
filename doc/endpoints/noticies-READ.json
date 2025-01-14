@@ -1,0 +1,22 @@
+{
+    "endpoint": "/api/noticia",
+    "method": "GET",
+    "description": "Retrieve a noticia",
+    "response": {
+        "status": "success",
+        "message": "Noticies retrieved successfully",
+        "data": [
+            {
+                "id": "int",
+                "titol": "string",
+                "subtitol": "string",
+                "imatge": "string",
+                "autor": "int",
+                "idAsso": "int",
+                "createdAt": "string",
+                "updatedAt": "string"
+            }
+        ]
+        
+    }
+}

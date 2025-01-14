@@ -1,0 +1,22 @@
+{
+    "endpoint": "/api/activitat/:id",
+    "method": "GET",
+    "description": "Get all activitats by associacio id that are posteriror or equal to the current date",
+    "request": {
+        "contentType": "application/json"
+    },
+    "response": {
+        "201": {
+            "description": "Activitats found",
+            "body": {
+                "dates": "date",
+                "color": "string",
+                "link": "string",
+                "label": "string"
+            }
+        },
+        "400": {
+            "description": "No activitats found"
+        }
+    }
+}

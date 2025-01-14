@@ -1,0 +1,111 @@
+name: TR2G1 PRODUCTION Deploy Actions
+run-name: ${{ github.actor }} is deploying Associa't on production ⭐
+on:
+  push:
+    branches:
+      - main
+# a
+jobs:
+  STOP-SCREEN:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stop Screen
+        run: |
+          echo "Connecting to the server and stopping screen"
+          echo "${{ secrets.PRE_SECRET_KEY }}" > ~/key
+          chmod 600 ~/key
+        
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }} << 'EOF'
+            if screen -ls | grep -q tr2g1_PROD; then
+              echo "The screen session 'tr2g1_PROD' exists.";
+              screen -X -S tr2g1_PROD quit
+              echo "Screen terminated.";
+            else
+              echo "The screen session 'tr2g1_PROD' does not exist.";
+            fi
+          EOF
+  
+  DEPLOY-NODE:
+    needs: [STOP-SCREEN]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtaining repository code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Deploy
+        run: |
+          echo "Connecting to the server and deploying TR2G1 Node"
+          echo "${{ secrets.PRE_SECRET_KEY }}" > ~/key
+          chmod 600 ~/key
+
+          cd ./back
+
+          echo "ROOT_PORT=${{ secrets.BACK_PORT }}" >> .env 
+          echo "CHAT_PORT=${{ secrets.CHAT_PORT }}" >> .env
+          echo "ACTIVITY_PORT=${{ secrets.ACTIVITY_PORT }}" >> .env
+          echo "NEWS_PORT=${{ secrets.NEWS_PORT }}" >> .env
+
+          echo "MYSQL_HOST=${{ secrets.MYSQL_HOST }}" >> .env
+          echo "MYSQL_DB=${{ secrets.MYSQL_DB }}" >> .env
+          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
+          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PRE_PASSWORD }}" >> .env
+          echo "MONGO_URL=${{ secrets.MONGO_URL }}" >> .env
+          echo "SECRET_KEY=${{ secrets.TOKEN_KEY }}" >> .env
+
+          cd ${{ github.workspace }}
+
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./back/* ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.DOMAIN }}/private
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./back/.env ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.DOMAIN }}/private
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }} << 'EOF'
+            cd web/${{ secrets.DOMAIN }}/private
+            npm install
+            screen -S tr2g1_PROD -d -m node index.js
+          EOF
+
+  DEPLOY-VUE:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtaining repository code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: |
+          cd ./front/fronttr2
+          npm install
+
+          cd ${{ github.workspace }}
+
+      - name: Deploy Vue
+        run: |
+          echo "Connecting to the server and deploying TR2G1 Vue"
+          
+          cd front/fronttr2
+
+          echo "setting up .env.production"
+
+          echo "VITE_API_ROUTE=${{ secrets.API_ROUTE }}" > .env.production
+          echo "VITE_CHAT_ROUTE=${{ secrets.API_HOST }}:${{ secrets.CHAT_PORT }}" >> .env.production
+          echo "VITE_ACTIVITY_ROUTE=${{ secrets.API_HOST }}:${{ secrets.ACTIVITY_PORT }}" >> .env.production
+          echo "VITE_NEWS_ROUTE=${{ secrets.API_HOST }}:${{ secrets.NEWS_PORT }}" >> .env.production
+
+          echo "building the project"
+
+          npm run build
+
+          cd ${{ github.workspace }}
+
+          echo "${{ secrets.PRE_SECRET_KEY }}" > ~/key
+          chmod 600 ~/key
+
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./front/fronttr2/dist/* ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.DOMAIN }}/public_html
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/key -r ./front/fronttr2/.htaccess ${{ secrets.PRE_USER }}@${{ secrets.PRE_HOST }}:./web/${{ secrets.DOMAIN }}/public_html

@@ -1,0 +1,12 @@
+{
+    "endpoint": "/api/noticia/{id}",
+    "method": "DELETE",
+    "description": "Delete an existing noticia",
+    "request": {
+        "id": "int"
+    },
+    "response": {
+        "status": "success",
+        "message": "Noticia deleted successfully"
+    }
+}

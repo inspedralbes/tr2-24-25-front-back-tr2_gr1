@@ -1,0 +1,47 @@
+[
+    {
+        "_id": {
+            "$oid": "6784c3a03eb54086c10cc8df"
+        },
+        "idActivitat": 1,
+        "idUsuari": 3,
+        "vot": true,
+        "createdAt": {
+            "$date": "2025-01-13T07:41:20.136Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-13T07:41:20.136Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6784c3a03eb54086c10cc8df"
+        },
+        "idActivitat": 1,
+        "idUsuari": 4,
+        "vot": true,
+        "createdAt": {
+            "$date": "2025-01-13T07:41:20.136Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-13T07:41:20.136Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6784c3a03eb54086c10cc8df"
+        },
+        "idActivitat": 1,
+        "idUsuari": 5,
+        "vot": false,
+        "createdAt": {
+            "$date": "2025-01-13T07:41:20.136Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-13T07:41:20.136Z"
+        },
+        "__v": 0
+    }
+]

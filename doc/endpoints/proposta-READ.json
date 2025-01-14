@@ -1,0 +1,22 @@
+{
+    "endpoint": "/api/proposta",
+    "method": "GET",
+    "description": "Retrieve all records from the PROPOSTA table",
+    "response": {
+        "status": 200,
+        "body": [
+            {
+                "id": 1,
+                "titol": "Millora del Parc Central",
+                "subtitol": "Proposta per afegir més zones verdes",
+                "contingut": "Suggerim plantar més arbres i instal·lar bancs al parc per millorar l'espai públic.",
+                "autor": {
+                    "idUsuari": 3,
+                    "nomUsuari": "Joan Ferrer"
+                },
+                "idAsso": 1,
+                "data": "2024-12-10"
+            }
+        ]
+    }
+}
