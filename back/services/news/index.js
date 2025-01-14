@@ -59,7 +59,7 @@ app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
         });
     } catch (err) {
         console.error('Error al obtener las noticias:', err);
-        res.status(500).send('Error al obtener las noticias');
+        res.status(500).send('Error al obtener las noticias', err);
     }
 });
 
