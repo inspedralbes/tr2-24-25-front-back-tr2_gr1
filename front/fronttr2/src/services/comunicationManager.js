@@ -314,16 +314,18 @@ export const getComentarios = async (idProp) => {
 };
 
 export const addComentario = async (idProp, comentario) => {
-    const loggedUsersStore = useLoggedUsers();
-    let user = loggedUsersStore.getUser();
+    const loggedUsersStore = useLoggedUsers(); // Asegúrate de que uses este store
+    let user = loggedUsersStore.currentUser; // Accede a la propiedad 'currentUser' directamente desde el store
     let token = "";
+
     if (!user || !user.token) {
-        noLogged
+        throw new Error('No se encontró el token. El usuario no está autenticado.');
     } else {
-        token = user.token;
+        token = user.token; // Aquí obtienes el token correctamente
     }
+
     try {
-        if (!currentUser.value || token == "") {
+        if (!user || token === "") {
             throw new Error('No se encontró el token. El usuario no está autenticado.');
         }
 
@@ -331,7 +333,7 @@ export const addComentario = async (idProp, comentario) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${currentUser.value.token}`,
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({ contenido: comentario }),
         });
@@ -451,7 +453,7 @@ export const getNoticia = async (id) => {
     }
 };
 
-export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor, idAsso }) => {
+export const createNoticia = async ({ titol, subtitol, contingut, autor, idAsso }) => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
@@ -461,18 +463,20 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
         } else {
             token = user.token;
         }
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, autor, idAsso);
         const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + user.token
             },
-            body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
+            body: JSON.stringify({ titol, subtitol, contingut, autor, idAsso }),
         });
         if (response.ok) {
             const data = await response.json();
             console.log('Noticia created successfully:', data);
         } else if (response.status === 400) {
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, autor, idAsso);
             console.error('Invalid input');
         } else if (response.status === 401) {
             noLogged();
@@ -484,7 +488,7 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
     }
 };
 
-export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, autor, idAsso }) => {
+export const editNoticia = async ({ id, titol, subtitol, contingut, autor, idAsso }) => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
@@ -500,7 +504,7 @@ export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, auto
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + user.token
             },
-            body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
+            body: JSON.stringify({ titol, subtitol, contingut, autor, idAsso }),
         });
         if (response.ok) {
             const data = await response.json();
@@ -626,16 +630,22 @@ export const getActivities = async () => {
     }
 };
 
-export const crearProposta = async (titol, subtitol, contingut, idAsso, data, color) => {
+export const crearProposta = async (titol, subtitol, contingut, userId, data, color) => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token = "";
+
         if (!user || !user.token) {
-            noLogged
+            console.error('No hay usuario autenticado o token disponible.');
+            throw new Error('No user is logged in.');
         } else {
             token = user.token;
         }
+
+        console.log('Enviando solicitud con el siguiente token:', token);
+        console.log('Datos enviados al backend:', { titol, subtitol, contingut, userId, data, color });
+
         const response = await fetch(`${URLPROPOSTES}/api/proposta`, {
             method: 'POST',
             headers: {
@@ -646,23 +656,25 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data, co
                 titol,
                 subtitol,
                 contingut,
-                autor: 1,
-                idAsso: idAsso || 1,
+                idAsso: 1,  // Mantén el valor fijo de idAsso
+                userId,     // Ahora pasamos correctamente el userId
                 data,
                 color,
             }),
         });
 
+        console.log('Respuesta del servidor:', response);
+
         if (response.ok) {
             const data = await response.json();
-            console.log('Proposta creada correctamente:', data);
+            console.log('Propuesta creada exitosamente:', data);
             return data;
         } else {
-            console.error('Error al crear la proposta:', response.status);
+            console.error('Error en la respuesta del servidor. Código de estado:', response.status);
             throw new Error('Error al crear la proposta');
         }
     } catch (err) {
-        console.error('Error durante la petición:', err);
+        console.error('Error durante la solicitud:', err);
         throw err;
     }
 };

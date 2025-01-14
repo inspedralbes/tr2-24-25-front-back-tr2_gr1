@@ -242,50 +242,71 @@ db.query(query, params, (err, results) => {
 
 
 // POST Endpoint para crear una nueva propuesta
-app.post('/api/proposta',verifyTokenMiddleware, (req, res) => {
-  const { titol, subtitol, contingut, autor, data, color } = req.body;
+app.post('/api/proposta', verifyTokenMiddleware, (req, res) => {
+  const { titol, subtitol, contingut, data, color, userId } = req.body;  // Ahora incluyes userId
 
-  const autorId = autor || 1;
-  const associacioId = 1;
-  const currentDate = data || new Date().toISOString().split('T')[0];
-  const proposalColor = '#' + (color || 'FFFFFF').toUpperCase();
+  console.log('Datos recibidos en el cuerpo:', req.body);
 
-  if (!titol || !subtitol || !contingut) {
-    return res.status(400).json({ description: "Invalid input. All fields except autor and idAsso are required." });
+  if (!titol || !subtitol || !contingut || !data) {
+      console.error('Faltan campos obligatorios en la solicitud.');
+      return res.status(400).json({ description: 'Invalid input. All fields are required.' });
   }
 
+  // Verificamos si el userId está presente
+  if (!userId) {
+      console.error('Información del usuario no disponible.');
+      return res.status(403).json({ description: 'Unauthorized. User information missing.' });
+  }
+
+  // Consultamos la base de datos para obtener el nombre y apellido del usuario
   const db = connectToDatabase();
+  const userQuery = 'SELECT nom, cognoms FROM USUARI WHERE id = ?';
 
-  const query = `
-    INSERT INTO PROPOSTA (titol, subtitol, contingut, autor, idAsso, data, color)
-    VALUES (?, ?, ?, ?, ?, ?, ?);
-  `;
-
-  const params = [titol, subtitol, contingut, autorId, associacioId, currentDate, proposalColor];
-
-  db.query(query, params, (err, result) => {
-    if (err) {
-      console.error('Error creating proposal:', err);
-      return res.status(500).send('Error creating proposal');
+  db.query(userQuery, [userId], (err, userResults) => {
+    if (err || userResults.length === 0) {
+      console.error('Error al recuperar la información del usuario');
+      return res.status(500).json({ description: 'Error retrieving user information.' });
     }
 
-    const newProposalId = result.insertId;
+    const autorName = `${userResults[0].nom} ${userResults[0].cognoms}`;
 
-    const newProposal = {
-      id: newProposalId,
-      titol,
-      subtitol,
-      contingut,
-      autor: autorId,
-      idAsso: associacioId,
-      data: currentDate,
-      color: proposalColor,
-    };
+    console.log('Usuario autenticado:', autorName);
 
-    res.status(201).json(newProposal);
-  });
+    const associacioId = 1;  // El valor de idAsso sigue siendo 1
+    const proposalColor = '#' + (color || 'FFFFFF').toUpperCase();
+    console.log('Color de la propuesta:', proposalColor);
 
-  db.end();
+    console.log('Conexión a la base de datos establecida.');
+  
+    const query = `
+        INSERT INTO PROPOSTA (titol, subtitol, contingut, autor, idAsso, data, color)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
+    `;
+
+    const params = [titol, subtitol, contingut, userId, associacioId, data, proposalColor]; // Usar userId en lugar de autorName
+
+    db.query(query, params, (err, result) => {
+        if (err) {
+            console.error('Error creando propuesta en la base de datos:', err);
+            return res.status(500).send('Error creating proposal');
+        }
+
+        console.log('Propuesta creada exitosamente con ID:', result.insertId);
+
+        res.status(201).json({
+            id: result.insertId,
+            titol,
+            subtitol,
+            contingut,
+            autor: userId, // Devolver el userId en lugar del nombre del autor
+            idAsso: associacioId,
+            data,
+            color: proposalColor,
+        });
+    });
+
+    db.end();
+});
 });
 
 
@@ -334,7 +355,6 @@ app.get('/api/comentaris/:idProp',verifyTokenMiddleware, (req, res) => {
 });
 
 // POST Endpoint per IDPROP con sockets
-// POST Endpoint per IDPROP amb sockets
 app.post('/api/comentaris/:idProp', verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
   const { idProp } = req.params;
@@ -357,11 +377,10 @@ app.post('/api/comentaris/:idProp', verifyTokenMiddleware, (req, res) => {
       return res.status(400).send('El comentario no puede estar vacío.');
     }
 
-    // Realizamos una consulta para obtener el nombre del autor
     const userQuery = 'SELECT nom, cognoms FROM USUARI WHERE id = ?';
     db.query(userQuery, [autorId], (err, userResults) => {
       if (err || userResults.length === 0) {
-        db.end(); // Cerrar la conexión si hay un error
+        db.end();
         return res.status(500).send('Error retrieving user information');
       }
 
@@ -375,11 +394,9 @@ app.post('/api/comentaris/:idProp', verifyTokenMiddleware, (req, res) => {
       db.query(query, [autorId, idProp, contenido], (err, results) => {
         if (err) {
           console.error('Error inserting comment:', err);
-          db.end(); // Cerrar la conexión si hay un error
+          db.end();
           return res.status(500).send('Error adding comment');
         }
-
-        // Creamos el comentario con el nombre correcto
         const newComment = {
           id: results.insertId,
           autor: { nomUsuari: userName },
@@ -387,11 +404,7 @@ app.post('/api/comentaris/:idProp', verifyTokenMiddleware, (req, res) => {
         };
 
         io.emit('newComment', { idProp, newComment });
-
-        // Enviamos la respuesta con el nombre correcto del autor
         res.status(200).json(newComment);
-
-        // Ahora que hemos enviado la respuesta, cerramos la conexión
         db.end();
       });
     });

@@ -17,6 +17,9 @@
                     </template>
                 </Card>
             </div>
+            <div class="create-button-container">
+                <button @click="goToCreateNoticia" class="create-button">Crear Nova Notícia</button>
+            </div>
         </div>
 
         <footer>
@@ -43,18 +46,22 @@ onMounted(async () => {
     }
 });
 
+const goToCreateNoticia = () => {
+  router.push({ path: '/noticies/add' });
+};
+
 </script>
 
 <style scoped>
 .main {
-  /* background-color: var(--main-color); */
-  padding: 1rem;
-  padding-bottom: 8rem;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 0;
-  height: calc(100vh - 4rem);
-  overflow-y: auto;
+    /* background-color: var(--main-color); */
+    padding: 1rem;
+    padding-bottom: 8rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    height: calc(100vh - 4rem);
+    overflow-y: auto;
 }
 
 .grid {
@@ -101,5 +108,24 @@ onMounted(async () => {
 .footer {
     font-size: 0.8rem;
     color: var(--accent-dark-color);
+}
+
+.create-button-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.create-button {
+  background-color: var(--secondary-light-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background-color: var(--secondary-dark-color);
 }
 </style>
