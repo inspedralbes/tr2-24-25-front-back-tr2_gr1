@@ -31,10 +31,10 @@ const io = new Server(server, {
 });
 
 const db = mysql2.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'tr2-g1',
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DB,
 });
 
 let news = [];
