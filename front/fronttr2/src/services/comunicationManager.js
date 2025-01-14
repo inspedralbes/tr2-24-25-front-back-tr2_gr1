@@ -314,16 +314,18 @@ export const getComentarios = async (idProp) => {
 };
 
 export const addComentario = async (idProp, comentario) => {
-    const loggedUsersStore = useLoggedUsers();
-    let user = loggedUsersStore.getUser();
+    const loggedUsersStore = useLoggedUsers(); // Asegúrate de que uses este store
+    let user = loggedUsersStore.currentUser; // Accede a la propiedad 'currentUser' directamente desde el store
     let token = "";
+
     if (!user || !user.token) {
-        noLogged
+        throw new Error('No se encontró el token. El usuario no está autenticado.');
     } else {
-        token = user.token;
+        token = user.token; // Aquí obtienes el token correctamente
     }
+
     try {
-        if (!currentUser.value || token == "") {
+        if (!user || token === "") {
             throw new Error('No se encontró el token. El usuario no está autenticado.');
         }
 
@@ -331,7 +333,7 @@ export const addComentario = async (idProp, comentario) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${currentUser.value.token}`,
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({ contenido: comentario }),
         });
