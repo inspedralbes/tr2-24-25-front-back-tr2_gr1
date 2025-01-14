@@ -12,14 +12,21 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import NavigationBar from '@/components/NavigationBar.vue';
+import { getNoticies } from '@/services/comunicationManager';
+
 
 const props = defineProps(['id']);
 const noticia = ref({});
 
 const noticies = ref([]);
-onMounted(() => {
-  noticies.value = getNoticies()
-  noticia.value = noticies.find(noticia => noticia.id == props.id);
+onMounted(async () => {
+  try {
+        noticies.value = await getNoticies();
+        console.log(noticies.value); // Agrega esta línea para ver qué datos llegan
+        noticia.value = noticies.value.find(noticia => noticia.id == props.id);
+    } catch (error) {
+        console.error('Error al obtenir les notícies:', error);
+    }
 
 })
 

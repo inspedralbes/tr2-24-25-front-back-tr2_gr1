@@ -35,6 +35,7 @@ const db = mysql2.createPool({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DB,
+    charset: 'utf8' 
 });
 
 let news = [];
@@ -66,7 +67,7 @@ app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
 app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
     try {
         const id = req.params.id;
-        const query = `SELECT id, titol, subtitol, contingut, autor, idAsso FROM noticia WHERE id = ${id}`;
+        const query = `SELECT id, titol, subtitol, contingut, autor, idAsso FROM NOTICIA WHERE id = ${id}`;
         db.query(query, (err, result) => {
             if (err) {
                 console.error('Error al obtenir la notícia:', err);
@@ -84,7 +85,7 @@ app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
 app.post('/api/noticia', verifyTokenMiddleware, (req, res) => {
     const { titol, subtitol, contingut, autor, idAsso } = req.body;
 
-    const validateAuthorQuery = `SELECT id FROM usuari WHERE id = '${autor}'`;
+    const validateAuthorQuery = `SELECT id FROM USUARI WHERE id = '${autor}'`;
     db.query(validateAuthorQuery, (err, result) => {
         if (err) {
             console.error('Error al validar el autor:', err);
@@ -95,7 +96,7 @@ app.post('/api/noticia', verifyTokenMiddleware, (req, res) => {
             return res.status(400).send('El autor no existe en la base de datos');
         }
 
-        const insertQuery = `INSERT INTO noticia (titol, subtitol, contingut, autor, idAsso) VALUES ('${titol}', '${subtitol}', '${contingut}', '${autor}', ${idAsso})`;
+        const insertQuery = `INSERT INTO NOTICIA (titol, subtitol, contingut, autor, idAsso) VALUES ('${titol}', '${subtitol}', '${contingut}', '${autor}', ${idAsso})`;
         db.query(insertQuery, (err, result) => {
             if (err) {
                 console.error('Error al crear la notícia:', err);
@@ -116,7 +117,7 @@ app.put('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
     const { titol, subtitol, contingut, autor, idAsso } = req.body;
 
     // Validar que el autor existe antes de actualizar la noticia
-    const validateAuthorQuery = `SELECT id FROM usuari WHERE id = '${autor}'`;
+    const validateAuthorQuery = `SELECT id FROM USUARI WHERE id = '${autor}'`;
     db.query(validateAuthorQuery, (err, result) => {
         if (err) {
             console.error('Error al validar el autor:', err);
@@ -129,7 +130,7 @@ app.put('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
 
         // Actualizar los campos de la noticia
         const updateQuery = `
-            UPDATE noticia 
+            UPDATE NOTICIA 
             SET 
                 titol = ?, 
                 subtitol = ?, 
@@ -163,7 +164,7 @@ app.put('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
 app.delete('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
     const id = req.params.id;
 
-    const deleteQuery = `DELETE FROM noticia WHERE id = ${id}`;
+    const deleteQuery = `DELETE FROM NOTICIA WHERE id = ${id}`;
     db.query(deleteQuery, (err, result) => {
         if (err) {
             console.error('Error al eliminar la notícia:', err);

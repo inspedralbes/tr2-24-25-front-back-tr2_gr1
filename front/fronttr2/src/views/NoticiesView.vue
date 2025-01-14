@@ -12,7 +12,7 @@
                     </template>
                     <template #footer>
                         <div class="flex gap-4 mt-1 footer">
-                            Per {{ noticia.autor }} el {{ noticia.updatedAt }}
+                            Esscrita per: {{ noticia.autor }}
                         </div>
                     </template>
                 </Card>
