@@ -47,6 +47,11 @@ const router = createRouter({
       component: () => import('../views/NoticiesView.vue'),
     },
     {
+      path: '/noticies/add',
+      name: 'AfegirNoticia',
+      component:  () => import('../views/newNoticia.vue'),
+    },
+    {
       path: '/noticies/:id',
       name: 'NotciaDetall',
       component:  () => import('../views/NotciaDetall.vue'),

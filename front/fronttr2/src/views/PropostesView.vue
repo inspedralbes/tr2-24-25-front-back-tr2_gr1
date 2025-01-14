@@ -2,13 +2,8 @@
   <main>
     <div class="pb-16 main">
       <div class="grid">
-        <Card 
-          style="width: 100%; overflow: hidden" 
-          v-for="proposta in propostes" 
-          class="cardNew" 
-          :key="proposta.id" 
-          @click="goToProposta(proposta.id)"
-        >
+        <Card style="width: 100%; overflow: hidden" v-for="proposta in propostes" class="cardNew" :key="proposta.id"
+          @click="goToProposta(proposta.id)">
           <template #title>
             <div class="title">{{ proposta.titol }}</div>
           </template>
@@ -25,15 +20,10 @@
 
       <!-- Botón para redirigir a la pantalla de creación de propuesta -->
       <div class="create-button-container">
-        <Button 
-          label="Crear Nueva Proposta" 
-          icon="pi pi-plus" 
-          @click="goToCreateProposta" 
-          class="create-button" 
-        />
+        <Button label="Crear Nueva Proposta" icon="pi pi-plus" @click="goToCreateProposta" class="create-button" />
       </div>
     </div>
-  
+
     <footer>
       <NavigationBar />
     </footer>

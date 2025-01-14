@@ -463,6 +463,7 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
         } else {
             token = user.token;
         }
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, imatge, autor, idAsso);
         const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
             method: 'POST',
             headers: {
@@ -475,6 +476,7 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
             const data = await response.json();
             console.log('Noticia created successfully:', data);
         } else if (response.status === 400) {
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, imatge, autor, idAsso);
             console.error('Invalid input');
         } else if (response.status === 401) {
             noLogged();

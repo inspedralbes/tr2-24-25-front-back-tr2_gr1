@@ -5,8 +5,7 @@
                 <Card style="width: 100%; overflow: hidden" v-for="noticia in noticies" class="cardNew"
                     :key="noticia.id" @click="router.push({ path: `/noticies/${noticia.id}` })">
                     <template #header>
-                        <img alt="user header" class="banner"
-                            :src="noticia.imatge || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlYTylxm7BIjHX7C0QOwEA7iEVEheDE65ukQ&s'" />
+                        <img alt="user header" class="banner" :src="noticia.imatge" />
                     </template>
                     <template #title>
                         <div class="title">{{ noticia.titol }}</div>
@@ -20,6 +19,9 @@
                         </div>
                     </template>
                 </Card>
+            </div>
+            <div class="create-button-container">
+                <button @click="goToCreateNoticia" class="create-button">Crear Nova Notícia</button>
             </div>
         </div>
 
@@ -47,18 +49,22 @@ onMounted(async () => {
     }
 });
 
+const goToCreateNoticia = () => {
+  router.push({ path: '/noticies/add' });
+};
+
 </script>
 
 <style scoped>
 .main {
-  /* background-color: var(--main-color); */
-  padding: 1rem;
-  padding-bottom: 8rem;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 0;
-  height: calc(100vh - 4rem);
-  overflow-y: auto;
+    /* background-color: var(--main-color); */
+    padding: 1rem;
+    padding-bottom: 8rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    height: calc(100vh - 4rem);
+    overflow-y: auto;
 }
 
 .grid {
@@ -105,5 +111,24 @@ onMounted(async () => {
 .footer {
     font-size: 0.8rem;
     color: var(--accent-dark-color);
+}
+
+.create-button-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.create-button {
+  background-color: var(--secondary-light-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background-color: var(--secondary-dark-color);
 }
 </style>

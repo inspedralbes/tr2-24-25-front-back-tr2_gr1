@@ -93,7 +93,7 @@ export default {
                         permisos: 'user',
                     });
                     if(response.state==true){
-                        router.push('/noticies');
+                        router.push('/show');
                     }
                 } catch (error) {
                     console.error('Error al crear el usuari:', error);
