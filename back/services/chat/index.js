@@ -29,7 +29,7 @@ const io = new Server(server, {
     }
 });
 
-mongoose.connect(process.env.MONGODB_URL)
+mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('Connectat a MongoDB'))
     .catch((err) => console.error('Error al connectar a MongoDB', err));
 
@@ -53,6 +53,7 @@ io.on('connection', (socket) => {
             ]).then(([chatData, messagesData]) => {
 
                 chat.push({ room: data, participants: chatData.chat?.participants || [], messages: messagesData.valid == true ? messagesData.messages : [] });
+                console.log("sending messages");
                 socket.emit('allMessages', chat.find(room => room.room === data).messages);
     
                 socket.join(data);
