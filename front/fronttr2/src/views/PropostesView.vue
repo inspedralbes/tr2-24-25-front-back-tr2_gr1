@@ -12,7 +12,7 @@
           </template>
           <template #footer>
             <div class="flex gap-4 mt-1 footer">
-              Per {{ proposta.autor.nomUsuari }} ,finalitza el {{ proposta.data }}
+              Per {{ proposta.autor.nomUsuari }}, finalitza el {{ proposta.data }}
             </div>
           </template>
         </Card>

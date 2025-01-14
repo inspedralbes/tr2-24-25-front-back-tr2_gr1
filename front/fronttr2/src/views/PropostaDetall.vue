@@ -4,7 +4,7 @@
     <h3>{{ proposta?.subtitol || 'Cargando...' }}</h3>
     <p>{{ proposta?.contingut || 'Cargando contenido...' }}</p>
     <p class="author" v-if="proposta?.autor?.nomUsuari">
-      Per {{ proposta.autor.nomUsuari }} el {{ proposta.data }}
+      Per {{ proposta.autor.nomUsuari }}, el {{ proposta.data }}
     </p>
 
     <div class="vote-section">
