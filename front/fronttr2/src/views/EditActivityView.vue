@@ -39,8 +39,6 @@
               @click="updateProposta"
             />
           </div>
-  
-          <!-- Diálogos para mostrar mensajes -->
           <Dialog :visible="visible" modal header="Atenció" :style="{ width: '25rem' }" class="bg-white">
             <span class="text-surface-500 dark:text-surface-400 block mb-8">Es requereixen tots els camps obligatoris</span>
             <div class="flex justify-end gap-2">
