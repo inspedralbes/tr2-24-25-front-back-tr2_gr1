@@ -87,4 +87,4 @@ A MongoDB guardem la següent informació:
 - Votacions de propostes
 
 # Esquema de pantalles
-- PENPOT: https://design.penpot.app/#/view/a0a8e792-b2d2-818e-8005-5cde9cd6dfe5?page-id=a0a8e792-b2d2-818e-8005-5cde9cd6dfe6&section=interactions&frame-id=e9c0f044-26f2-8008-8005-5e4f1c789fff&index=0&share-id=a0a8e792-b2d2-818e-8005-5f7d9dc41abf
+- [Penpot](https://design.penpot.app/#/view/a0a8e792-b2d2-818e-8005-5cde9cd6dfe5?page-id=a0a8e792-b2d2-818e-8005-5cde9cd6dfe6&section=interactions&frame-id=e9c0f044-26f2-8008-8005-5e4f1c789fff&index=0&share-id=a0a8e792-b2d2-818e-8005-5f7d9dc41abf)
