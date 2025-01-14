@@ -11,7 +11,7 @@ import { verifyTokenMiddleware } from '../../tokens.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.NEWS_PORT;
 
 app.use(cors({
     origin: '*',
@@ -31,10 +31,10 @@ const io = new Server(server, {
 });
 
 const db = mysql2.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'tr2-g1',
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DB,
 });
 
 let news = [];
@@ -59,7 +59,7 @@ app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
         });
     } catch (err) {
         console.error('Error al obtener las noticias:', err);
-        res.status(500).send('Error al obtener las noticias');
+        res.status(500).send('Error al obtener las noticias', err);
     }
 });
 

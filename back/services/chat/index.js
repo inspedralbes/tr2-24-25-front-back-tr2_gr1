@@ -5,7 +5,7 @@ dotenv.config();
 
 import express from 'express';
 import { createServer, get } from 'node:http';
-import { join } from 'node:path';
+// import { join } from 'node:path';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -29,7 +29,7 @@ const io = new Server(server, {
     }
 });
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGODB_URL)
     .then(() => console.log('Connectat a MongoDB'))
     .catch((err) => console.error('Error al connectar a MongoDB', err));
 
@@ -123,10 +123,8 @@ function findSocketRoom(socket) {
     }
     return null;
 }
-
-
-// const PORT = process.env.PORT || 3001;
-const PORT = 3001;
+const PORT = process.env.CHAT_PORT;
+// const PORT = 3001;
 
 server.listen(PORT, () => {
     console.log(`Servidor en funcionament a http://localhost:${PORT}`);

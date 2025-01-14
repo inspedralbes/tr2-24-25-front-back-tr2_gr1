@@ -1,9 +1,9 @@
 name: TR2G1 PRODUCTION Deploy Actions
-run-name: ${{ github.actor }} is deploying TR2G1 on production ⭐
+run-name: ${{ github.actor }} is deploying Associa't on production ⭐
 on:
   push:
     branches:
-      - main
+      - feature-revisit-github-actions
 # a
 jobs:
   STOP-SCREEN:
@@ -45,11 +45,17 @@ jobs:
 
           cd ./back
 
+          echo "ROOT_PORT=${{ secrets.BACK_PORT }}" >> .env 
+          echo "CHAT_PORT=${{ secrets.CHAT_PORT }}" >> .env
+          echo "ACTIVITY_PORT=${{ secrets.ACTIVITY_PORT }}" >> .env
+          echo "NEWS_PORT=${{ secrets.NEWS_PORT }}" >> .env
+
           echo "MYSQL_HOST=${{ secrets.MYSQL_HOST }}" >> .env
           echo "MYSQL_DB=${{ secrets.MYSQL_DB }}" >> .env
           echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PRE_PASSWORD }}" >> .env
-          echo "PORT=${{ secrets.BACK_PORT }}" >> .env
+          echo "MONGO_URL=${{ secrets.MONGO_URL }}" >> .env
+          echo "SECRET_KEY=${{ secrets.TOKEN_KEY }}" >> .env
 
           cd ${{ github.workspace }}
 
@@ -85,7 +91,14 @@ jobs:
           
           cd front/fronttr2
 
+          echo "setting up .env.production"
+
           echo "VITE_API_ROUTE=${{ secrets.API_ROUTE }}" > .env.production
+          echo "VITE_CHAT_ROUTE=${{ secrets.API_HOST }}:${{ secrets.CHAT_PORT }}" >> .env.production
+          echo "VITE_ACTIVITY_ROUTE=${{ secrets.API_HOST }}:${{ secrets.ACTIVITY_PORT }}" >> .env.production
+          echo "VITE_NEWS_ROUTE=${{ secrets.API_HOST }}:${{ secrets.NEWS_PORT }}" >> .env.production
+
+          echo "building the project"
 
           npm run build
 

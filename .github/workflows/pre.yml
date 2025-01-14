@@ -45,11 +45,17 @@ jobs:
 
           cd ./back
 
+          echo "ROOT_PORT=${{ secrets.PRE_BACK_PORT }}" >> .env
+          echo "CHAT_PORT=${{ secrets.PRE_CHAT_PORT }}" >> .env
+          echo "ACTIVITY_PORT=${{ secrets.PRE_ACTIVITY_PORT }}" >> .env
+          echo "NEWS_PORT=${{ secrets.PRE_NEWS_PORT }}" >> .env
           echo "MYSQL_HOST=${{ secrets.MYSQL_PRE_HOST }}" >> .env
           echo "MYSQL_DB=${{ secrets.MYSQL_PRE_DB }}" >> .env
           echo "MYSQL_USER=${{ secrets.MYSQL_PRE_USER }}" >> .env
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PRE_PASSWORD }}" >> .env
-          echo "PORT=${{ secrets.PRE_BACK_PORT }}" >> .env
+          echo "MONGO_URL=${{ secrets.MONGO_URL }}" >> .env
+          echo "SECRET_KEY=${{ secrets.TOKEN_KEY }}" >> .env
+         
 
           cd ${{ github.workspace }}
 
@@ -85,7 +91,10 @@ jobs:
           
           cd front/fronttr2
 
-          echo "VITE_API_ROUTE=${{ secrets.PRE_API_ROUTE }}" > .env.production
+          echo "VITE_API_ROUTE=${{ secrets.PRE_API_ROUTE }}" >> .env.production
+          echo "VITE_CHAT_ROUTE=${{ secrets.PRE_CHAT_ROUTE }}" >> .env.production
+          echo "VITE_ACTIVITY_ROUTE=${{ secrets.PRE_ACTIVITY_ROUTE }}" >> .env.production
+          echo "VITE_NEWS_ROUTE=${{ secrets.PRE_NEWS_ROUTE }}" >> .env.production
 
           npm run build
 

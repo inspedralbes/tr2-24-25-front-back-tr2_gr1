@@ -20,8 +20,11 @@ dotenv.config();
 import { login, verifyTokenMiddleware, verifyToken } from './tokens.js';
 import { stat } from 'node:fs';
 
+try {
 
-async function hashPassword(contrasenya){
+
+
+async function hashPassword(contrasenya) {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(contrasenya, salt);
   return hashedPassword
@@ -41,7 +44,7 @@ const server = createServer(app);
 const io = new Server(server);
 
 // Variables de entorno
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.ROOT_PORT;
 const SECRET_KEY = process.env.SECRET_KEY;
 
 
@@ -56,8 +59,21 @@ const connectionConfig = {
 };
 
 function connectToDatabase() {
-  const connection = mysql.createConnection(connectionConfig);
-  return connection;
+
+  try {
+
+    const connection = mysql.createConnection(connectionConfig);
+    connection.on('error', (err) => { 
+        console.error('Error  en MySQL:', err);
+        process.exit(1);
+      
+    });
+
+    return connection;
+
+  } catch (e) {
+    console.log(e.stack);
+  }
 }
 
 
@@ -68,14 +84,27 @@ connection.connect((err) => {
   if (err) {
     console.error('Error conectando a MySQL:', err);
     process.exit(1);
+  } else {
+    console.log('Conectado a MySQL!');
+    connection.end();
+    console.log("conexion cerrada");
   }
-  console.log('Conectado a MySQL!');
 });
+
+function verifyTokenMiddleware(req, res, next) {
+  const verificacio = verifyToken(SECRET_KEY, req);
+  console.log(verificacio.message);
+  if (verificacio.status === 401) {
+    return res.status(401).json(verificacio);
+  }
+  next();
+};
 
 
 // --- ENDPOINTS PARA ASSOCIACIO ---
 // GET Endpoint
-app.get('/api/associacio',verifyTokenMiddleware, (req, res) => {
+app.get('/api/associacio', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const query = 'SELECT id, nom, descripcio FROM ASSOCIACIO';
 
@@ -92,7 +121,8 @@ app.get('/api/associacio',verifyTokenMiddleware, (req, res) => {
 });
 
 // POST Endpoint
-app.post('/api/associacio',verifyTokenMiddleware, (req, res) => {
+app.post('/api/associacio', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { nom, descripcio } = req.body;
 
@@ -125,7 +155,8 @@ app.post('/api/associacio',verifyTokenMiddleware, (req, res) => {
 });
 
 // DELETE Endpoint
-app.delete('/api/associacio',verifyTokenMiddleware, (req, res) => {
+app.delete('/api/associacio', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { id } = req.body;
 
@@ -153,7 +184,8 @@ app.delete('/api/associacio',verifyTokenMiddleware, (req, res) => {
 });
 
 // PUT Endpoint
-app.put('/api/associacio',verifyTokenMiddleware, (req, res) => {
+app.put('/api/associacio', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { id, nom, descripcio } = req.body;
 
@@ -188,6 +220,7 @@ app.put('/api/associacio',verifyTokenMiddleware, (req, res) => {
 // --- ENDPOINTS PARA USUARI ---
 // GET Endpoint
 app.get('/api/usuari', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const query = 'SELECT id, nom, cognoms, contrasenya, correu, imatge, permisos FROM USUARI';
 
@@ -205,6 +238,7 @@ app.get('/api/usuari', verifyTokenMiddleware, (req, res) => {
 
 // POST Endpoint
 app.post('/api/usuari', async (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
 
@@ -253,6 +287,7 @@ app.post('/api/usuari', async (req, res) => {
 
 // DELETE Endpoint
 app.delete('/api/usuari', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { id } = req.body;
 
@@ -279,6 +314,7 @@ app.delete('/api/usuari', verifyTokenMiddleware, (req, res) => {
 
 // PUT Endpoint
 app.put('/api/usuari', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const { id, nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
   console.log(req.body);
@@ -316,7 +352,8 @@ app.put('/api/usuari', verifyTokenMiddleware, (req, res) => {
 // --- ENDPOINTS PER PROPOSTA ---
 
 // GET Endpoint
-app.get('/api/proposta',verifyTokenMiddleware, (req, res) => {
+app.get('/api/proposta', verifyTokenMiddleware, (req, res) => {
+  console.log("pidiendo")
   const db = connectToDatabase();
   const query = `
     SELECT 
@@ -358,13 +395,14 @@ app.get('/api/proposta',verifyTokenMiddleware, (req, res) => {
 });
 
 // UPDATE Endpoint
-app.put('/api/proposta',verifyTokenMiddleware, (req, res) => {
+app.put('/api/proposta', verifyTokenMiddleware, (req, res) => {
   const { id, titol, subtitol, contingut, autor, idAsso, data } = req.body;
 
   if (!id || !titol || !subtitol || !contingut || !autor || !idAsso || !data) {
     return res.status(400).json({ description: "Invalid input" });
   }
 
+  console.log("pidiendo")
   const db = connectToDatabase();
   const query = `
     UPDATE PROPOSTA 
@@ -424,7 +462,6 @@ fs.readdirSync(path.join(__dirname, 'services')).forEach(file => {
     console.log(`File not found: ${error}`);
   }
 
-  console.log(services.find(service => service.name === file).logs);
 
   try {
     let data = fs.readFileSync(path.join(__dirname, 'logs') + `/${file}.error.log`, 'utf8');
@@ -449,13 +486,10 @@ app.get('/services', (req, res) => {
 
 app.post('/changeServiceState', (req, res) => {
 
-  console.log(req.body);
 
   const { id } = req.body
 
   const service = services.find(service => service.id === id);
-
-  console.log(service);
 
   if (service.state === 'tancat') {
     startProcess(service);
@@ -470,8 +504,8 @@ app.post('/changeServiceState', (req, res) => {
 });
 
 // --- ENDPOINTS PER ACTIVITIES ---
-app.get('/api/activities',verifyTokenMiddleware, (req,res)=>{
-  let data=[
+app.get('/api/activities', verifyTokenMiddleware, (req, res) => {
+  let data = [
     {
       id: 1,
       date: new Date(2025, 0, 1),
@@ -500,10 +534,16 @@ app.get('/api/activities',verifyTokenMiddleware, (req,res)=>{
   res.status(200).json(data);
 
 })// --- Login ENDPOINT ---
-app.post('/api/login', login(connectToDatabase(), SECRET_KEY));
+app.post('/api/login', (req, res) => {
+  const db = connectToDatabase();
+  const db2 = connectToDatabase();
+  login(db, db2, SECRET_KEY, req, res);
+});
+
 
 app.post('/asignaUsuariAssociacio', (req, res) => {
   const { idUsu, idAsso } = req.body;
+  console.log("pidiendo")
   const db = connectToDatabase();
 
   // Validación de entrada
@@ -511,15 +551,15 @@ app.post('/asignaUsuariAssociacio', (req, res) => {
     return res.status(400).json({ message: 'Falten paràmetres' });
   }
 
-  // Conexión a la base de datos
-  db.connect((err) => {
-    if (err) {
-      console.error('Error connecting to the database', err);
-      return res.status(500).json({ message: 'Error connecting to the database' });
-    }
+  // // Conexión a la base de datos
+  // db.connect((err) => {
+  //   if (err) {
+  //     console.error('Error connecting to the database', err);
+  //     return res.status(500).json({ message: 'Error connecting to the database' });
+  //   }
 
     // Consulta para insertar la asignación
-    const query = 'INSERT INTO usuari_associacio (idUsu, idAsso) VALUES (?, ?)';
+    const query = 'INSERT INTO USUARI_ASSOCIACIO (idUsu, idAsso) VALUES (?, ?)';
     db.query(query, [idUsu, idAsso], (err, result) => {
       db.end(); // Cerrar la conexión
 
@@ -536,7 +576,7 @@ app.post('/asignaUsuariAssociacio', (req, res) => {
       };
       res.status(201).json(createdAssociation); // Enviar el resultado con el nuevo ID
     });
-  });
+  // });
 });
 
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
@@ -565,19 +605,15 @@ function startProcess(service) {
   });
 
   service.process = process;
-  
-  console.log("entering");
 
   process.stdout.on('data', data => {
     const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
-    console.log(date);
     service.logs.push({ log: data.toString(), date: date });
     saveLogs(service, { log: data.toString(), date: date });
   });
 
   process.stderr.on('data', data => {
     const date = new Date(Date.now("YYYY-MM-DD HH:mm:ss")).toISOString().split('.')[0].replace('T', ' ');
-    console.log(date);
     service.errorLogs.push({ log: data.toString(), date: date });
     saveErrorLogs(service, { log: data.toString(), date: date });
 
@@ -593,7 +629,6 @@ function startProcess(service) {
 }
 
 function stopProcess(service) {
-  console.log(process.platform);
   service.process.kill();
   service.process = null;
   service.state = 'tancat';
@@ -615,7 +650,6 @@ function saveLogs(service, objectToSave) {
 }
 
 function saveErrorLogs(service, objectToSave) {
-  console.log(objectToSave);
   const { log, date } = objectToSave;
 
   fs.existsSync(path.join(__dirname, 'logs')) || fs.mkdirSync(path.join(__dirname, 'logs'));
@@ -652,3 +686,8 @@ function checkServiceStatus(serviceName) {
 server.listen(PORT, () => {
   console.log(`Server active at port ${PORT}`);
 });
+
+} catch (e) {
+  console.log("LO TENEMOS");
+  console.log(e.stack);
+}
