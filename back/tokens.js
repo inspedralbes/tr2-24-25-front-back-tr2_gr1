@@ -99,10 +99,14 @@ export function login(db, SECRET_KEY) {
   }
 }
 export function verifyTokenMiddleware(req, res, next) {
+  console.log('Iniciando verificación del token...');
   const verificacio = verifyToken(SECRET_KEY, req);
-  console.log(verificacio.message);
+  console.log('Resultado de la verificación del token:', verificacio);
+  
   if (verificacio.status === 401) {
+    console.log('Token inválido o expirado.');
     return res.status(401).json(verificacio);
   }
+  
   next();
 }

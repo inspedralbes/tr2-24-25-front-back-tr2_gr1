@@ -626,16 +626,22 @@ export const getActivities = async () => {
     }
 };
 
-export const crearProposta = async (titol, subtitol, contingut, idAsso, data, color) => {
+export const crearProposta = async (titol, subtitol, contingut, userId, data, color) => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
         let token = "";
+
         if (!user || !user.token) {
-            noLogged
+            console.error('No hay usuario autenticado o token disponible.');
+            throw new Error('No user is logged in.');
         } else {
             token = user.token;
         }
+
+        console.log('Enviando solicitud con el siguiente token:', token);
+        console.log('Datos enviados al backend:', { titol, subtitol, contingut, userId, data, color });
+
         const response = await fetch(`${URLPROPOSTES}/api/proposta`, {
             method: 'POST',
             headers: {
@@ -646,23 +652,25 @@ export const crearProposta = async (titol, subtitol, contingut, idAsso, data, co
                 titol,
                 subtitol,
                 contingut,
-                autor: 1,
-                idAsso: idAsso || 1,
+                idAsso: 1,  // Mantén el valor fijo de idAsso
+                userId,     // Ahora pasamos correctamente el userId
                 data,
                 color,
             }),
         });
 
+        console.log('Respuesta del servidor:', response);
+
         if (response.ok) {
             const data = await response.json();
-            console.log('Proposta creada correctamente:', data);
+            console.log('Propuesta creada exitosamente:', data);
             return data;
         } else {
-            console.error('Error al crear la proposta:', response.status);
+            console.error('Error en la respuesta del servidor. Código de estado:', response.status);
             throw new Error('Error al crear la proposta');
         }
     } catch (err) {
-        console.error('Error durante la petición:', err);
+        console.error('Error durante la solicitud:', err);
         throw err;
     }
 };
