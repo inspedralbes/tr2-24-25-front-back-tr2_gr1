@@ -58,7 +58,8 @@ const textarea = ref(null);
 const voted = ref(false);
 
 const loggedUsersStore = useLoggedUsers(); // Usamos el store directamente
-const socket = io('http://localhost:3003');
+const URL = import.meta.env.VITE_CHAT_ROUTE
+const socket = io(URL);
 
 onMounted(async () => {
   try {
