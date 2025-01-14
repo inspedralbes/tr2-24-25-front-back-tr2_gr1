@@ -24,15 +24,6 @@
                     </FloatLabel>
                 </div>
 
-                <div class="card flex flex-wrap justify-center items-end gap-4">
-                    <FloatLabel variant="in">
-                        <input type="file" id="image_label" @change="onFileChange" class="file-input" />
-                        <Button class="button secondary-button" label="Seleccionar Imatge" icon="pi pi-image"
-                            iconPos="left" @click="selectImage" />
-                    </FloatLabel>
-                </div>
-
-
                 <!-- Botón de crear noticia -->
                 <div class="card flex flex-wrap justify-center items-end gap-4">
                     <Button class="button secondary-button" label="Crear" icon="pi pi-plus" iconPos="left"
@@ -130,7 +121,7 @@ async function newNoticia() {
             titol: titol.value,
             subtitol: subtitol.value,
             contingut: contingut.value,
-            imatge: '', // Aquí puedes asignar el valor correspondiente para la imagen
+            // imatge: '', // Aquí puedes asignar el valor correspondiente para la imagen
             autor: userId,
             idAsso: currentAssociacio
         });

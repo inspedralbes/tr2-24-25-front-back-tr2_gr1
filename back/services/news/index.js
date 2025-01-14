@@ -42,7 +42,7 @@ let news = [];
 app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
     const id = req.params.id;
     try {
-        const queryNoticia = 'SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM NOTICIA WHERE idAsso = ?';
+        const queryNoticia = 'SELECT id, titol, subtitol, contingut, autor, idAsso FROM NOTICIA WHERE idAsso = ?';
         db.query(queryNoticia, [id], (err, result) => {
             if (err) {
                 console.error('Error al obtener las noticias:', err);
@@ -66,7 +66,7 @@ app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
 app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
     try {
         const id = req.params.id;
-        const query = `SELECT id, titol, subtitol, contingut, imatge, autor, idAsso FROM noticia WHERE id = ${id}`;
+        const query = `SELECT id, titol, subtitol, contingut, autor, idAsso FROM noticia WHERE id = ${id}`;
         db.query(query, (err, result) => {
             if (err) {
                 console.error('Error al obtenir la notícia:', err);
@@ -82,7 +82,7 @@ app.get('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
 });
 
 app.post('/api/noticia', verifyTokenMiddleware, (req, res) => {
-    const { titol, subtitol, contingut, imatge, autor, idAsso } = req.body;
+    const { titol, subtitol, contingut, autor, idAsso } = req.body;
 
     const validateAuthorQuery = `SELECT id FROM usuari WHERE id = '${autor}'`;
     db.query(validateAuthorQuery, (err, result) => {
@@ -95,7 +95,7 @@ app.post('/api/noticia', verifyTokenMiddleware, (req, res) => {
             return res.status(400).send('El autor no existe en la base de datos');
         }
 
-        const insertQuery = `INSERT INTO noticia (titol, subtitol, contingut, imatge, autor, idAsso) VALUES ('${titol}', '${subtitol}', '${contingut}', '${imatge}', '${autor}', ${idAsso})`;
+        const insertQuery = `INSERT INTO noticia (titol, subtitol, contingut, autor, idAsso) VALUES ('${titol}', '${subtitol}', '${contingut}', '${autor}', ${idAsso})`;
         db.query(insertQuery, (err, result) => {
             if (err) {
                 console.error('Error al crear la notícia:', err);
@@ -113,7 +113,7 @@ app.post('/api/noticia', verifyTokenMiddleware, (req, res) => {
 
 app.put('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
     const id = req.params.id; // ID de la noticia a editar
-    const { titol, subtitol, contingut, imatge, autor, idAsso } = req.body;
+    const { titol, subtitol, contingut, autor, idAsso } = req.body;
 
     // Validar que el autor existe antes de actualizar la noticia
     const validateAuthorQuery = `SELECT id FROM usuari WHERE id = '${autor}'`;
@@ -134,13 +134,12 @@ app.put('/api/noticia/:id', verifyTokenMiddleware, (req, res) => {
                 titol = ?, 
                 subtitol = ?, 
                 contingut = ?, 
-                imatge = ?, 
                 autor = ?, 
                 idAsso = ? 
             WHERE id = ?
         `;
 
-        const values = [titol, subtitol, contingut, imatge, autor, idAsso, id];
+        const values = [titol, subtitol, contingut, autor, idAsso, id];
 
         db.query(updateQuery, values, (err, result) => {
             if (err) {

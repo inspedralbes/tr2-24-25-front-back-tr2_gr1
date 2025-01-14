@@ -453,7 +453,7 @@ export const getNoticia = async (id) => {
     }
 };
 
-export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor, idAsso }) => {
+export const createNoticia = async ({ titol, subtitol, contingut, autor, idAsso }) => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
@@ -463,20 +463,20 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
         } else {
             token = user.token;
         }
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, imatge, autor, idAsso);
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, autor, idAsso);
         const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + user.token
             },
-            body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
+            body: JSON.stringify({ titol, subtitol, contingut, autor, idAsso }),
         });
         if (response.ok) {
             const data = await response.json();
             console.log('Noticia created successfully:', data);
         } else if (response.status === 400) {
-            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, imatge, autor, idAsso);
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, autor, idAsso);
             console.error('Invalid input');
         } else if (response.status === 401) {
             noLogged();
@@ -488,7 +488,7 @@ export const createNoticia = async ({ titol, subtitol, contingut, imatge, autor,
     }
 };
 
-export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, autor, idAsso }) => {
+export const editNoticia = async ({ id, titol, subtitol, contingut, autor, idAsso }) => {
     try {
         const loggedUsersStore = useLoggedUsers();
         let user = loggedUsersStore.getUser();
@@ -504,7 +504,7 @@ export const editNoticia = async ({ id, titol, subtitol, contingut, imatge, auto
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + user.token
             },
-            body: JSON.stringify({ titol, subtitol, contingut, imatge, autor, idAsso }),
+            body: JSON.stringify({ titol, subtitol, contingut, autor, idAsso }),
         });
         if (response.ok) {
             const data = await response.json();
