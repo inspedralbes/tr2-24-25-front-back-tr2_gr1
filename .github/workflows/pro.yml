@@ -93,9 +93,9 @@ jobs:
 
           echo "VITE_API_ROUTE=${{ secrets.API_ROUTE }}" > .env.production
 
-          echo "VITE_CHAT_ROUTE=${{ secrets.MYSQL_HOST }}:${{ secrets.CHAT_PORT }}" >> .env.production
-          echo "VITE_ACTIVITY_ROUTE=${{ secrets.MYSQL_HOST }}:${{ secrets.ACTIVITY_PORT }}" >> .env.production
-          echo "VITE_NEWS_ROUTE=${{ secrets.MYSQL_HOST }}:${{ secrets.NEWS_PORT }}" >> .env.production
+          echo "VITE_CHAT_ROUTE=${{ secrets.API_HOST }}:${{ secrets.CHAT_PORT }}" >> .env.production
+          echo "VITE_ACTIVITY_ROUTE=${{ secrets.API_HOST }}:${{ secrets.ACTIVITY_PORT }}" >> .env.production
+          echo "VITE_NEWS_ROUTE=${{ secrets.API_HOST }}:${{ secrets.NEWS_PORT }}" >> .env.production
 
           npm run build
 
