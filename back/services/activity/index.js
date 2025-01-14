@@ -214,7 +214,7 @@ app.get('/api/activities/:idAsso',verifyTokenMiddleware, (req, res) => {
   
   // UNION ALL
   const query = `
-  SELECT data, color, titol, subtitol, contingut, color
+  SELECT id, data, color, titol, subtitol, contingut, color
   FROM PROPOSTA
   WHERE idAsso = ? AND data >= CURRENT_DATE;`;
 
@@ -229,6 +229,7 @@ db.query(query, params, (err, results) => {
   console.log('Activities retrieved:', results);
 
   const formattedResults = results.map(activity => ({
+    id: activity.id,
     date: activity.data,
     color: activity.color,
     label: activity.titol,
@@ -247,7 +248,7 @@ app.post('/api/proposta',verifyTokenMiddleware, (req, res) => {
   const autorId = autor || 1;
   const associacioId = 1;
   const currentDate = data || new Date().toISOString().split('T')[0];
-  const proposalColor = color || '#FFFFFF';
+  const proposalColor = '#' + (color || 'FFFFFF').toUpperCase();
 
   if (!titol || !subtitol || !contingut) {
     return res.status(400).json({ description: "Invalid input. All fields except autor and idAsso are required." });

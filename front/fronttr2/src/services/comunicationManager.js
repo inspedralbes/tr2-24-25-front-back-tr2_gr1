@@ -561,7 +561,7 @@ export const asignaUsuariAssociacio = async (idUsu, idAsso) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${currentUser.value.token}`,
+                'Authorization': `Bearer ${user.token}`,
             },
             body: JSON.stringify({ idUsu, idAsso }),
         });
@@ -587,10 +587,13 @@ export const getActivities = async () => {
         if (!user || !user.token) {
             noLogged
         }
+        else {
+            token = user.token;
+        }
 
         let currentAssiciacio = user.currentAssiciacio
         // user.currentAsso
-        const response = await fetch(`${URLPROPOSTES}/api/activities/` + user.currentAssiciacio, {
+        const response = await fetch(`${URLPROPOSTES}/api/activities/` + currentAssiciacio, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

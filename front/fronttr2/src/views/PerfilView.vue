@@ -41,7 +41,7 @@
                     <Button class="secondary-button" label="Editar Perfil" @click="visible = true" />
                 </div>
                 <Dialog :visible="visible" modal header="Edit Profile" :style="{ width: '25rem' }">
-                    <span class="text-surface-500 dark:text-surface-400 block mb-8">Edita el teu perfil.</span>
+                    <span class="text-surface-500 dark:text-surface-400 block mb-8">Editar el teu perfil.</span>
                     <div class="flex items-center gap-4 mb-4">
                         <label for="username" class="font-semibold w-24">Nom</label>
                         <InputText id="username" v-model="user.nom" class="flex-auto" autocomplete="off" />

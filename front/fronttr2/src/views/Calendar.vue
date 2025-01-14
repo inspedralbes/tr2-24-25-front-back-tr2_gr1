@@ -26,7 +26,7 @@
       </template>
       
       <div v-for="(data, index) in dayData" :key="index">
-        <h3 :style="{ color: data.bar }"><a :href="data.link" >{{ data.label }}</a></h3>
+        <h3 :style="{ color: data.bar }"><a @click="redirect(data.id)">{{ data.label }}</a></h3>
         
       </div>
       
@@ -37,9 +37,10 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import NavigationBar from "@/components/NavigationBar.vue";
+import NavigationBar from "@/components/NavigationBar.vue"
 import Dialog from "primevue/dialog";
 import {getActivities} from "@/services/comunicationManager.js"
+import router from "@/router";
 
 const attrs = ref([]);
 const dayData = ref([]);
@@ -67,12 +68,13 @@ function onDayClickHandler({ date }) {
 
 function transformEventsToDates(date) {
   date.forEach((element) => {
+    console.log(element)
     attrs.value.push({
+      id: element.id,
       dates: element.date,
       bar:{style: {
         backgroundColor: element.color,
       }} ,
-      link: element.link,
       label: element.label,
       smDescription: element.subtitol,
       contingut: element.contingut,
@@ -86,6 +88,10 @@ onMounted(async () => {
   
   transformEventsToDates(events);
 });
+
+function redirect(id) {
+  router.push('/propostes/'+id);
+}
 </script>
 
 <style>
