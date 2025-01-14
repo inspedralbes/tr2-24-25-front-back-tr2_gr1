@@ -243,7 +243,7 @@ db.query(query, params, (err, results) => {
 
 // POST Endpoint para crear una nueva propuesta
 app.post('/api/proposta', verifyTokenMiddleware, (req, res) => {
-  const { titol, subtitol, contingut, data, color, userId } = req.body;  // Ahora incluyes userId
+  const { titol, subtitol, contingut, data, color, userId } = req.body;
 
   console.log('Datos recibidos en el cuerpo:', req.body);
 
@@ -252,13 +252,11 @@ app.post('/api/proposta', verifyTokenMiddleware, (req, res) => {
       return res.status(400).json({ description: 'Invalid input. All fields are required.' });
   }
 
-  // Verificamos si el userId está presente
   if (!userId) {
       console.error('Información del usuario no disponible.');
       return res.status(403).json({ description: 'Unauthorized. User information missing.' });
   }
 
-  // Consultamos la base de datos para obtener el nombre y apellido del usuario
   const db = connectToDatabase();
   const userQuery = 'SELECT nom, cognoms FROM USUARI WHERE id = ?';
 
@@ -272,7 +270,7 @@ app.post('/api/proposta', verifyTokenMiddleware, (req, res) => {
 
     console.log('Usuario autenticado:', autorName);
 
-    const associacioId = 1;  // El valor de idAsso sigue siendo 1
+    const associacioId = 1;
     const proposalColor = '#' + (color || 'FFFFFF').toUpperCase();
     console.log('Color de la propuesta:', proposalColor);
 
@@ -283,7 +281,7 @@ app.post('/api/proposta', verifyTokenMiddleware, (req, res) => {
         VALUES (?, ?, ?, ?, ?, ?, ?);
     `;
 
-    const params = [titol, subtitol, contingut, userId, associacioId, data, proposalColor]; // Usar userId en lugar de autorName
+    const params = [titol, subtitol, contingut, userId, associacioId, data, proposalColor];
 
     db.query(query, params, (err, result) => {
         if (err) {
@@ -298,7 +296,7 @@ app.post('/api/proposta', verifyTokenMiddleware, (req, res) => {
             titol,
             subtitol,
             contingut,
-            autor: userId, // Devolver el userId en lugar del nombre del autor
+            autor: userId,
             idAsso: associacioId,
             data,
             color: proposalColor,
@@ -311,7 +309,6 @@ app.post('/api/proposta', verifyTokenMiddleware, (req, res) => {
 
 
 // --- ENDPOINTS PARA COMENTARIS ---
-// GET Endpoint per IDPROP
 // GET Endpoint per IDPROP con sockets
 app.get('/api/comentaris/:idProp',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();

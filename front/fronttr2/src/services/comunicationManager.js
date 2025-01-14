@@ -314,14 +314,14 @@ export const getComentarios = async (idProp) => {
 };
 
 export const addComentario = async (idProp, comentario) => {
-    const loggedUsersStore = useLoggedUsers(); // Asegúrate de que uses este store
-    let user = loggedUsersStore.currentUser; // Accede a la propiedad 'currentUser' directamente desde el store
+    const loggedUsersStore = useLoggedUsers();
+    let user = loggedUsersStore.currentUser;
     let token = "";
 
     if (!user || !user.token) {
         throw new Error('No se encontró el token. El usuario no está autenticado.');
     } else {
-        token = user.token; // Aquí obtienes el token correctamente
+        token = user.token;
     }
 
     try {
@@ -656,8 +656,8 @@ export const crearProposta = async (titol, subtitol, contingut, userId, data, co
                 titol,
                 subtitol,
                 contingut,
-                idAsso: 1,  // Mantén el valor fijo de idAsso
-                userId,     // Ahora pasamos correctamente el userId
+                idAsso: 1,
+                userId,
                 data,
                 color,
             }),

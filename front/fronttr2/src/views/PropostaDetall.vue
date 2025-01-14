@@ -57,7 +57,7 @@ const newComment = ref('');
 const textarea = ref(null);
 const voted = ref(false);
 
-const loggedUsersStore = useLoggedUsers(); // Usamos el store directamente
+const loggedUsersStore = useLoggedUsers();
 const socket = io('http://localhost:3003');
 
 onMounted(async () => {

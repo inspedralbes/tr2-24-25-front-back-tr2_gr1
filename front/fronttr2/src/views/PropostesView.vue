@@ -17,8 +17,6 @@
           </template>
         </Card>
       </div>
-
-      <!-- Botón para redirigir a la pantalla de creación de propuesta -->
       <div class="create-button-container">
         <Button label="Crear Nueva Proposta" icon="pi pi-plus" @click="goToCreateProposta" class="create-button" />
       </div>
@@ -44,7 +42,6 @@ const goToProposta = (id) => {
   router.push({ path: `/propostes/${id}` });
 };
 
-// Redirige a la página para crear una nueva propuesta
 const goToCreateProposta = () => {
   router.push({ path: '/propostes/add' });
 };

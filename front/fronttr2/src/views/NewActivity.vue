@@ -82,7 +82,7 @@ import Card from 'primevue/card';
 import { crearProposta } from '@/services/comunicationManager';
 import ColorPicker from 'primevue/colorpicker';
 import { useRouter } from 'vue-router';
-import { useLoggedUsers } from '@/stores/users'; // Importar el store de usuarios
+import { useLoggedUsers } from '@/stores/users';
 
 const router = useRouter();
 
@@ -96,10 +96,8 @@ let visible = ref(false);
 let visible2 = ref(false);
 let visible3 = ref(false);
 
-// Usar el store de usuarios
 const loggedUsersStore = useLoggedUsers();
 
-// Obtener el ID del usuario logueado
 const userId = loggedUsersStore.currentUser?.id;
 
 async function newProposta() {
@@ -116,7 +114,7 @@ async function newProposta() {
 
     if (!userId) {
         console.error('Debes estar logueado para crear una propuesta.');
-        visible3.value = true; // Mostrar mensaje de error
+        visible3.value = true;
         return;
     }
 
@@ -127,11 +125,11 @@ async function newProposta() {
         contingut: contingut.value,
         data: data.value,
         color: color.value,
-        userId: userId, // Pasar el userId al backend
+        userId: userId,
     });
 
     try {
-        await crearProposta(titol.value, subtitol.value, contingut.value, userId, data.value, color.value); // Pasar el userId a la función
+        await crearProposta(titol.value, subtitol.value, contingut.value, userId, data.value, color.value);
         console.log('Propuesta creada exitosamente.');
         visible2.value = true;
 
