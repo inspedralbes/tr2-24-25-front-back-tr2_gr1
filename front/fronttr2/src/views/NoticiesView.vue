@@ -4,10 +4,6 @@
             <div class="grid">
                 <Card style="width: 100%; overflow: hidden" v-for="noticia in noticies" class="cardNew"
                     :key="noticia.id" @click="router.push({ path: `/noticies/${noticia.id}` })">
-                    <template #header>
-                        <img alt="user header" class="banner"
-                            :src="noticia.imatge || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlYTylxm7BIjHX7C0QOwEA7iEVEheDE65ukQ&s'" />
-                    </template>
                     <template #title>
                         <div class="title">{{ noticia.titol }}</div>
                     </template>

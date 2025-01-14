@@ -2,13 +2,8 @@
   <div class="main">
     <h1>{{ noticia.titol }}</h1>
     <h3>{{ noticia.subtitol }}</h3>
-    <img :src="noticia.imatge" alt="Imatge de la noticia" />
     <p>{{ noticia.contingut }}</p>
-    <p>{{ noticia.contingut }}</p>
-    <p>{{ noticia.contingut }}</p>
-    <p>{{ noticia.contingut }}</p>
-    <p>{{ noticia.contingut }}</p>
-    <p>{{ noticia.contingut }}</p>
+
     <p class="author">Per {{ noticia.autor }} el {{ noticia.updatedAt }}</p>
     <NavigationBar />
   </div>
@@ -16,14 +11,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import noticiesSample from '../assets/noticiesSample.json'
 import NavigationBar from '@/components/NavigationBar.vue';
 
 const props = defineProps(['id']);
 const noticia = ref({});
+
+const noticies = ref([]);
 onMounted(() => {
-  //getNoticies()
-  noticia.value = noticiesSample.find(noticia => noticia.id == props.id);
+  noticies.value = getNoticies()
+  noticia.value = noticies.find(noticia => noticia.id == props.id);
 
 })
 

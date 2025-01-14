@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is deploying Associa't on production ⭐
 on:
   push:
     branches:
-      - feature-revisit-github-actions
+      - feature-fix-news
 # a
 jobs:
   STOP-SCREEN:
