@@ -1,8 +1,3 @@
-
-
-// models/Motocicleta.js
-// const mongoose = require('mongoose');
-
 import mongoose from 'mongoose';
 
 const ChatSchema = new mongoose.Schema({

@@ -96,10 +96,8 @@ const fetchAssociations = async () => {
 
 const saveProfile = async () => {
     userStore.newUser(user);
-    console.log("Actalitzant Usuari: ", user.value);
     await updateUsuari(user.value.id, user.value.nom, user.value.cognoms, user.value.contrasenya, user.value.correu, user.value.imatge, user.value.permisos, user.value.token);
     visible.value = false;
-    console.log('Profile updated');
 };
 
 onMounted(() => {

@@ -48,7 +48,6 @@ const goToCreatePage = () => {
 const joinAssociation = async (idAsso) => {
     const userId = userStore.currentUser.id;
 
-    console.log("Este es el id del usuario: ", userStore.currentUser.id);
 
     if (!userId) {
         console.error('No hay ID de usuario guardado.');
@@ -58,7 +57,6 @@ const joinAssociation = async (idAsso) => {
     try {
         const result = await asignaUsuariAssociacio(userId, idAsso);
         router.push('/noticies');
-        // console.log('Usuario asignado a la asociación correctamente.', result);
     } catch (error) {
         console.error('Error al intentar asociar el usuario con la asociación:', error);
     }
@@ -69,11 +67,8 @@ onMounted(() => {
     const userId = userStore.currentUser.userId;
 
     if (!userStore.loggedUser || !userStore.associations.length) {
-        console.log('No hay usuario logueado o no tiene asociaciones');
         // Manejar el caso donde no haya asociaciones
     } else {
-        console.log('Usuario logueado:', userStore.loggedUser);
-        console.log('Asociaciones:', userStore.associations);
     }
 });
 

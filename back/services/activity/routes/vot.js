@@ -1,11 +1,10 @@
 
 
-// routes/motocicletes.js
 import express from 'express';
 import path from 'path';
 import Vot from '../models/Vot.js';
 
-// Crear una nova motocicleta
+// Crear un nou vot
 export async function createVot(data) {
     try {
         // let imatgePath = '';
@@ -47,7 +46,7 @@ export async function getVotByActUserID(idAct, idUser) {
     }
 };
 
-// Actualitzar una motocicleta per ID
+// Actualitzar un vot per ID
 export async function updateVotById(id, data) {
     try {
         // let imatgePath = req.body.imatge || '';
@@ -78,14 +77,3 @@ export async function updateVotById(id, data) {
         return { valid: false, error };
     }
 };
-
-// Eliminar una motocicleta per ID
-// router.delete('/:id', async (req, res) => {
-//   try {
-//     const votEliminat = await Vot.findByIdAndDelete(req.params.id);
-//     if (!votEliminat) return res.status(404).json({ missatge: 'Vot no trobat' });
-//     res.json({ missatge: 'Vot eliminada' });
-//   } catch (error) {
-//     res.status(500).json({ missatge: 'Error al eliminar el vot', error });
-//   }
-// });

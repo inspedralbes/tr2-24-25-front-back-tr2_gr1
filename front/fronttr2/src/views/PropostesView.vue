@@ -48,7 +48,6 @@ const goToCreateProposta = () => {
 
 onMounted(async () => {
   try {
-    console.log('Fetching data from backend...');
     propostes.value = await getPropostes();
   } catch (error) {
     console.error('Error fetching proposals:', error);

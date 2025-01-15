@@ -47,9 +47,6 @@ const io = new Server(server);
 const PORT = process.env.ROOT_PORT;
 const SECRET_KEY = process.env.SECRET_KEY;
 
-
-console.log(process.env.MYSQL_USER);
-
 // Configuración de la conexión a la base de datos desde variables de entorno
 const connectionConfig = {
   host: process.env.MYSQL_HOST,
@@ -122,14 +119,8 @@ app.get('/api/associacio', verifyTokenMiddleware, (req, res) => {
 
 // POST Endpoint
 app.post('/api/associacio', verifyTokenMiddleware, (req, res) => {
-  console.log("pidiendo")
   const db = connectToDatabase();
   const { nom, descripcio } = req.body;
-
-  console.log(nom)
-
-
-  console.log(descripcio)
 
   // Validación de entrada
   if (!nom || !descripcio) {
@@ -156,7 +147,6 @@ app.post('/api/associacio', verifyTokenMiddleware, (req, res) => {
 
 // DELETE Endpoint
 app.delete('/api/associacio', verifyTokenMiddleware, (req, res) => {
-  console.log("pidiendo")
   const db = connectToDatabase();
   const { id } = req.body;
 
@@ -185,7 +175,6 @@ app.delete('/api/associacio', verifyTokenMiddleware, (req, res) => {
 
 // PUT Endpoint
 app.put('/api/associacio', verifyTokenMiddleware, (req, res) => {
-  console.log("pidiendo")
   const db = connectToDatabase();
   const { id, nom, descripcio } = req.body;
 
@@ -220,7 +209,6 @@ app.put('/api/associacio', verifyTokenMiddleware, (req, res) => {
 // --- ENDPOINTS PARA USUARI ---
 // GET Endpoint
 app.get('/api/usuari', verifyTokenMiddleware, (req, res) => {
-  console.log("pidiendo")
   const db = connectToDatabase();
   const query = 'SELECT id, nom, cognoms, contrasenya, correu, imatge, permisos FROM USUARI';
 
@@ -238,7 +226,6 @@ app.get('/api/usuari', verifyTokenMiddleware, (req, res) => {
 
 // POST Endpoint
 app.post('/api/usuari', async (req, res) => {
-  console.log("pidiendo")
   const db = connectToDatabase();
   const { nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
 
@@ -260,7 +247,6 @@ app.post('/api/usuari', async (req, res) => {
     }
 
     let hashedPassword = await hashPassword(contrasenya);
-    console.log(hashedPassword);
     const insertQuery = 'INSERT INTO USUARI (nom, cognoms, contrasenya, correu, imatge, permisos) VALUES (?, ?, ?, ?, ?, ?)';
     db.query(insertQuery, [nom, cognoms, hashedPassword, correu, imatge, permisos], (err, result) => {
       if (err) {
@@ -287,7 +273,6 @@ app.post('/api/usuari', async (req, res) => {
 
 // DELETE Endpoint
 app.delete('/api/usuari', verifyTokenMiddleware, (req, res) => {
-  console.log("pidiendo")
   const db = connectToDatabase();
   const { id } = req.body;
 
@@ -314,10 +299,8 @@ app.delete('/api/usuari', verifyTokenMiddleware, (req, res) => {
 
 // PUT Endpoint
 app.put('/api/usuari', verifyTokenMiddleware, (req, res) => {
-  console.log("pidiendo")
   const db = connectToDatabase();
   const { id, nom, cognoms, contrasenya, correu, imatge, permisos } = req.body;
-  console.log(req.body);
   // Validación de entrada
   if (!id || !nom || !cognoms || !contrasenya || !correu || !imatge || !permisos) {
     return res.status(400).json({ message: 'Invalid input' });
@@ -353,7 +336,6 @@ app.put('/api/usuari', verifyTokenMiddleware, (req, res) => {
 
 // GET Endpoint
 app.get('/api/proposta', verifyTokenMiddleware, (req, res) => {
-  console.log("pidiendo")
   const db = connectToDatabase();
   const query = `
     SELECT 
@@ -402,7 +384,6 @@ app.put('/api/proposta', verifyTokenMiddleware, (req, res) => {
     return res.status(400).json({ description: "Invalid input" });
   }
 
-  console.log("pidiendo")
   const db = connectToDatabase();
   const query = `
     UPDATE PROPOSTA 
@@ -543,7 +524,6 @@ app.post('/api/login', (req, res) => {
 
 app.post('/asignaUsuariAssociacio', (req, res) => {
   const { idUsu, idAsso } = req.body;
-  console.log("pidiendo")
   const db = connectToDatabase();
 
   // Validación de entrada
@@ -582,9 +562,7 @@ app.post('/asignaUsuariAssociacio', (req, res) => {
 // Endpoint prova. Si el token ha expirat enviem un login: true i fem /login automàticament per generar nou token
 app.get('/prova', (req, res) => {
   const verificacio = verifyToken( process.env.SECRET_KEY, req);
-  console.log(verificacio)
   if (verificacio.status === 401) {
-    console.log('lol, lmao')
     res.status(401).json(verificacio);
   } else {
     res.status(200).json(verificacio);
@@ -688,6 +666,5 @@ server.listen(PORT, () => {
 });
 
 } catch (e) {
-  console.log("LO TENEMOS");
   console.log(e.stack);
 }

@@ -1,11 +1,10 @@
 
 
-// routes/motocicletes.js
 import express from 'express';
 import path from 'path';
 import Chat from '../models/Chat.js';
 
-// Crear una nova motocicleta
+// Crear un nou xat
 export async function createChat(data) {
   try {
     // let imatgePath = '';
@@ -33,7 +32,7 @@ export async function createChat(data) {
   }
 };
 
-// Obtenir un chat per ID
+// Obtenir un xat per ID
 export async function getChatByAssoId(idAsso) {
   try {
     const chat = await Chat.findById({ idAsso });
@@ -45,7 +44,7 @@ export async function getChatByAssoId(idAsso) {
   }
 };
 
-// Actualitzar una motocicleta per ID
+// Actualitzar un xat per ID
 export async function updateChatById(id, data) {
   try {
     // let imatgePath = req.body.imatge || '';
@@ -75,14 +74,3 @@ export async function updateChatById(id, data) {
     return { valid: false, error };
   }
 };
-
-// Eliminar una motocicleta per ID
-// router.delete('/:id', async (req, res) => {
-//   try {
-//     const chatEliminat = await Chat.findByIdAndDelete(req.params.id);
-//     if (!chatEliminat) return res.status(404).json({ missatge: 'Chat no trobat' });
-//     res.json({ missatge: 'Chat eliminada' });
-//   } catch (error) {
-//     res.status(500).json({ missatge: 'Error al eliminar el chat', error });
-//   }
-// });

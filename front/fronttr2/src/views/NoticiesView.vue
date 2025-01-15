@@ -40,7 +40,6 @@ const noticies = ref([]);
 onMounted(async () => {
     try {
         noticies.value = await getNoticies();
-        console.log(noticies.value); // Agrega esta línea para ver qué datos llegan
     } catch (error) {
         console.error('Error al obtenir les notícies:', error);
     }

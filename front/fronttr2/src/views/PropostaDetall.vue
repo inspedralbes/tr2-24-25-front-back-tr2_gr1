@@ -141,7 +141,6 @@ const vote = async (option) => {
 
     voted.value = true;
 
-    console.log(`Voto registrado: ${resposta ? 'A favor' : 'En contra'}`);
   } catch (error) {
     console.error('Error al registrar la votación:', error);
   }

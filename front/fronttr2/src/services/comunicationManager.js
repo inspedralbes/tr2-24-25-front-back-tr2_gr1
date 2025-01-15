@@ -26,7 +26,6 @@ export const crearAssociacio = async (nom, desc) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log('Associacio created successfully:', data);
         } else if (response.status === 400) {
             console.error('Invalid input');
         } else if (response.status === 401) {
@@ -56,7 +55,6 @@ export const getAssociacions = async () => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log('Associacions:', data);
             return data;
         } else if (response.status === 401) {
             noLogged();
@@ -72,10 +70,8 @@ export const getAssociacions = async () => {
 
 export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, permisos }) => {
     try {
-        console.log('Dades enviades (abans del hash): ', { nom, cognoms, contrasenya, correu, imatge, permisos });
 
 
-        console.log('Contrasenya encriptada: ', contrasenya);
 
         const response = await fetch(`${URL}/api/usuari`, {
             method: 'POST',
@@ -94,9 +90,7 @@ export const createUser = async ({ nom, cognoms, contrasenya, correu, imatge, pe
 
         if (response.ok) {
             const data = await response.json();
-            console.log('Usuari creat amb èxit:', data);
             let returnData = await loginUsuari(data.correu, contrasenya);
-            console.log(returnData);
             return returnData;
         } else if (response.status === 400) {
             const errorDetails = await response.json();
@@ -149,12 +143,9 @@ export async function loginUsuari(correu, contrasenya) {
             currentAssiciacio
         });
 
-        console.log('Usuari autenticat amb èxit', user.associacionsId);
 
-        console.log(loggedUsersStore.currentUser);
 
         if (response.ok) {
-            console.log('Usuari autenticat amb èxit');
             return { state: true, associacionsId: user.associacionsId };
         } else {
             console.error('Usuari o contrasenya incorrectes');
@@ -194,13 +185,7 @@ export const updateUsuari = async (id, nom, cognoms, contrasenya, correu, imatge
             })
         });
 
-        if (response.ok) {
-            console.log('Usuari actualitzat amb èxit: ', response);
-        } else if (response.status === 404) {
-            console.log('Usuari no trobat: ', response);
-        } else {
-            console.log('Dades incorrectes: ', response);
-        }
+        
     } catch (err) {
         console.error('Error during fetch: ', err);
         throw err;
@@ -226,7 +211,6 @@ export const getPropostes = async () => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log('Propostes:', data);
             return data.map(item => ({
                 id: item.id,
                 titol: item.titol,
@@ -301,7 +285,6 @@ export const getComentarios = async (idProp) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log('Comentarios:', data);
             return data;
         } else {
             console.error('Error fetching comments:', response.status);
@@ -343,7 +326,6 @@ export const addComentario = async (idProp, comentario) => {
         }
 
         const data = await response.json();
-        console.log('Comentario añadido:', data);
         return data;
     } catch (error) {
         console.error('Error adding comment:', error);
@@ -397,7 +379,6 @@ export const getNoticies = async () => {
         } else {
             token = user.token;
         }
-        console.log("idIssoActual --------------------------------------------------------------------->" + idAssoAcutal);
         const response = await fetch(`${URLNOTICIAS}/api/noticia/${idAssoAcutal}`, {
             method: 'GET',
             headers: {
@@ -405,18 +386,14 @@ export const getNoticies = async () => {
             },
         });
         const responseText = await response.text();
-        console.log('Response:', responseText);
 
         try {
             const data = JSON.parse(responseText);
-            console.log('Noticies:', data);
             return data;
         } catch (err) {
-            console.error('Error parsing JSON:', err);
             return [];
         }
     } catch (err) {
-        console.error('Error during fetch: ', err);
         throw err;
     }
 };
@@ -439,7 +416,6 @@ export const getNoticia = async (id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log('Noticia:', data);
             return data;
         } else if (response.status === 401) {
             noLogged();
@@ -463,7 +439,6 @@ export const createNoticia = async ({ titol, subtitol, contingut, autor, idAsso 
         } else {
             token = user.token;
         }
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, autor, idAsso);
         const response = await fetch(`${URLNOTICIAS}/api/noticia`, {
             method: 'POST',
             headers: {
@@ -474,9 +449,7 @@ export const createNoticia = async ({ titol, subtitol, contingut, autor, idAsso 
         });
         if (response.ok) {
             const data = await response.json();
-            console.log('Noticia created successfully:', data);
         } else if (response.status === 400) {
-            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ----> ", titol, subtitol, contingut, autor, idAsso);
             console.error('Invalid input');
         } else if (response.status === 401) {
             noLogged();
@@ -508,7 +481,6 @@ export const editNoticia = async ({ id, titol, subtitol, contingut, autor, idAss
         });
         if (response.ok) {
             const data = await response.json();
-            console.log('Noticia edited successfully:', data);
         } else if (response.status === 400) {
             console.error('Invalid input');
         } else if (response.status === 401) {
@@ -538,7 +510,6 @@ export const deleteNoticia = async (id) => {
             }
         });
         if (response.ok) {
-            console.log('Noticia deleted successfully');
         } else if (response.status === 401) {
             noLogged();
         } else {
@@ -615,7 +586,6 @@ export const getActivities = async () => {
 
         const activities = await response.json();
 
-        console.log("holiwi" + activities);
 
         return activities;
 
@@ -643,8 +613,6 @@ export const crearProposta = async (titol, subtitol, contingut, userId, data, co
             token = user.token;
         }
 
-        console.log('Enviando solicitud con el siguiente token:', token);
-        console.log('Datos enviados al backend:', { titol, subtitol, contingut, userId, data, color });
 
         const response = await fetch(`${URLPROPOSTES}/api/proposta`, {
             method: 'POST',
@@ -663,11 +631,9 @@ export const crearProposta = async (titol, subtitol, contingut, userId, data, co
             }),
         });
 
-        console.log('Respuesta del servidor:', response);
 
         if (response.ok) {
             const data = await response.json();
-            console.log('Propuesta creada exitosamente:', data);
             return data;
         } else {
             console.error('Error en la respuesta del servidor. Código de estado:', response.status);
@@ -688,7 +654,6 @@ export const checkToken = async () => {
     } else {
         token = user.token;
     }
-    console.log(user);
     if (user == undefined || !user) {
         noLogged
         return { "status": 401 }
@@ -702,12 +667,10 @@ export const checkToken = async () => {
                 'Authorization': 'Bearer ' + user.token
             },
         });
-        console.log("Response" + response);
         if (response.status === 401) {
             noLogged();
         }
         let responseJson = await response.json();
-        console.log("respondoe" + responseJson);
         return responseJson;
     }
 };
@@ -729,7 +692,6 @@ export const getServiceStatus = async (serviceName) => {
         body: JSON.stringify({ "serviceName": serviceName })
       });
       const data = await response.json();
-      console.log("this is the data"+ data)
         return data;
     
     }    

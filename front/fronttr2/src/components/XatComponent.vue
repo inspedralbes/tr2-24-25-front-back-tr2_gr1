@@ -40,15 +40,6 @@ watch(
     { immediate: true }
 );
 
-// //This code is just for testing
-// socket.on('allMessages', (data) => {
-//     messages.value = data;
-// })
-// //This code is just for testing
-// socket.on('chat message', (data) => {
-//     console.log(data)
-//     messages.value.push(data);
-// })
 
 //function to send a message
 function sendMessage() {
@@ -58,7 +49,6 @@ function sendMessage() {
         idAsso: loggedUsersStore.currentUser.currentAssiciacio, //This must be changed to the association id
         username: loggedUsersStore.currentUser.nom+" "+loggedUsersStore.currentUser.cognoms //This must be changed to the user name
     }
-    console.log("Sending message: ", auxObject);
     socket.emit('newMessage', auxObject);
     messageToSend.value = '';
 }

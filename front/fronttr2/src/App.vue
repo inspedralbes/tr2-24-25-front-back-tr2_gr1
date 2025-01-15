@@ -24,7 +24,6 @@ const notify = () => {
 
 const logRouteChange = async () => {
   if (router.currentRoute.value.fullPath != "/" && router.currentRoute.value.fullPath != "/register" && router.currentRoute.value.fullPath != "/login" && router.currentRoute.value.fullPath != "/loading") {
-    console.log("entering" + router.currentRoute.value.fullPath)
     let response = await checkToken()
     if (response.status != 200) {
       const loggedUsersStore = useLoggedUsers();

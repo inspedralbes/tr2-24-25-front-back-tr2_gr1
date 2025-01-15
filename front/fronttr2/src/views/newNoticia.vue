@@ -113,9 +113,6 @@ async function newNoticia() {
     try {
         const currentDate = formatDate(new Date());
 
-        console.log('userId:', userId);
-        console.log('currentAssociacio:', currentAssociacio);
-        console.log('titol:', titol.value, 'subtitol:', subtitol.value, 'contingut:', contingut.value);
 
         await createNoticia({
             titol: titol.value,

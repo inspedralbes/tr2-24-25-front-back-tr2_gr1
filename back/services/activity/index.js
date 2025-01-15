@@ -1,7 +1,5 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: '../../.env' });
-console.log("--------------------------------------------")
-console.log("SECRET_KEY:", process.env.SECRET_KEY);
 
 import express from 'express';
 import { createServer } from 'node:http';
@@ -227,8 +225,6 @@ db.query(query, params, (err, results) => {
     return res.status(500).send(`Error retrieving activities: ${err.message}`);
   }
 
-  console.log('Activities retrieved:', results);
-
   const formattedResults = results.map(activity => ({
     id: activity.id,
     date: activity.data,
@@ -246,7 +242,6 @@ db.query(query, params, (err, results) => {
 app.post('/api/proposta', verifyTokenMiddleware, (req, res) => {
   const { titol, subtitol, contingut, data, color, userId } = req.body;
 
-  console.log('Datos recibidos en el cuerpo:', req.body);
 
   if (!titol || !subtitol || !contingut || !data) {
       console.error('Faltan campos obligatorios en la solicitud.');
@@ -273,7 +268,6 @@ app.post('/api/proposta', verifyTokenMiddleware, (req, res) => {
 
     const associacioId = 1;
     const proposalColor = '#' + (color || 'FFFFFF').toUpperCase();
-    console.log('Color de la propuesta:', proposalColor);
 
     console.log('Conexión a la base de datos establecida.');
   
