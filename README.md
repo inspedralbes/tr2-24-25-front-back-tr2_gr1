@@ -26,7 +26,7 @@ Actualment estem en la fase de planificació i disseny del projecte.
 
 # Github Actions
 
-El fitxer `pro.yml` situat a `.github/workflows` conté la configuració per a les accions de GitHub que automatitzen el procés de construcció, prova i desplegament del projecte. Aquest fitxer defineix els passos necessaris per assegurar que el codi es construeix correctament, passa totes les proves i es desplega a l'entorn de producció de manera eficient.
+El fitxer `pro.yml` situat a `.github/workflows` conté la configuració per a les accions de GitHub que automatitzen el procés de construcció, prova i desplegament del projecte. Aquest fitxer defineix els passos necessaris per assegurar que el codi es construeix correctament i es desplega a l'entorn de producció de manera eficient.
 
 # Docker
 
