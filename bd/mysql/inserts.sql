@@ -9,9 +9,9 @@ INSERT INTO USUARI (nom, cognoms, contrasenya, correu, imatge, permisos) VALUES
 ('Maria', 'Lopez', 'pass456', 'maria@example.com', 'maria.jpg', 'user');
 
 -- Tabla PROPOSTA
-INSERT INTO PROPOSTA (titol, subtitol, contingut, autor, idAsso, data) VALUES
-('Millores al parc', 'Proposta per a millorar el parc', 'Augmentar zones verdes i afegir bancs.', 1, 1, '2024-12-01'),
-('Festes locals', 'Organització de festes populars', 'Planificar un calendari de festes locals anuals.', 2, 2, '2024-12-02');
+INSERT INTO PROPOSTA (titol, subtitol, contingut, autor, idAsso, data, dataFinal) VALUES
+('Millores al parc', 'Proposta per a millorar el parc', 'Augmentar zones verdes i afegir bancs.', 1, 1, '2024-12-01', '2024-12-15'),
+('Festes locals', 'Organització de festes populars', 'Planificar un calendari de festes locals anuals.', 2, 2, '2024-12-02', '2024-12-16');
 
 -- Tabla COMENTARI
 INSERT INTO COMENTARI (autor, idProp, contingut, actiu) VALUES

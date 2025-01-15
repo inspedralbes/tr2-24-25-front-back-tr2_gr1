@@ -24,6 +24,13 @@
           </FloatLabel>
         </div>
 
+        <div class="card flex flex-wrap justify-center items-end gap-4">
+          <FloatLabel variant="in">
+            <label for="final_date_label">Data de final de votacions</label>
+            <DatePicker id="final_date_label" v-model="crudeFinalDate" autocomplete="off"/>
+          </FloatLabel>
+        </div>
+        
         <!-- Selección de color -->
         <div class="card flex flex-wrap justify-center items-end gap-4">
           <label for="color_picker">Color de la Proposta</label>
@@ -80,6 +87,7 @@ import Card from 'primevue/card';
 import { crearProposta } from '@/services/comunicationManager';
 import ColorPicker from 'primevue/colorpicker';
 import { useRouter } from 'vue-router';
+import DatePicker from 'primevue/datepicker';
 
 const router = useRouter();
 
@@ -91,6 +99,7 @@ const loading = ref(false);
 let visible = ref(false);
 let visible2 = ref(false);
 let visible3 = ref(false);
+const crudeFinalDate = ref(null);
 
 function formatDate(date) {
   const d = new Date(date);
@@ -109,12 +118,13 @@ async function newProposta() {
   loading.value = true;
   try {
     const currentDate = formatDate(new Date());
-    
+    const finalDate=formatDate(crudeFinalDate.value);
     console.log('Nueva Proposta:', {
       titol: titol.value,
       subtitol: subtitol.value,
       contingut: contingut.value,
       color: color.value,
+      dataFinal: finalDate,
       idAsso: 1,
       data: currentDate
     });

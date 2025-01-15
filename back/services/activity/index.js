@@ -73,6 +73,7 @@ app.get('/api/proposta/',verifyTokenMiddleware, (req, res) => {
         p.subtitol,
         p.contingut,
         p.data,
+        p.dataFinal,
         p.idAsso,
         u.id AS idUsuari,
         CONCAT(u.nom, ' ', u.cognoms) AS nomUsuari
@@ -118,6 +119,7 @@ app.get('/api/proposta/:id',verifyTokenMiddleware, (req, res) => {
         p.subtitol,
         p.contingut,
         p.data,
+        p.dataFinal,
         p.idAsso,
         u.id AS idUsuari,
         CONCAT(u.nom, ' ', u.cognoms) AS nomUsuari
@@ -214,7 +216,7 @@ app.get('/api/activities/:idAsso',verifyTokenMiddleware, (req, res) => {
   
   // UNION ALL
   const query = `
-  SELECT id, data, color, titol, subtitol, contingut, color
+  SELECT id, data,dataFinal, color, titol, subtitol, contingut, color
   FROM PROPOSTA
   WHERE idAsso = ? AND data >= CURRENT_DATE;`;
 
@@ -243,11 +245,12 @@ db.query(query, params, (err, results) => {
 
 // POST Endpoint para crear una nueva propuesta
 app.post('/api/proposta',verifyTokenMiddleware, (req, res) => {
-  const { titol, subtitol, contingut, autor, data, color } = req.body;
+  const { titol, subtitol, contingut, autor, data, dataFinal, color } = req.body;
 
   const autorId = autor || 1;
   const associacioId = 1;
   const currentDate = data || new Date().toISOString().split('T')[0];
+  const finalDate = dataFinal || new Date().toISOString().split('T')[0];
   const proposalColor = '#' + (color || 'FFFFFF').toUpperCase();
 
   if (!titol || !subtitol || !contingut) {
@@ -257,11 +260,11 @@ app.post('/api/proposta',verifyTokenMiddleware, (req, res) => {
   const db = connectToDatabase();
 
   const query = `
-    INSERT INTO PROPOSTA (titol, subtitol, contingut, autor, idAsso, data, color)
-    VALUES (?, ?, ?, ?, ?, ?, ?);
+    INSERT INTO PROPOSTA (titol, subtitol, contingut, autor, idAsso, data,dataFinal, color)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
-  const params = [titol, subtitol, contingut, autorId, associacioId, currentDate, proposalColor];
+  const params = [titol, subtitol, contingut, autorId, associacioId, currentDate,finalDate, proposalColor];
 
   db.query(query, params, (err, result) => {
     if (err) {
@@ -279,6 +282,7 @@ app.post('/api/proposta',verifyTokenMiddleware, (req, res) => {
       autor: autorId,
       idAsso: associacioId,
       data: currentDate,
+      dataFinal: finalDate,
       color: proposalColor,
     };
 

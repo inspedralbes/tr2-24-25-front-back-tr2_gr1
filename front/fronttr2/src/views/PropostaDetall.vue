@@ -7,13 +7,17 @@
       Per {{ proposta.autor.nomUsuari }} el {{ proposta.data }}
     </p>
 
-    <div class="vote-section">
+    <div class="vote-section" v-if="proposta?.dataFinal > new Date()">
       <h3>Vota:</h3>
       <button @click="vote('aFavor')" :disabled="voted" class="vote-button a-favor">A favor</button>
       <button @click="vote('enContra')" :disabled="voted" class="vote-button en-contra">En contra</button>
       <p v-if="voted" class="vote-message">Ja has votat</p>
     </div>
 
+
+    <div v-else>
+      Imagen aquí
+    </div>
     <div class="comments-section">
       <h2>Comentaris</h2>
       <div v-if="comments.length === 0">Encara no hi ha comentaris.</div>

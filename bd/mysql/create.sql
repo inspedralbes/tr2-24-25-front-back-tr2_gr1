@@ -34,6 +34,7 @@ CREATE TABLE PROPOSTA (
     autor INT,
     idAsso INT,
     data DATE,
+    dataFinal DATE,
     color VARCHAR(7) DEFAULT '#FFFFFF',
     FOREIGN KEY (autor) REFERENCES USUARI(id),
     FOREIGN KEY (idAsso) REFERENCES ASSOCIACIO(id)

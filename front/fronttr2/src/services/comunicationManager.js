@@ -271,6 +271,7 @@ export const getPropostaById = async (id) => {
                 contingut: data.contingut,
                 autor: data.autor,
                 data: new Date(data.data).toLocaleDateString(),
+                dataFinal: new Date(data.dataFinal).toLocaleDateString(),
             };
         } else {
             console.error('Proposal not found', response.status);
