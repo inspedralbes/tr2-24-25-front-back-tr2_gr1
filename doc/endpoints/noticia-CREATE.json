@@ -1,0 +1,28 @@
+{
+    "endpoint": "/api/noticia",
+    "method": "POST",
+    "description": "Create a new noticia",
+    "request": {
+        "titol": "string",
+        "subtitol": "string",
+        "contingut": "string",
+        "imatge": "string",
+        "autor": "int",
+        "idAsso": "int"
+    },
+    "response": {
+        "status": "success",
+        "message": "Noticia created successfully",
+        "data": {
+            "id": "int",
+            "titol": "string",
+            "subtitol": "string",
+            "contingut": "string",
+            "imatge": "string",
+            "autor": "int",
+            "idAsso": "int",
+            "createdAt": "string",
+            "updatedAt": "string"
+        }
+    }
+}

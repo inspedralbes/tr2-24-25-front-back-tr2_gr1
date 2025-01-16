@@ -1,0 +1,37 @@
+{
+    "endpoint": "/api/usuari",
+    "method": "PUT",
+    "description": "Update an existing user",
+    "request": {
+        "contentType": "application/json",
+        "body": {
+            "id": "integer",
+            "nom": "string",
+            "cognoms": "string",
+            "contrasenya": "string",
+            "correu": "string",
+            "imatge": "string",
+            "permisos": "string"
+        }
+    },
+    "response": {
+        "200": {
+            "description": "User updated successfully",
+            "body": {
+                "id": "integer",
+                "nom": "string",
+                "cognoms": "string",
+                "contrasenya": "string",
+                "correu": "string",
+                "imatge": "string",
+                "permisos": "string"
+            }
+        },
+        "400": {
+            "description": "Invalid input"
+        },
+        "404": {
+            "description": "User not found"
+        }
+    }
+}
