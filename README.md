@@ -1,9 +1,9 @@
 # Nom dels integrants
-* Arnau Fernández Gil
-* Eric Gómez Vilà
+* Arnau Fernández 
+* Eric Gómez 
 * Fabian Roldan
-* Martí
-* David
+* Martí Clavé
+* David Muñoz
 
 # Nom del projecte
 Associa't
