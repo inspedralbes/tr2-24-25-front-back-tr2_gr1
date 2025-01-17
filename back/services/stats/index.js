@@ -2,9 +2,18 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import fs from 'fs';
 import { spawn } from 'child_process';
+import cors from 'cors';
+import express from 'express';
 
 dotenv.config();
 
+const app = express();
+const PORT = process.env.STATS_PORT || 3004;
+
+app.use(cors());
+app.use(express.json());
+
+app.use('/statImages', express.static('statImages/vots'));
 
 console.log('MONGO_URL:', process.env.MONGO_URL);
 
@@ -45,3 +54,8 @@ const fetchAndWriteMessages = async () => {
 };
 
 setInterval(fetchAndWriteMessages, 60000);
+
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

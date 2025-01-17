@@ -13,11 +13,10 @@
       <button @click="vote('enContra')" :disabled="voted" class="vote-button en-contra">En contra</button>
       <p v-if="voted" class="vote-message">Ja has votat</p>
     </div>
-
-
     <div v-else>
-      Imagen aquí
+      <img :src="imgSrc" alt="Resultats de la votació">
     </div>
+
     <div class="comments-section">
       <h2>Comentaris</h2>
       <div v-if="comments.length === 0">Encara no hi ha comentaris.</div>
@@ -61,6 +60,7 @@ const newComment = ref('');
 const textarea = ref(null);
 const voted = ref(false);
 
+const BASE_URL = `http://localhost:3004/statImages/${props.id}.png`;
 const loggedUsersStore = useLoggedUsers(); // Usamos el store directamente
 const socket = io('http://localhost:3003');
 
